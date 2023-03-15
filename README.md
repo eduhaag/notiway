@@ -20,11 +20,11 @@
   - [ ] Um admin deve poder alterar o nivel de acesso
   - [x] Deve ser possivel listar os usuários
   - [x] Deve ser possivel alterar a senha de um usuário
-  - [ ] Um usuário deve poder fazer login
+  - [x] Um usuário deve poder fazer login
 
   ### RN
   - [x] o email deve ser unico
-  - [ ] não deve ser possivel fazer login com senha e usuario errados
+  - [x] não deve ser possivel fazer login com senha e usuario errados
   - [x] não deve ser retornado a hashedPassword em nenhuma rota
 
   ### RNF

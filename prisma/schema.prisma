@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Consumer {
+  id                    String    @id @default(uuid())
+  name                  String
+  tax_id                String?   @unique
+  email                 String    @unique
+  fone                  String?
+  whatsapp              String?
+  zip_code              String?
+  street                String?
+  number                String?
+  complement            String?
+  district              String?
+  city                  String?
+  province              String?
+  country               String?
+  accept_marketing_from DateTime? @default(now())
+  User                  User[]
+  Sender                Sender[]
+  Client                Client[]
+
+  @@map("consumers")
+}
+
+model User {
+  id            String @id @default(uuid())
+  email         String @unique
+  password_hash String
+  access_level  Int    @default(10)
+
+  consumer    Consumer @relation(fields: [consumer_id], references: [id])
+  consumer_id String
+
+  @@map("users")
+}
+
+enum SendeType {
+  SHARED
+  PRIVATE
+  EXCLUSIVE
+}
+
+model Sender {
+  id                 String    @id @default(uuid())
+  api_token          String    @unique
+  name               String    @unique
+  type               SendeType
+  company            String?
+  last_recharge      DateTime?
+  disabled_from      DateTime?
+  national_code      Int?
+  internacional_code Int?
+  region             String?
+  full_number        String    @unique
+
+  consumer    Consumer? @relation(fields: [consumer_id], references: [id])
+  consumer_id String?
+  Client      Client[]
+
+  @@map("senders")
+}
+
+model Client {
+  id         String    @id @default(uuid())
+  name       String
+  status     String?   @default("processing")
+  header     String?
+  footer     String?
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt()
+  deleted_at DateTime?
+
+  consumer    Consumer @relation(fields: [consumer_id], references: [id])
+  consumer_id String
+
+  sender      Sender?       @relation(fields: [sender_id], references: [id])
+  sender_id   String?
+  ClientToken ClientToken[]
+
+  @@map("clients")
+}
+
+model ClientToken {
+  id         String   @id @default(uuid())
+  token      String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
+
+  client    Client @relation(fields: [client_id], references: [id])
+  client_id String
+
+  @@map("client_tokens")
+}

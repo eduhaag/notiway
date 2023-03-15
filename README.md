@@ -17,8 +17,9 @@
   ### RF
   - [x] Deve ser possivel criar um novo usuário
   - [x] Deve ser possivel alterar um usuário
-  - [ ] Um admin deve poder alterar o nivel de acesso
+  - [x] Um admin deve poder alterar o nivel de acesso
   - [x] Deve ser possivel listar os usuários
+  - [ ] Deve ser possivel listar os usuarios com nivel de acesso maior ou igual a x
   - [x] Deve ser possivel alterar a senha de um usuário
   - [x] Um usuário deve poder fazer login
 
@@ -28,7 +29,7 @@
   - [x] não deve ser retornado a hashedPassword em nenhuma rota
 
   ### RNF
-  - [ ] o password deve ser criptografado
+  - [x] o password deve ser criptografado
 
 ## :pushpin: Clients
   ### RF

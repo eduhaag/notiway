@@ -15,15 +15,15 @@
 
 ## :pushpin: Users
   ### RF
-  - [ ] Deve ser possivel criar um novo usuário
+  - [x] Deve ser possivel criar um novo usuário
   - [ ] Deve ser possivel alterar um usuário
   - [ ] Um admin deve poder alterar o nivel de acesso
-  - [ ] Deve ser possivel listar os usuários
+  - [x] Deve ser possivel listar os usuários
   - [ ] Deve ser possivel alterar a senha de um usuário
   - [ ] Um usuário deve poder fazer login
 
   ### RN
-  - [ ] o email deve ser unico
+  - [x] o email deve ser unico
   - [ ] não deve ser possivel fazer login com senha e usuario errados
   - [ ] não deve ser retornado a hashedPassword em nenhuma rota
 

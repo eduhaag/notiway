@@ -11,24 +11,24 @@ datasource db {
 }
 
 model Consumer {
-  id                    String    @id @default(uuid())
-  name                  String
-  tax_id                String?   @unique
-  email                 String    @unique
-  fone                  String?
-  whatsapp              String?
-  zip_code              String?
-  street                String?
-  number                String?
-  complement            String?
-  district              String?
-  city                  String?
-  province              String?
-  country               String?
-  accept_marketing_from DateTime? @default(now())
-  User                  User[]
-  Sender                Sender[]
-  Client                Client[]
+  id                  String    @id @default(uuid())
+  name                String
+  tax_id              String?   @unique
+  email               String    @unique
+  fone                String?
+  whatsapp            String?
+  zip_code            String?
+  street              String?
+  number              String?
+  complement          String?
+  district            String?
+  city                String?
+  province            String?
+  country             String?
+  accept_marketing_at DateTime? @default(now())
+  User                User[]
+  Sender              Sender[]
+  Client              Client[]
 
   @@map("consumers")
 }
@@ -39,8 +39,8 @@ model User {
   password_hash String
   access_level  Int    @default(10)
 
-  consumer    Consumer @relation(fields: [consumer_id], references: [id])
-  consumer_id String
+  consumer    Consumer? @relation(fields: [consumer_id], references: [id])
+  consumer_id String?
 
   @@map("users")
 }
@@ -58,7 +58,7 @@ model Sender {
   type               SendeType
   company            String?
   last_recharge      DateTime?
-  disabled_from      DateTime?
+  disabled_at        DateTime?
   national_code      Int?
   internacional_code Int?
   region             String?

@@ -11,7 +11,7 @@ export class InMemoryUsersRepository implements UsersRepository {
       email: data.email,
       password_hash: data.password_hash,
       access_level: data.access_level ?? 10,
-      consumer_id: data.consumer_id,
+      consumer_id: data.consumer_id ?? null,
     }
 
     this.users.push(user)

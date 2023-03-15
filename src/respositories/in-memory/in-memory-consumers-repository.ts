@@ -21,8 +21,8 @@ export class InMemoryConsumersRepository implements ConsumersRepository {
       city: data.city ?? null,
       province: data.province ?? null,
       country: data.country ?? null,
-      accept_marketing_from: data.accept_marketing_from
-        ? new Date(data.accept_marketing_from)
+      accept_marketing_at: data.accept_marketing_at
+        ? new Date(data.accept_marketing_at)
         : null,
     }
 
@@ -86,13 +86,13 @@ export class InMemoryConsumersRepository implements ConsumersRepository {
 
       if (acceptMarketing !== undefined) {
         if (acceptMarketing) {
-          if (item.accept_marketing_from) {
+          if (item.accept_marketing_at) {
             check.push(true)
           } else {
             check.push(false)
           }
         } else {
-          if (!item.accept_marketing_from) {
+          if (!item.accept_marketing_at) {
             check.push(true)
           } else {
             check.push(false)

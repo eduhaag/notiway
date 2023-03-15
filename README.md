@@ -16,10 +16,10 @@
 ## :pushpin: Users
   ### RF
   - [x] Deve ser possivel criar um novo usuário
-  - [ ] Deve ser possivel alterar um usuário
+  - [x] Deve ser possivel alterar um usuário
   - [ ] Um admin deve poder alterar o nivel de acesso
   - [x] Deve ser possivel listar os usuários
-  - [ ] Deve ser possivel alterar a senha de um usuário
+  - [x] Deve ser possivel alterar a senha de um usuário
   - [ ] Um usuário deve poder fazer login
 
   ### RN

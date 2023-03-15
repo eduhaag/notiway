@@ -77,6 +77,7 @@ model Client {
   status     String?   @default("processing")
   header     String?
   footer     String?
+  token      String
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt()
   deleted_at DateTime?
@@ -84,21 +85,8 @@ model Client {
   consumer    Consumer @relation(fields: [consumer_id], references: [id])
   consumer_id String
 
-  sender      Sender?       @relation(fields: [sender_id], references: [id])
-  sender_id   String?
-  ClientToken ClientToken[]
+  sender    Sender? @relation(fields: [sender_id], references: [id])
+  sender_id String?
 
   @@map("clients")
-}
-
-model ClientToken {
-  id         String   @id @default(uuid())
-  token      String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt()
-
-  client    Client @relation(fields: [client_id], references: [id])
-  client_id String
-
-  @@map("client_tokens")
 }

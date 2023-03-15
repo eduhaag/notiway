@@ -24,7 +24,9 @@ export class PrismaUsersRepository implements UsersRepository {
     return await prisma.user.findUnique({ where: { email } })
   }
 
-  async getAll() {
-    return await prisma.user.findMany()
+  async getAll(accessLevel: number) {
+    return await prisma.user.findMany({
+      where: { access_level: { gte: accessLevel } },
+    })
   }
 }

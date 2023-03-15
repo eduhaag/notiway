@@ -33,7 +33,11 @@ export class InMemoryUsersRepository implements UsersRepository {
     return this.users.find((item) => item.email === email) ?? null
   }
 
-  async getAll() {
+  async getAll(accessLevel: number) {
+    if (accessLevel) {
+      return this.users.filter((user) => user.access_level >= accessLevel)
+    }
+
     return this.users
   }
 }

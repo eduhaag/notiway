@@ -22,13 +22,27 @@ describe('Check-in history (e2e)', () => {
 
     await prisma.user.createMany({
       data: [
-        { email: 'user1@example.com', password_hash: 'password1' },
-        { email: 'user2example.com', password_hash: 'password2' },
+        {
+          email: 'user1@example.com',
+          password_hash: 'password1',
+          access_level: 10,
+        },
+        {
+          email: 'user2@example.com',
+          password_hash: 'password2',
+          access_level: 20,
+        },
+        {
+          email: 'user3@example.com',
+          password_hash: 'password3',
+          access_level: 40,
+        },
       ],
     })
 
     const response = await request(app.server)
       .get('/admin/users')
+      .query({ accessLevel: 20 })
       .set('Authorization', `Bearer ${token}`)
       .send()
 
@@ -37,10 +51,10 @@ describe('Check-in history (e2e)', () => {
     expect(response.body.users).toEqual([
       expect.objectContaining({}),
       expect.objectContaining({
-        email: 'user1@example.com',
+        email: 'user2@example.com',
       }),
       expect.objectContaining({
-        email: 'user2example.com',
+        email: 'user3@example.com',
       }),
     ])
   })

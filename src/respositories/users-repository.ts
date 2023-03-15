@@ -5,5 +5,5 @@ export interface UsersRepository {
   save(user: User): Promise<void>
   findById(id: string): Promise<User | null>
   findByEmail(email: string): Promise<User | null>
-  getAll(): Promise<User[]>
+  getAll(accessLevel?: number): Promise<User[]>
 }

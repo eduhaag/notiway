@@ -11,7 +11,7 @@ export async function fetch(req: FastifyRequest, reply: FastifyReply) {
 
   const fetchUseCase = makeFetchUsersUseCase()
 
-  const { users } = await fetchUseCase.execute()
+  const { users } = await fetchUseCase.execute({ accessLevel })
 
   return reply.status(200).send({ users })
 }

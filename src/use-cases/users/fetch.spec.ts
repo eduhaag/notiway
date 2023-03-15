@@ -13,28 +13,36 @@ describe('Fetch user use case', () => {
     usersRepository.create({
       email: 'johndoe@example.com',
       password_hash: '123456',
+      access_level: 20,
     })
 
     usersRepository.create({
       email: 'mariedoe@example.com',
       password_hash: '123456',
     })
+
+    usersRepository.create({
+      email: 'josephdoe@example.com',
+      password_hash: '123456',
+      access_level: 40,
+    })
   })
 
   it('should be able to list all users', async () => {
-    const { users } = await sut.execute()
+    const { users } = await sut.execute({ accessLevel: 20 })
 
     expect(users).toHaveLength(2)
     expect(users).toEqual([
       expect.objectContaining({ email: 'johndoe@example.com' }),
-      expect.objectContaining({ email: 'mariedoe@example.com' }),
+      expect.objectContaining({ email: 'josephdoe@example.com' }),
     ])
   })
 
   it('should be able to omit the password hash', async () => {
-    const { users } = await sut.execute()
+    const { users } = await sut.execute({})
 
     expect(users).toEqual([
+      expect.objectContaining({ password_hash: 'omited' }),
       expect.objectContaining({ password_hash: 'omited' }),
       expect.objectContaining({ password_hash: 'omited' }),
     ])

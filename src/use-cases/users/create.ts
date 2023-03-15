@@ -1,7 +1,7 @@
 import { UsersRepository } from '@/respositories/users-repository'
 import { User } from '@prisma/client'
-import { EmailAlreadyUsedError } from './errors/email-already-used-error'
 import { hash } from 'bcryptjs'
+import { EmailAlreadyUsedError } from '../errors/email-already-used-error'
 
 interface CreateUserUseCaseRequest {
   email: string

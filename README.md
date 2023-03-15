@@ -25,7 +25,7 @@
   ### RN
   - [x] o email deve ser unico
   - [ ] não deve ser possivel fazer login com senha e usuario errados
-  - [ ] não deve ser retornado a hashedPassword em nenhuma rota
+  - [x] não deve ser retornado a hashedPassword em nenhuma rota
 
   ### RNF
   - [ ] o password deve ser criptografado

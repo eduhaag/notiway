@@ -1,8 +1,8 @@
 import { InMemoryUsersRepository } from '@/respositories/in-memory/in-memory-users-repository'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { CreateUserUseCase } from './create'
-import { EmailAlreadyUsedError } from './errors/email-already-used-error'
 import { compare } from 'bcryptjs'
+import { EmailAlreadyUsedError } from '../errors/email-already-used-error'
 
 let usersRepository: InMemoryUsersRepository
 let sut: CreateUserUseCase

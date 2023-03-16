@@ -1,17 +1,17 @@
 
 ## :pushpin: Consumers
   ### RF
-  - [ ] Deve ser possivel criar novos consumidores
-  - [ ] Deve ser possivel alterar um consumidor
+  - [] Deve ser possivel criar novos consumidores
+  - [] Deve ser possivel alterar um consumidor
   - [ ] Deve ser possivel obter uma lista de consumidores
   - [ ] Deve ser possivel obter um consumidor pelo ID
   - [ ] Deve ser possivel filtrar a lista de consumidores pelo
           Tax ID, nome, email ou accetpMarketing
 
   ### RN
-  - [ ] Os campos email e name devem ser obrigatórios
-  - [ ] Os campos email e taxId devem ser unicos
-  - [ ] O campo email e taxId não podem ser alterados por usuario
+  - [] Os campos email e name devem ser obrigatórios
+  - [] Os campos email e taxId devem ser unicos
+  - [] O campo email e taxId não podem ser alterados por usuario
 
 ## :pushpin: Userss
   ### RF

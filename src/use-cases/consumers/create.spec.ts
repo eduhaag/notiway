@@ -20,8 +20,6 @@ describe('Create consumer use case', () => {
       password: '123456',
     })
 
-    console.log(consumersRepository.consumers)
-
     expect(consumer.id).toEqual(expect.any(String))
   })
 

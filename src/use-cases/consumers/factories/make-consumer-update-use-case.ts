@@ -1,8 +1,8 @@
-import { InMemoryConsumersRepository } from '@/respositories/in-memory/in-memory-consumers-repository'
 import { UpdateConsumerUseCase } from '../update'
+import { PrismaConsumersRepository } from '@/respositories/prisma/prisma-consumers-repository'
 
 export function makeConsumerUpdateUseCase() {
-  const prismaConsumersRepository = new InMemoryConsumersRepository()
+  const prismaConsumersRepository = new PrismaConsumersRepository()
   const updateUseCase = new UpdateConsumerUseCase(prismaConsumersRepository)
 
   return updateUseCase

@@ -26,15 +26,15 @@ export class PrismaConsumersRepository implements ConsumersRepository {
   }
 
   async findById(id: string) {
-    return prisma.consumer.findUnique({ where: { id } })
+    return await prisma.consumer.findUnique({ where: { id } })
   }
 
   async findByTaxId(taxId: string) {
-    return prisma.consumer.findUnique({ where: { tax_id: taxId } })
+    return await prisma.consumer.findUnique({ where: { tax_id: taxId } })
   }
 
   async findByEmail(email: string) {
-    return prisma.consumer.findUnique({ where: { email } })
+    return await prisma.consumer.findUnique({ where: { email } })
   }
 
   async findManyWithFilter(filter: ConsumersFilter) {

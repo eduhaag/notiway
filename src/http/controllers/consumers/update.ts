@@ -5,8 +5,8 @@ import { z } from 'zod'
 
 export async function update(req: FastifyRequest, reply: FastifyReply) {
   const updateConsumerBodySchema = z.object({
-    name: z.string(),
-    email: z.string().email(),
+    name: z.string().optional(),
+    email: z.string().email().optional(),
     fone: z.string().optional(),
     whatsapp: z.string().optional(),
     zip_code: z.string().optional(),
@@ -25,6 +25,8 @@ export async function update(req: FastifyRequest, reply: FastifyReply) {
 
   const data = updateConsumerBodySchema.parse(req.body)
   const { consumerId } = updateConsumerParamsSchema.parse(req.params)
+
+  console.log(consumerId)
 
   try {
     const updateConsumerUseCase = makeConsumerUpdateUseCase()

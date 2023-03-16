@@ -4,7 +4,7 @@
   - [x] Deve ser possivel criar novos consumidores
   - [x] Deve ser possivel alterar um consumidor
   - [x] Deve ser possivel obter uma lista de consumidores
-  - [] Deve ser possivel obter um consumidor pelo ID
+  - [x] Deve ser possivel obter um consumidor pelo ID
   - [x] Deve ser possivel filtrar a lista de consumidores pelo
           Tax ID, nome, email ou accetpMarketing
 

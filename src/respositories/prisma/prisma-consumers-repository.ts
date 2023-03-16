@@ -41,6 +41,10 @@ export class PrismaConsumersRepository implements ConsumersRepository {
     const { acceptMarketing, email, name, taxId } = filter
     const filterParams: FilterParams = {}
 
+    if (acceptMarketing === undefined && !email && !name && !taxId) {
+      return await prisma.consumer.findMany()
+    }
+
     if (email) {
       filterParams.email = { contains: email }
     }

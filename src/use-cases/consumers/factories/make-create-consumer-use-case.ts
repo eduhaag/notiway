@@ -1,8 +1,8 @@
-import { InMemoryConsumersRepository } from '@/respositories/in-memory/in-memory-consumers-repository'
 import { CreateConsumerUseCase } from '../create'
+import { PrismaConsumersRepository } from '@/respositories/prisma/prisma-consumers-repository'
 
 export function makeCreateConsumerUseCase() {
-  const prismaConsumersRepository = new InMemoryConsumersRepository()
+  const prismaConsumersRepository = new PrismaConsumersRepository()
   const createUsersUseCase = new CreateConsumerUseCase(
     prismaConsumersRepository,
   )

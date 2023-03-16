@@ -32,7 +32,7 @@ export class CreateConsumerUseCase {
   async execute(
     data: CreateConsumerUseCaseRequest,
   ): Promise<CreateConsumerUseCaseResponse> {
-    const { email, password, tax_id, acceptMarketing = true } = data
+    const { email, tax_id, acceptMarketing = true } = data
 
     const emailAlreadyExists = await this.consumersRepository.findByEmail(email)
 
@@ -50,10 +50,12 @@ export class CreateConsumerUseCase {
       }
     }
 
-    const password_hash = await hash(password, 6)
+    const password_hash = await hash(data.password, 6)
+
+    const { password, ...dataWithoutPassword } = data
 
     const consumer = await this.consumersRepository.create({
-      ...data,
+      ...dataWithoutPassword,
       accept_marketing_at: acceptMarketing ? new Date() : null,
       User: {
         create: {

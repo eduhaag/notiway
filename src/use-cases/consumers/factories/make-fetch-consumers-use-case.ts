@@ -1,8 +1,8 @@
+import { PrismaConsumersRepository } from '@/respositories/prisma/prisma-consumers-repository'
 import { FetchConsumersUseCase } from '../fetch'
-import { InMemoryConsumersRepository } from '@/respositories/in-memory/in-memory-consumers-repository'
 
 export function makeFetchConsumersUseCase() {
-  const prismaConsumersRepository = new InMemoryConsumersRepository()
+  const prismaConsumersRepository = new PrismaConsumersRepository()
   const fetchUsersUseCase = new FetchConsumersUseCase(prismaConsumersRepository)
 
   return fetchUsersUseCase

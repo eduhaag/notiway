@@ -26,8 +26,6 @@ export async function update(req: FastifyRequest, reply: FastifyReply) {
   const data = updateConsumerBodySchema.parse(req.body)
   const { consumerId } = updateConsumerParamsSchema.parse(req.params)
 
-  console.log(consumerId)
-
   try {
     const updateConsumerUseCase = makeConsumerUpdateUseCase()
 

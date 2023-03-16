@@ -11,7 +11,7 @@ describe('Create consumer e2e', () => {
     await app.close()
   })
 
-  it('should be able to create a new consumer', async () => {
+  it.only('should be able to create a new consumer', async () => {
     const response = await request(app.server).post('/consumers').send({
       email: 'johndoe@example.com',
       password: '123456',

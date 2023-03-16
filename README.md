@@ -13,13 +13,13 @@
   - [ ] Os campos email e taxId devem ser unicos
   - [ ] O campo email e taxId não podem ser alterados por usuario
 
-## :pushpin: Users
+## :pushpin: Userss
   ### RF
   - [x] Deve ser possivel criar um novo usuário
   - [x] Deve ser possivel alterar um usuário
   - [x] Um admin deve poder alterar o nivel de acesso
   - [x] Deve ser possivel listar os usuários
-  - [ ] Deve ser possivel listar os usuarios com nivel de acesso maior ou igual a x
+  - [x] Deve ser possivel listar os usuarios com nivel de acesso maior ou igual a x
   - [x] Deve ser possivel alterar a senha de um usuário
   - [x] Um usuário deve poder fazer login
 

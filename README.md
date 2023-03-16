@@ -3,9 +3,9 @@
   ### RF
   - [] Deve ser possivel criar novos consumidores
   - [] Deve ser possivel alterar um consumidor
-  - [ ] Deve ser possivel obter uma lista de consumidores
-  - [ ] Deve ser possivel obter um consumidor pelo ID
-  - [ ] Deve ser possivel filtrar a lista de consumidores pelo
+  - [] Deve ser possivel obter uma lista de consumidores
+  - [] Deve ser possivel obter um consumidor pelo ID
+  - [] Deve ser possivel filtrar a lista de consumidores pelo
           Tax ID, nome, email ou accetpMarketing
 
   ### RN

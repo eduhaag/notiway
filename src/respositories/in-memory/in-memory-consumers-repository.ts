@@ -58,7 +58,7 @@ export class InMemoryConsumersRepository implements ConsumersRepository {
       return this.consumers
     }
 
-    return this.consumers.filter((item) => {
+    const consumers = this.consumers.filter((item) => {
       const check = []
       if (name) {
         if (item.name.includes(name)) {
@@ -85,14 +85,14 @@ export class InMemoryConsumersRepository implements ConsumersRepository {
       }
 
       if (acceptMarketing !== undefined) {
-        if (acceptMarketing) {
-          if (item.accept_marketing_at) {
+        if (acceptMarketing === true) {
+          if (item.accept_marketing_at !== null) {
             check.push(true)
           } else {
             check.push(false)
           }
         } else {
-          if (!item.accept_marketing_at) {
+          if (item.accept_marketing_at === null) {
             check.push(true)
           } else {
             check.push(false)
@@ -100,9 +100,17 @@ export class InMemoryConsumersRepository implements ConsumersRepository {
         }
       }
 
-      return check.every((value) => {
+      const allTrue = check.every((value) => {
         return value === true
       })
+
+      if (allTrue) {
+        return item
+      } else {
+        return null
+      }
     })
+
+    return consumers
   }
 }

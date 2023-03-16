@@ -9,7 +9,7 @@ import { fetch as fetchConsumers } from './consumers/fetch'
 export async function adminRoutes(app: FastifyInstance) {
   app.addHook('onRequest', verifyJWT)
 
-  // users
+  // ------- users
   app.post('/admin/users', { onRequest: [verifyAdminAccess(50)] }, create)
   app.put(
     '/admin/users/:userId',
@@ -18,9 +18,9 @@ export async function adminRoutes(app: FastifyInstance) {
   )
   app.get('/admin/users', { onRequest: [verifyAdminAccess(50)] }, fetchUsers)
 
-  // consumers
+  // ------ consumers
   app.get(
-    '/admin/consumers',
+    '/admin/consumers/search',
     {
       onRequest: [verifyAdminAccess(50)],
     },

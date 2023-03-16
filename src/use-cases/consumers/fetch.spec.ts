@@ -1,8 +1,9 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryConsumersRepository } from '@/respositories/in-memory/in-memory-consumers-repository'
 import { FetchConsumersUseCase } from './fetch'
+import { ConsumersRepository } from '@/respositories/consumers-repository'
 
-let consumersRepository: InMemoryConsumersRepository
+let consumersRepository: ConsumersRepository
 let sut: FetchConsumersUseCase
 
 describe('Fetch consumers use case', () => {
@@ -90,7 +91,7 @@ describe('Fetch consumers use case', () => {
     ])
   })
 
-  it.only('shoud not be able to fetch consumers by accept marketing', async () => {
+  it('shoud not be able to fetch consumers by accept marketing', async () => {
     await consumersRepository.create({
       email: 'johndoe@example.com',
       name: 'John Doe',

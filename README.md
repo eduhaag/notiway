@@ -38,22 +38,13 @@
   - [ ] Deve ser possivel listar os clients de um consumidor
   - [ ] Deve ser possivel deletar um client
   - [ ] Deve ser possivel alterar o status de um client
+  - [ ] Deve ser possivel gerar um novo token para o client
 
   ### RN
   - [ ] É obrigatório que o client tenha um nome e esteja associado a um Consumidor
 
-## :pushpin: Clients Tokens
-  ### RF
-  - [ ] Deve ser possivel criar um novo token para um client
 
-  ### RN
-  - [ ] Cada client pode ter somente um token ativo
-  - [ ] Ao gerar um novo token antes deve ser excluido o antigo
 
-  ### RNF
-  - [ ] O token deve ser um JWT
-  - [ ] O token deve armazenar o clientID
-  - [ ] O token não deve ter expiração
 
 ## :pushpin: Senders
   ### RF

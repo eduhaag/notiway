@@ -6,6 +6,7 @@ const envSchema = z.object({
   PORT: z.coerce.number().default(3333),
   DATABASE_URL: z.string(),
   JWT_SECRET: z.string(),
+  CLIENT_TOKEN_SECRET: z.string(),
   WPP_SECRET: z.string(),
   WPP_URL: z.string(),
 })

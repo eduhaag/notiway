@@ -43,9 +43,6 @@
   ### RN
   - [ ] É obrigatório que o client tenha um nome e esteja associado a um Consumidor
 
-
-
-
 ## :pushpin: Senders
   ### RF
   - [ ] Deve ser possivel criar novos senders

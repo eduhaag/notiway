@@ -1,5 +1,8 @@
 import { Prisma, ClientToken } from '@prisma/client'
-import { ClientTokensRepository } from '../client-tokens-repository'
+import {
+  ClientTokensRepository,
+  TokenUpdateData,
+} from '../client-tokens-repository'
 import { randomUUID } from 'node:crypto'
 
 export class InMemoryClientTokensRepository implements ClientTokensRepository {
@@ -18,11 +21,22 @@ export class InMemoryClientTokensRepository implements ClientTokensRepository {
     return token
   }
 
-  async save(token: ClientToken) {
-    const tokenIndex = this.tokens.findIndex((item) => item.id === token.id)
+  async updateByClientId({ client_id, token }: TokenUpdateData) {
+    const tokenIndex = this.tokens.findIndex(
+      (item) => item.client_id === client_id,
+    )
 
-    this.tokens[tokenIndex] = token
-    this.tokens[tokenIndex].updated_at = new Date()
+    if (tokenIndex < 0) {
+      this.tokens.push({
+        client_id,
+        id: randomUUID(),
+        token,
+        updated_at: new Date(),
+      })
+    } else {
+      this.tokens[tokenIndex].token = token
+      this.tokens[tokenIndex].updated_at = new Date()
+    }
   }
 
   async findByToken(token: string) {

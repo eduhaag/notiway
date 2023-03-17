@@ -3,9 +3,8 @@ import { ConsumersRepository } from '@/respositories/consumers-repository'
 import { SendersRepository } from '@/respositories/senders-repository'
 import { Client } from '@prisma/client'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
-import { hash } from 'bcryptjs'
-import { env } from '@/env'
 import { ClientTokensRepository } from '@/respositories/client-tokens-repository'
+import { generateClientToken } from '@/utils/generate-client-token'
 
 interface CreateClientUseCaseRequest {
   name: string
@@ -50,10 +49,7 @@ export class CreateClientUseCase {
 
     const client = await this.clientsRepository.create({ ...data })
 
-    const token = await hash(
-      client.id + env.CLIENT_TOKEN_SECRET + new Date(),
-      6,
-    )
+    const token = await generateClientToken(client.id)
 
     await this.clientTokensRepository.create({ client_id: client.id, token })
 

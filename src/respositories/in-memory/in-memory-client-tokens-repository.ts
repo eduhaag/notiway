@@ -43,8 +43,10 @@ export class InMemoryClientTokensRepository implements ClientTokensRepository {
     return this.tokens.find((item) => item.token === token) ?? null
   }
 
-  async delete(tokenId: string) {
-    const tokenIndex = this.tokens.findIndex((item) => item.id === tokenId)
+  async deleteByClientId(clientId: string) {
+    const tokenIndex = this.tokens.findIndex(
+      (item) => item.client_id === clientId,
+    )
 
     this.tokens.splice(tokenIndex, 1)
   }

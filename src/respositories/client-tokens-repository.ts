@@ -9,5 +9,5 @@ export interface ClientTokensRepository {
   create(data: Prisma.ClientTokenUncheckedCreateInput): Promise<ClientToken>
   updateByClientId(data: TokenUpdateData): Promise<void>
   findByToken(token: string): Promise<ClientToken | null>
-  delete(token: string): Promise<void>
+  deleteByClientId(clientId: string): Promise<void>
 }

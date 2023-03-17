@@ -6,13 +6,12 @@ export class InMemoryClientsRepository implements ClientsRepository {
   clients: Client[] = []
 
   async create(data: Prisma.ClientUncheckedCreateInput) {
-    const { consumer_id, name, footer, header, sender_id, token } = data
+    const { consumer_id, name, footer, header, sender_id } = data
 
     const client: Client = {
       id: randomUUID(),
       consumer_id,
       name,
-      token,
       footer: footer ?? null,
       header: header ?? null,
       sender_id: sender_id ?? null,

@@ -6,7 +6,6 @@ export async function fetch(req: FastifyRequest, reply: FastifyReply) {
   const fetchClientsParamsSchema = z.object({
     consumerId: z.string().uuid(),
   })
-  console.log('chegou')
   const { consumerId } = fetchClientsParamsSchema.parse(req.params)
 
   const fetchClientsUseCase = makeFetchClientUseCase()

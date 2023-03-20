@@ -4,7 +4,10 @@ import { prisma } from '@/lib/prisma'
 
 export class PrismaClientsRepository implements ClientsRepository {
   async create(data: Prisma.ClientUncheckedCreateInput) {
-    const client = await prisma.client.create({ data })
+    const client = await prisma.client.create({
+      data,
+      include: { ClientToken: true },
+    })
 
     return client
   }

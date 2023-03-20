@@ -36,7 +36,7 @@
   - [] Deve ser possivel criar novos clients
   - [] Deve ser gerado um token junto ao client
   - [ ] Deve ser possivel alterar um client
-  - [ ] Deve ser possivel listar os clients de um consumidor
+  - [] Deve ser possivel listar os clients de um consumidor
   - [] Deve ser possivel deletar um client
   - [ ] Deve ser possivel alterar o status de um client
   - [] Deve ser possivel gerar um novo token para o client

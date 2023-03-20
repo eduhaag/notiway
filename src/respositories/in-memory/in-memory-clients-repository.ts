@@ -43,4 +43,8 @@ export class InMemoryClientsRepository implements ClientsRepository {
       this.clients.find((item) => item.id === id && !item.deleted_at) ?? null
     )
   }
+
+  async findByConsumerId(consumerId: string) {
+    return this.clients.filter((client) => (client.consumer_id = consumerId))
+  }
 }

@@ -5,4 +5,5 @@ export interface ClientsRepository {
   save(client: Client): Promise<void>
   delete(id: string): Promise<void>
   findById(id: string): Promise<Client | null>
+  findByConsumerId(consumerId: string): Promise<Client[]>
 }

@@ -21,7 +21,7 @@ describe('Update client use case', () => {
       name: 'client-example',
     })
 
-    await sut.execute({ client_id: client.id, status: 'updated' })
+    await sut.execute({ id: client.id, status: 'updated' })
 
     const clientUpdated = await clientsRepository.findById(client.id)
 
@@ -31,7 +31,7 @@ describe('Update client use case', () => {
   it('should not be able to update a non-existing-client', async () => {
     expect(async () => {
       await sut.execute({
-        client_id: 'non-existing-client-id',
+        id: 'non-existing-client-id',
         status: 'updated',
       })
     }).rejects.toBeInstanceOf(ResourceNotFoundError)
@@ -45,7 +45,7 @@ describe('Update client use case', () => {
 
     expect(async () => {
       await sut.execute({
-        client_id: client.id,
+        id: client.id,
         sender_id: 'non-existing-sender-id',
       })
     }).rejects.toBeInstanceOf(ResourceNotFoundError)

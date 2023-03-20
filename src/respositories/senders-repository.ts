@@ -2,9 +2,8 @@ import { Prisma, Sender } from '@prisma/client'
 
 export interface SenderFilter {
   type?: 'SHARED' | 'EXCLUSIVE' | 'PRIVATE'
-  company?: string
   enabled?: boolean
-  natinalCode?: number
+  nationalCode?: number
   lastRecharge?: {
     from: Date
     to: Date

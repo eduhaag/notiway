@@ -16,7 +16,7 @@ export class InMemorySenderRepository implements SendersRepository {
       type,
       company,
       consumer_id,
-      disabled_from,
+      disabled_at,
       internacional_code,
       national_code,
       region,
@@ -30,7 +30,7 @@ export class InMemorySenderRepository implements SendersRepository {
       type,
       company: company ?? null,
       consumer_id: consumer_id ?? null,
-      disabled_from: disabled_from ? new Date(disabled_from) : null,
+      disabled_at: disabled_at ? new Date(disabled_at) : null,
       internacional_code: internacional_code ?? null,
       national_code: national_code ?? null,
       region: region ?? null,
@@ -61,31 +61,18 @@ export class InMemorySenderRepository implements SendersRepository {
   }
 
   async findManyWithFilter(filter: SenderFilter) {
-    const { company, enabled, lastRecharge, natinalCode, type } = filter
+    dayjs.extend(isBetween)
+    const { enabled, lastRecharge, nationalCode, type } = filter
 
-    if (
-      !company &&
-      enabled === undefined &&
-      !lastRecharge &&
-      !natinalCode &&
-      !type
-    ) {
+    if (enabled === undefined && !lastRecharge && !nationalCode && !type) {
       return this.senders
     }
 
     return this.senders.filter((item) => {
       const check = []
 
-      if (company) {
-        if (item.company && item.company.includes(company)) {
-          check.push(true)
-        } else {
-          check.push(false)
-        }
-      }
-
-      if (natinalCode) {
-        if (item.national_code === natinalCode) {
+      if (nationalCode) {
+        if (item.national_code === nationalCode) {
           check.push(true)
         } else {
           check.push(false)
@@ -102,13 +89,13 @@ export class InMemorySenderRepository implements SendersRepository {
 
       if (enabled !== undefined) {
         if (enabled) {
-          if (!item.disabled_from) {
+          if (!item.disabled_at) {
             check.push(true)
           } else {
             check.push(false)
           }
         } else {
-          if (item.disabled_from) {
+          if (item.disabled_at) {
             check.push(true)
           } else {
             check.push(false)
@@ -117,11 +104,12 @@ export class InMemorySenderRepository implements SendersRepository {
       }
 
       if (lastRecharge) {
-        const startDate = dayjs(lastRecharge.from).startOf('day')
-        const endDate = dayjs(lastRecharge.to).endOf('day')
+        const startDate = dayjs(lastRecharge.from).startOf('d').toDate()
+        const endDate = dayjs(lastRecharge.to).endOf('d').toDate()
+
         if (
           item.last_recharge &&
-          dayjs(item.last_recharge).isBetween(startDate, endDate, 'day', '[]')
+          dayjs(item.last_recharge).isBetween(startDate, endDate, 'd', '[]')
         ) {
           check.push(true)
         } else {

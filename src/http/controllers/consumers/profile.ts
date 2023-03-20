@@ -5,7 +5,7 @@ import { z } from 'zod'
 
 export async function profile(req: FastifyRequest, reply: FastifyReply) {
   const profileParamsSchema = z.object({
-    consumerId: z.string(),
+    consumerId: z.string().uuid(),
   })
 
   const { consumerId } = profileParamsSchema.parse(req.params)

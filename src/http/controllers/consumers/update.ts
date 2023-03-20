@@ -20,7 +20,7 @@ export async function update(req: FastifyRequest, reply: FastifyReply) {
     acceptMarketing: z.boolean().optional(),
   })
   const updateConsumerParamsSchema = z.object({
-    consumerId: z.string(),
+    consumerId: z.string().uuid(),
   })
 
   const data = updateConsumerBodySchema.parse(req.body)

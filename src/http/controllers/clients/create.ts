@@ -8,7 +8,7 @@ export async function create(req: FastifyRequest, reply: FastifyReply) {
     name: z.string(),
     header: z.string().optional(),
     footer: z.string().optional(),
-    consumer_id: z.string(),
+    consumer_id: z.string().uuid(),
   })
 
   const data = createClientBodySchema.parse(req.body)

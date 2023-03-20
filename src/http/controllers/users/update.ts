@@ -10,7 +10,7 @@ export async function update(req: FastifyRequest, reply: FastifyReply) {
     accessLevel: z.number().optional(),
   })
   const updateParamsSchema = z.object({
-    userId: z.string(),
+    userId: z.string().uuid(),
   })
 
   const { email, accessLevel } = updateBodySchema.parse(req.body)

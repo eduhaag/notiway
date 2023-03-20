@@ -53,7 +53,6 @@
   - [ ] Deve ser possivel filtrar a listagem por type, company, ativos, DDD e entre
         duas datas no campo lastPayment
   - [ ] Deve ser possivel desativar/ativar um sender
-        Alterar rota para enabled/disabled e alterar entidades
   - [ ] Deve ser possivel atualizar a data de recarga de um sender
   - [ ] Deve ser possivel realizar o pareamento de um sender
   - [ ] Deverá ser possivel cancelar o pareamento de um sender.

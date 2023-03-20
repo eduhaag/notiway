@@ -18,7 +18,7 @@ describe('Update consumer use case', () => {
       name: 'John Doe',
     })
 
-    await sut.execute({ consumerId: consumer.id, acceptMarketing: true })
+    await sut.execute({ id: consumer.id, acceptMarketing: true })
 
     const response = await consumersRepository.findById(consumer.id)
 
@@ -28,7 +28,7 @@ describe('Update consumer use case', () => {
   it('shoud not be able to to update a non existing consumer', async () => {
     expect(async () => {
       await sut.execute({
-        consumerId: 'non-existing-consumer-id',
+        id: 'non-existing-consumer-id',
         acceptMarketing: true,
       })
     }).rejects.toBeInstanceOf(ResourceNotFoundError)

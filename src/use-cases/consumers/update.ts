@@ -2,7 +2,7 @@ import { ConsumersRepository } from '@/respositories/consumers-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 
 interface UpdateConsumerUseCaseRequest {
-  consumerId: string
+  id: string
   name?: string
   fone?: string | null
   whatsapp?: string | null
@@ -21,13 +21,15 @@ export class UpdateConsumerUseCase {
   constructor(private consumersRepository: ConsumersRepository) {}
 
   async execute(data: UpdateConsumerUseCaseRequest): Promise<void> {
-    const consumer = await this.consumersRepository.findById(data.consumerId)
+    const consumer = await this.consumersRepository.findById(data.id)
 
     if (!consumer) {
       throw new ResourceNotFoundError()
     }
 
-    const consumerToSave = { ...consumer, ...data }
+    const { acceptMarketing, ...dataWithoutAcceptMarketing } = data
+
+    const consumerToSave = { ...consumer, ...dataWithoutAcceptMarketing }
 
     if (data.acceptMarketing !== undefined) {
       if (data.acceptMarketing && !consumer?.accept_marketing_at) {

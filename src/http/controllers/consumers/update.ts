@@ -29,7 +29,7 @@ export async function update(req: FastifyRequest, reply: FastifyReply) {
   try {
     const updateConsumerUseCase = makeConsumerUpdateUseCase()
 
-    await updateConsumerUseCase.execute({ consumerId, ...data })
+    await updateConsumerUseCase.execute({ id: consumerId, ...data })
 
     return reply.status(204).send()
   } catch (error) {

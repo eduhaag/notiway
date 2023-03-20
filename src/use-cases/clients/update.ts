@@ -20,7 +20,7 @@ export class UpdateClientUseCase {
   async execute(data: UpdateClientUseCaseRequest): Promise<void> {
     const { client_id, sender_id } = data
 
-    let client = await this.clientsRepository.findById(client_id)
+    const client = await this.clientsRepository.findById(client_id)
 
     if (!client) {
       throw new ResourceNotFoundError()
@@ -33,8 +33,8 @@ export class UpdateClientUseCase {
         throw new ResourceNotFoundError()
       }
     }
-    client = { ...client!, ...data }
+    const clientToSave = { ...client, ...data }
 
-    await this.clientsRepository.save(client)
+    await this.clientsRepository.save(clientToSave)
   }
 }

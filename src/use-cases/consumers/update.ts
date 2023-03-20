@@ -27,33 +27,17 @@ export class UpdateConsumerUseCase {
       throw new ResourceNotFoundError()
     }
 
+    const consumerToSave = { ...consumer, ...data }
+
     if (data.acceptMarketing !== undefined) {
       if (data.acceptMarketing && !consumer?.accept_marketing_at) {
-        consumer.accept_marketing_at = new Date()
+        consumerToSave.accept_marketing_at = new Date()
       }
       if (!data.acceptMarketing) {
-        consumer.accept_marketing_at = null
+        consumerToSave.accept_marketing_at = null
       }
     }
 
-    consumer.city = data.city !== undefined ? data.city : consumer.city
-    consumer.street = data.street !== undefined ? data.street : consumer.street
-    consumer.zip_code =
-      data.zip_code !== undefined ? data.zip_code : consumer.zip_code
-    consumer.whatsapp =
-      data.whatsapp !== undefined ? data.whatsapp : consumer.whatsapp
-    consumer.name = data.name !== undefined ? data.name : consumer.name
-    consumer.province =
-      data.province !== undefined ? data.province : consumer.province
-    consumer.number = data.number !== undefined ? data.number : consumer.number
-    consumer.fone = data.fone !== undefined ? data.fone : consumer.fone
-    consumer.district =
-      data.district !== undefined ? data.district : consumer.district
-    consumer.country =
-      data.country !== undefined ? data.country : consumer.country
-    consumer.complement =
-      data.complement !== undefined ? data.complement : consumer.complement
-
-    await this.consumersRepository.save(consumer)
+    await this.consumersRepository.save(consumerToSave)
   }
 }

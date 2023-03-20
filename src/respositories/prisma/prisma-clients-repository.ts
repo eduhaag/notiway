@@ -6,7 +6,6 @@ export class PrismaClientsRepository implements ClientsRepository {
   async create(data: Prisma.ClientUncheckedCreateInput) {
     const client = await prisma.client.create({
       data,
-      include: { ClientToken: true },
     })
 
     return client
@@ -23,13 +22,13 @@ export class PrismaClientsRepository implements ClientsRepository {
     })
   }
 
-  async findById(id: string) {
+  async findById(id: string, withToken: boolean = false) {
     const client = await prisma.client.findFirst({
       where: {
         id,
         deleted_at: null,
       },
-      include: { ClientToken: true },
+      include: { ClientToken: withToken },
     })
 
     return client

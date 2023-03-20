@@ -3,7 +3,7 @@ import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { ClientsRepository } from '@/respositories/clients-repository'
 
 interface UpdateClientUseCaseRequest {
-  client_id: string
+  id: string
   sender_id?: string
   name?: string
   status?: string
@@ -18,9 +18,9 @@ export class UpdateClientUseCase {
   ) {}
 
   async execute(data: UpdateClientUseCaseRequest): Promise<void> {
-    const { client_id, sender_id } = data
+    const { id, sender_id } = data
 
-    const client = await this.clientsRepository.findById(client_id)
+    const client = await this.clientsRepository.findById(id)
 
     if (!client) {
       throw new ResourceNotFoundError()
@@ -33,6 +33,7 @@ export class UpdateClientUseCase {
         throw new ResourceNotFoundError()
       }
     }
+
     const clientToSave = { ...client, ...data }
 
     await this.clientsRepository.save(clientToSave)

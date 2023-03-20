@@ -33,16 +33,16 @@
 
 ## :pushpin: Clients
   ### RF
-  - [] Deve ser possivel criar novos clients
-  - [] Deve ser gerado um token junto ao client
-  - [] Deve ser possivel alterar um client
-  - [] Deve ser possivel listar os clients de um consumidor
-  - [] Deve ser possivel deletar um client
-  - [] Deve ser possivel alterar o status de um client
-  - [] Deve ser possivel gerar um novo token para o client
+  - [x] Deve ser possivel criar novos clients
+  - [x] Deve ser gerado um token junto ao client
+  - [x] Deve ser possivel alterar um client
+  - [x] Deve ser possivel listar os clients de um consumidor
+  - [x] Deve ser possivel deletar um client
+  - [x] Deve ser possivel alterar o status de um client
+  - [x] Deve ser possivel gerar um novo token para o client
 
   ### RN
-  - [] É obrigatório que o client tenha um nome e esteja associado a um Consumidor
+  - [x] É obrigatório que o client tenha um nome e esteja associado a um Consumidor
 
 ## :pushpin: Senders
   ### RF

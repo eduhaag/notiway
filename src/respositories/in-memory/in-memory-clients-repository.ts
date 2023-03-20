@@ -38,7 +38,7 @@ export class InMemoryClientsRepository implements ClientsRepository {
     this.clients[clientIndex].deleted_at = new Date()
   }
 
-  async findById(id: string) {
+  async findById(id: string, withToken?: boolean) {
     return (
       this.clients.find((item) => item.id === id && !item.deleted_at) ?? null
     )

@@ -2,6 +2,7 @@ import { SendersRepository } from '@/respositories/senders-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { api } from '@/lib/axios'
 import { converteBase64ToDataImage } from '@/utils/convert-base64-to-data-image'
+import { SenderDisablerError } from '../errors/sender-disabled-error'
 
 interface GetSenderQrCodeUseCaseRequest {
   senderId: string
@@ -29,6 +30,10 @@ export class GetSenderQrCodeUseCase {
 
     if (!sender) {
       throw new ResourceNotFoundError()
+    }
+
+    if (sender.disabled_at && sender.disabled_at !== null) {
+      throw new SenderDisablerError()
     }
 
     const connection: GetSenderQrCodeUseCaseResponse = {}

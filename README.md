@@ -61,5 +61,5 @@
   - [ ] Os campos name, type e fullnumber são obrigatórios
   - [ ] Os campos name e fullNumber devem ser unicos
   - [ ] Os campos name e fullNumber não pode ser alterado
-  - [ ] Para a conexão do whatsapp deverá ser feito uma chamada a API do wpp
+  - [] Para a conexão do whatsapp deverá ser feito uma chamada a API do wpp
   - [ ] Para excluir o token do wpp deverá existir uma rota com chamada a API do WPP

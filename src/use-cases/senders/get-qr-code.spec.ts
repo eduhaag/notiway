@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { InMemorySenderRepository } from '@/respositories/in-memory/in-memory-senders-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { GetSenderQrCodeUseCase } from './get-qr-code'
+import { SenderDisablerError } from '../errors/sender-disabled-error'
 
 let sendersRepository: InMemorySenderRepository
 let sut: GetSenderQrCodeUseCase
@@ -45,5 +46,21 @@ describe('Get sender qr code use case', () => {
         senderId: 'non-existing-sender',
       })
     }).rejects.toBeInstanceOf(ResourceNotFoundError)
+  })
+
+  it('should not be able to get the QR of a sender disabled', async () => {
+    const sender = await sendersRepository.create({
+      api_token: 'api-token',
+      full_number: '(99)99999-9999',
+      name: 'sender 1',
+      type: 'SHARED',
+      disabled_at: new Date(),
+    })
+
+    expect(async () => {
+      await sut.execute({
+        senderId: sender.id,
+      })
+    }).rejects.toBeInstanceOf(SenderDisablerError)
   })
 })

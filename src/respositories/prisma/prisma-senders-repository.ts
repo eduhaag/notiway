@@ -42,21 +42,11 @@ export class PrismaSendersRepository implements SendersRepository {
   }
 
   async findManyWithFilter(filter: SenderFilter) {
-    const { company, enabled, lastRecharge, natinalCode, type } = filter
+    const { enabled, lastRecharge, nationalCode, type } = filter
     const filterParams: FilterParams = {}
 
-    if (
-      !company &&
-      enabled === undefined &&
-      !lastRecharge &&
-      !natinalCode &&
-      !type
-    ) {
+    if (enabled === undefined && !lastRecharge && !nationalCode && !type) {
       return await prisma.sender.findMany()
-    }
-
-    if (company) {
-      filterParams.company = { contains: company }
     }
 
     if (enabled !== undefined) {
@@ -74,8 +64,8 @@ export class PrismaSendersRepository implements SendersRepository {
       }
     }
 
-    if (natinalCode) {
-      filterParams.national_code = natinalCode
+    if (nationalCode) {
+      filterParams.national_code = nationalCode
     }
 
     if (type) {
@@ -85,5 +75,9 @@ export class PrismaSendersRepository implements SendersRepository {
     const senders = await prisma.sender.findMany({ where: filterParams })
 
     return senders
+  }
+
+  async findManyByConsumerId(consumerId: string) {
+    return await prisma.sender.findMany({ where: { consumer_id: consumerId } })
   }
 }

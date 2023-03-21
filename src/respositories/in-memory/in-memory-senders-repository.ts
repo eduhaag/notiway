@@ -1,6 +1,5 @@
 import { randomUUID } from 'node:crypto'
 import dayjs from 'dayjs'
-// eslint-disable-next-line no-unused-vars
 import isBetween from 'dayjs/plugin/isBetween'
 import { Prisma, Sender } from '@prisma/client'
 import { SenderFilter, SendersRepository } from '../senders-repository'
@@ -121,5 +120,9 @@ export class InMemorySenderRepository implements SendersRepository {
         return value === true
       })
     })
+  }
+
+  async findManyByConsumerId(consumerId: string) {
+    return this.senders.filter((sender) => sender.consumer_id === consumerId)
   }
 }

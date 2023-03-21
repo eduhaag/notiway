@@ -17,4 +17,5 @@ export interface SendersRepository {
   findByName(name: string): Promise<Sender | null>
   findByFullNumber(fullNumber: string): Promise<Sender | null>
   findManyWithFilter(filter: SenderFilter): Promise<Sender[]>
+  findManyByConsumerId(consumerId: string): Promise<Sender[]>
 }

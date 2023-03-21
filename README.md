@@ -50,6 +50,7 @@
   - [] Deve ser possivel alterar sender
   - [] Deve ser possivel listar todos os senders
   - [] Deve ser possivel obter um sender pelo ID
+  - [] Deve ser possivel listar os senders por consumerId
   - [] Deve ser possivel filtrar a listagem por type, ativos, DDD e entre duas datas no campo lastPayment
   - [] Deve ser possivel desativar/ativar um sender
   - [] Deve ser possivel atualizar a data de recarga de um sender

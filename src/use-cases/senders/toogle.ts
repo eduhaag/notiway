@@ -1,5 +1,6 @@
 import { SendersRepository } from '@/respositories/senders-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
+import { api } from '@/lib/axios'
 
 interface ToggleSenderUseCaseRequest {
   senderId: string
@@ -22,6 +23,20 @@ export class ToggleSenderUseCase {
     if (isEnabled) {
       sender.disabled_at = null
     } else {
+      try {
+        await api.post(
+          `/${sender.name}/close-session`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${sender.api_token}`,
+            },
+          },
+        )
+      } catch (error) {
+        throw error
+      }
+
       sender.disabled_at = new Date()
     }
 

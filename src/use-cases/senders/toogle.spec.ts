@@ -1,10 +1,17 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { InMemorySenderRepository } from '@/respositories/in-memory/in-memory-senders-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { ToggleSenderUseCase } from './toogle'
+import { api } from '@/lib/axios'
 
 let sendersRepository: InMemorySenderRepository
 let sut: ToggleSenderUseCase
+
+const mock = vi.spyOn(api, 'post').mockImplementation(async (data) => {
+  if (data.includes('close-session')) {
+    return { data: { status: true } }
+  }
+})
 
 describe('Toggle sender use case', () => {
   beforeEach(() => {
@@ -27,6 +34,8 @@ describe('Toggle sender use case', () => {
     await sut.execute({ senderId: sender.id, isEnabled: false })
     response = await sendersRepository.findById(sender.id)
     expect(response?.disabled_at).toEqual(expect.any(Date))
+
+    expect(mock).toBeCalledTimes(1)
   })
 
   it('should not be able to toogle a non-existing-sender', async () => {

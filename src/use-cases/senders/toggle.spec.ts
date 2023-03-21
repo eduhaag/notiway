@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { InMemorySenderRepository } from '@/respositories/in-memory/in-memory-senders-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
-import { ToggleSenderUseCase } from './toogle'
 import { api } from '@/lib/axios'
+import { ToggleSenderUseCase } from './toggle'
 
 let sendersRepository: InMemorySenderRepository
 let sut: ToggleSenderUseCase

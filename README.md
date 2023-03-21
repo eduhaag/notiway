@@ -49,11 +49,12 @@
   - [] Deve ser possivel criar novos senders
   - [ ] Deve ser possivel alterar sender
   - [] Deve ser possivel listar todos os senders
-  - [ ] Deve ser possivel obter um sender pelo ID
+  - [] Deve ser possivel obter um sender pelo ID
   - [] Deve ser possivel filtrar a listagem por type, ativos, DDD e entre duas datas no campo lastPayment
   - [] Deve ser possivel desativar/ativar um sender
   - [ ] Deve ser possivel atualizar a data de recarga de um sender
-  - [ ] Deve ser possivel realizar o pareamento de um sender
+  - [] Deve ser possivel realizar o pareamento de um sender
+  - [] Deve ser possivel obter o status da conexão
   - [ ] Deverá ser possivel cancelar o pareamento de um sender.
 
   ### RN

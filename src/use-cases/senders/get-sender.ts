@@ -1,41 +1,51 @@
 import { SendersRepository } from '@/respositories/senders-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { api } from '@/lib/axios'
-import { converteBase64ToDataImage } from '@/utils/convert-base64-to-data-image'
+import { SendeType } from '@prisma/client'
 
-interface GetSenderQrCodeUseCaseRequest {
+interface GGetSenderUseCaseRequest {
   senderId: string
 }
 
-interface GetSenderQrCodeUseCaseResponse {
-  base64Qr?: string
-  status?: string
+interface GetSenderUseCaseResponse {
+  connection_status?: string
+  sender: {
+    id: string
+    name: string
+    type: SendeType
+    company: string | null
+    last_recharge: Date | null
+    disabled_at: Date | null
+    national_code: number | null
+    internacional_code: number | null
+    region: string | null
+    full_number: string
+  }
 }
 
 interface ApiResponse {
   data: {
-    qrcode: string
     status: string
   }
 }
 
-export class GetSenderQrCodeUseCase {
+export class GetSenderUseCase {
   constructor(private sendersRepository: SendersRepository) {}
 
   async execute({
     senderId,
-  }: GetSenderQrCodeUseCaseRequest): Promise<GetSenderQrCodeUseCaseResponse> {
+  }: GGetSenderUseCaseRequest): Promise<GetSenderUseCaseResponse> {
     const sender = await this.sendersRepository.findById(senderId)
 
     if (!sender) {
       throw new ResourceNotFoundError()
     }
 
-    const connection: GetSenderQrCodeUseCaseResponse = {}
+    let status
 
     try {
       const { data } = (await api.post(
-        `/${sender.name}/start-session`,
+        `/${sender.name}/status-session`,
         {
           waitQrCode: true,
         },
@@ -46,12 +56,13 @@ export class GetSenderQrCodeUseCase {
         },
       )) as ApiResponse
 
-      connection.base64Qr = converteBase64ToDataImage(data.qrcode)
-      connection.status = data.status
+      status = data.status
     } catch (error) {
       throw error
     }
 
-    return connection
+    const { api_token, ...senderToReturn } = sender
+
+    return { connection_status: status, sender: senderToReturn }
   }
 }

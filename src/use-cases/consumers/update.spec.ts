@@ -12,7 +12,7 @@ describe('Update consumer use case', () => {
     sut = new UpdateConsumerUseCase(consumersRepository)
   })
 
-  it('should be able to update a  consumer', async () => {
+  it('should be able to update a consumer', async () => {
     const consumer = await consumersRepository.create({
       email: 'johndoe@example.com',
       name: 'John Doe',

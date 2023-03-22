@@ -9,3 +9,10 @@ services:
       - POSTGRESQL_USERNAME=docker
       - POSTGRESQL_PASSWORD=docker
       - POSTGRESQL_DATABASE=zpi_db
+  zpi-redis:
+    image: bitnami/redis
+    container_name: zpi-redis
+    ports:
+      - 6379:6379
+    environment:
+      - REDIS_PASSWORD=docker

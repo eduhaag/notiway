@@ -19,7 +19,7 @@ app.register(fastifyJwt, {
     signed: false,
   },
   sign: {
-    expiresIn: '10m',
+    expiresIn: env.NODE_ENV === 'dev' ? '1d' : '10m',
   },
 })
 

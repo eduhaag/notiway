@@ -47,13 +47,13 @@
 ## :pushpin: Senders
   ### RF
   - [x] Deve ser possivel criar novos senders
-  - [] Deve ser possivel alterar sender
+  - [x] Deve ser possivel alterar sender
   - [x] Deve ser possivel listar todos os senders
   - [x] Deve ser possivel obter um sender pelo ID
   - [x] Deve ser possivel listar os senders por consumerId
   - [x] Deve ser possivel filtrar a listagem por type, ativos, DDD e entre duas datas no campo lastPayment
   - [x] Deve ser possivel desativar/ativar um sender
-  - [] Deve ser possivel atualizar a data de recarga de um sender
+  - [x] Deve ser possivel atualizar a data de recarga de um sender
   - [x] Deve ser possivel realizar o pareamento de um sender
   - [x] Deve ser possivel obter o status da conexão
   - [x] Deverá ser possivel cancelar o pareamento de um sender.

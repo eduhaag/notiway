@@ -3,6 +3,7 @@ version: '3'
 services:
   zpi-pg:
     image: bitnami/postgresql
+    container_name: zpi-pg
     ports:
       - 5432:5432
     environment:
@@ -10,7 +11,7 @@ services:
       - POSTGRESQL_PASSWORD=docker
       - POSTGRESQL_DATABASE=zpi_db
   zpi-redis:
-    image: bitnami/redis
+    image: redis:alpine
     container_name: zpi-redis
     ports:
       - 6379:6379

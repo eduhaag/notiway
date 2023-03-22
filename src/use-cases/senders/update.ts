@@ -3,7 +3,8 @@ import { SendersRepository } from '@/respositories/senders-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 
 interface UpdateSenderUseCaseRequest {
-  id: string
+  id?: string
+  name?: string
   type?: 'SHARED' | 'EXCLUSIVE' | 'PRIVATE'
   consumer_id?: string
   company?: string
@@ -20,9 +21,15 @@ export class UpdateSenderUseCase {
   ) {}
 
   async execute(data: UpdateSenderUseCaseRequest): Promise<void> {
-    const { id, consumer_id } = data
+    const { id, name, consumer_id } = data
 
-    const sender = await this.sendersRepository.findById(id)
+    let sender
+
+    if (id) {
+      sender = await this.sendersRepository.findById(id)
+    } else if (name) {
+      sender = await this.sendersRepository.findByName(name)
+    }
 
     if (!sender) {
       throw new ResourceNotFoundError()

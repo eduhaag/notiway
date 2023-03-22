@@ -38,6 +38,7 @@ export class ToggleSenderUseCase {
       }
 
       sender.disabled_at = new Date()
+      sender.paread_at = null
     }
 
     await this.sendersRepository.save(sender)

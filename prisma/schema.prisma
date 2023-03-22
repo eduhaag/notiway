@@ -58,6 +58,7 @@ model Sender {
   type               SendeType
   company            String?
   last_recharge      DateTime?
+  paread_at          DateTime?
   disabled_at        DateTime?
   national_code      Int?
   internacional_code Int?

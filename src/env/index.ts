@@ -9,6 +9,7 @@ const envSchema = z.object({
   CLIENT_TOKEN_SECRET: z.string(),
   WPP_SECRET: z.string(),
   WPP_URL: z.string(),
+  WPP_URL_SOCKET: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)

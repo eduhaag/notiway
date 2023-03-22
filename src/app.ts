@@ -9,6 +9,7 @@ import { adminRoutes } from './http/controllers/adminRoutes'
 import { consumersRoutes } from './http/controllers/consumers/routes'
 import { clientsRoutes } from './http/controllers/clients/routes'
 import { sendersRoutes } from './http/controllers/senders/routes'
+import { sendersLogOnSocket } from './sockets'
 
 export const app = fastify()
 
@@ -30,6 +31,8 @@ app.register(usersRoutes)
 app.register(consumersRoutes)
 app.register(clientsRoutes)
 app.register(sendersRoutes)
+
+sendersLogOnSocket()
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

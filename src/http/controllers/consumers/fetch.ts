@@ -7,7 +7,13 @@ export async function fetch(req: FastifyRequest, reply: FastifyReply) {
     taxId: z.string().optional(),
     name: z.string().optional(),
     email: z.string().optional(),
-    acceptMarketing: z.coerce.boolean().optional(),
+    acceptMarketing: z
+      .string()
+      .transform((value) => {
+        // eslint-disable-next-line eqeqeq
+        return value == 'true'
+      })
+      .optional(),
   })
 
   const { acceptMarketing, email, name, taxId } = fetchQuerySchema.parse(

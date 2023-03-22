@@ -48,18 +48,18 @@
   ### RF
   - [x] Deve ser possivel criar novos senders
   - [] Deve ser possivel alterar sender
-  - [] Deve ser possivel listar todos os senders
+  - [x] Deve ser possivel listar todos os senders
   - [x] Deve ser possivel obter um sender pelo ID
-  - [] Deve ser possivel listar os senders por consumerId
-  - [] Deve ser possivel filtrar a listagem por type, ativos, DDD e entre duas datas no campo lastPayment
-  - [] Deve ser possivel desativar/ativar um sender
+  - [x] Deve ser possivel listar os senders por consumerId
+  - [x] Deve ser possivel filtrar a listagem por type, ativos, DDD e entre duas datas no campo lastPayment
+  - [x] Deve ser possivel desativar/ativar um sender
   - [] Deve ser possivel atualizar a data de recarga de um sender
-  - [] Deve ser possivel realizar o pareamento de um sender
-  - [] Deve ser possivel obter o status da conexão
-  - [] Deverá ser possivel cancelar o pareamento de um sender.
+  - [x] Deve ser possivel realizar o pareamento de um sender
+  - [x] Deve ser possivel obter o status da conexão
+  - [x] Deverá ser possivel cancelar o pareamento de um sender.
 
   ### RN
   - [x] Os campos name, type e fullnumber são obrigatórios
   - [x] Os campos name e fullNumber devem ser unicos
   - [x] Os campos name e fullNumber não pode ser alterado
-  - [] Para a conexão do whatsapp deverá ser feito uma chamada a API do wpp
+  - [x] Para a conexão do whatsapp deverá ser feito uma chamada a API do wpp

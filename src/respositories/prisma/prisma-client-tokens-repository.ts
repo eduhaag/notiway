@@ -22,6 +22,25 @@ export class PrismaClientTokensRepository implements ClientTokensRepository {
   async findByToken(token: string) {
     const clientToken = await prisma.clientToken.findUnique({
       where: { token },
+      select: {
+        token: true,
+        client: {
+          select: {
+            id: true,
+            status: true,
+            header: true,
+            footer: true,
+            sender: {
+              select: {
+                api_token: true,
+                name: true,
+                paread_at: true,
+                disabled_at: true,
+              },
+            },
+          },
+        },
+      },
     })
 
     return clientToken

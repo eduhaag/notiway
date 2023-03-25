@@ -66,7 +66,6 @@ export class CreateSenderUseCase {
 
     let apiToken
 
-    // eslint-disable-next-line no-useless-catch
     try {
       const { data } = await api.post(
         `/${name}/${env.WPP_SECRET}/generate-token`,

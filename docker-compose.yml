@@ -17,3 +17,11 @@ services:
       - 6379:6379
     environment:
       - REDIS_PASSWORD=docker
+  zpi-mongo:
+    image: mongo
+    container_name: zpi-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: docker
+      MONGO_INITDB_ROOT_PASSWORD: docker
+    ports:
+      - "27017:27017"

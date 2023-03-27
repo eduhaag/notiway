@@ -1,8 +1,9 @@
-import Queue from 'bull'
+import Queue, { Job } from 'bull'
 
 import * as jobs from './jobs'
 import redisConfig from '@/config/redisConfig'
 import jobsBullConfig from '@/config/jobsBullConfig'
+import { Message } from '@/mongo/mongose'
 
 const queues = Object.values(jobs).map((job) => ({
   bull: new Queue(job.key, { redis: redisConfig }),
@@ -22,9 +23,25 @@ export default {
   },
 
   process: () => {
+    console.log('✅ Queues started')
     queues.forEach((queue) => {
       queue.bull.process(queue.handle)
-      queue.bull.on('failed', (job, err) => {})
+      queue.bull.on('failed', (job: Job, err) => {})
+      queue.bull.on('completed', async (job: Job, err) => {
+        if (job.queue.name === 'SendToWPP') {
+          const { clientId, senderName, to, content } = job.data
+
+          const message = new Message({
+            client_id: clientId,
+            sender_name: senderName,
+            to,
+            content,
+            sended_at: new Date(),
+          })
+
+          await message.save()
+        }
+      })
     })
   },
 }

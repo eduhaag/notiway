@@ -15,6 +15,7 @@ import { sendersRoutes } from './http/controllers/senders/routes'
 import { messagesRoutes } from './http/controllers/messages/routes'
 import { sendersLogOnSocket } from './sockets'
 import queue from './queues/queue'
+import { connectToMongoDB } from './mongo/mongose'
 
 export const app = fastify()
 
@@ -30,6 +31,7 @@ app.register(fastifyJwt, {
 })
 
 queue.process()
+connectToMongoDB()
 
 const fastiFyAdapter = new FastifyAdapter()
 

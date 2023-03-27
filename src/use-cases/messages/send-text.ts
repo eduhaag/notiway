@@ -45,6 +45,7 @@ export class SendTextUseCase {
     }
 
     const message: Message = {
+      clientId: client.id,
       senderName: sender.name,
       apiToken: sender.api_token,
       to,

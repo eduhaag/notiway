@@ -52,6 +52,7 @@ export type TEXT = {
 
 export interface Message {
   senderName: string
+  clientId: string
   apiToken: string
   to: string
   content: AUDIO | BUTTON | FILE | IMAGE | LINK | LOCATION | TEXT

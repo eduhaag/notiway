@@ -5,8 +5,27 @@ import {
 } from '../client-tokens-repository'
 import { randomUUID } from 'node:crypto'
 
+interface FakeClient {
+  id: string
+  status: string | null
+  header: string | null
+  footer: string | null
+  sender?: {
+    api_token: string
+    name: string
+    paread_at: Date | null
+    disabled_at: Date | null
+  } | null
+}
+
 export class InMemoryClientTokensRepository implements ClientTokensRepository {
   tokens: ClientToken[] = []
+  client: FakeClient = {
+    status: null,
+    id: randomUUID(),
+    footer: null,
+    header: null,
+  }
 
   async create(data: Prisma.ClientTokenUncheckedCreateInput) {
     const token: ClientToken = {
@@ -19,6 +38,10 @@ export class InMemoryClientTokensRepository implements ClientTokensRepository {
     this.tokens.push(token)
 
     return token
+  }
+
+  async createFakeClient(data: FakeClient) {
+    this.client = data
   }
 
   async updateByClientId({ client_id, token }: TokenUpdateData) {
@@ -40,7 +63,16 @@ export class InMemoryClientTokensRepository implements ClientTokensRepository {
   }
 
   async findByToken(token: string) {
-    return this.tokens.find((item) => item.token === token) ?? null
+    const tokenSearched = this.tokens.find((item) => item.token === token)
+
+    if (tokenSearched) {
+      return {
+        token: tokenSearched.token,
+        client: this.client,
+      }
+    }
+
+    return null
   }
 
   async deleteByClientId(clientId: string) {

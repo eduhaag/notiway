@@ -18,7 +18,7 @@ export async function sendText(req: FastifyRequest, reply: FastifyReply) {
 
     await sendTexUseCase.execute({ text: message, to, token: req.token })
 
-    return reply.status(200).send()
+    return reply.status(200).send({ status: 'sended' })
   } catch (error) {
     if (error instanceof ClientNotAuthorizedError) {
       return reply.status(401).send({ message: error.message })

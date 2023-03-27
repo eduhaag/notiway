@@ -9,7 +9,7 @@ import { ClientSenderNotReadyError } from '../errors/client-sender-not-ready-err
 let clientTokensRepository: InMemoryClientTokensRepository
 let sut: SendTextUseCase
 
-const mockQueue = vi.spyOn(queue, 'add').mockReturnThis()
+const addToQueue = vi.spyOn(queue, 'add')
 
 describe('Send text use case', () => {
   beforeEach(async () => {
@@ -42,7 +42,7 @@ describe('Send text use case', () => {
       token: 'token-example',
     })
 
-    expect(mockQueue).toBeCalledTimes(1)
+    expect(addToQueue).toBeCalledTimes(1)
   })
 
   it('should not be able to send message with a invalid token', async () => {

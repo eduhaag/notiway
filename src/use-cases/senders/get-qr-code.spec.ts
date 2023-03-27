@@ -1,23 +1,14 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemorySenderRepository } from '@/respositories/in-memory/in-memory-senders-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { GetSenderQrCodeUseCase } from './get-qr-code'
 import { SenderDisablerError } from '../errors/sender-disabled-error'
+import { axiosPostMock } from '@/utils/test/mocks/axios-mock'
 
 let sendersRepository: InMemorySenderRepository
 let sut: GetSenderQrCodeUseCase
 
-vi.mock('@/lib/axios.ts', () => {
-  return {
-    api: {
-      post: vi.fn().mockImplementation((data) => {
-        if (data.includes('start-session')) {
-          return { data: { qrcode: 'fake-qr-code', status: 'qrcode' } }
-        }
-      }),
-    },
-  }
-})
+axiosPostMock()
 
 describe('Get sender qr code use case', () => {
   beforeEach(() => {

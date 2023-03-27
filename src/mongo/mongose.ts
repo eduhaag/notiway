@@ -1,8 +1,21 @@
 import { env } from '@/env'
 import mongoose from 'mongoose'
+import { MongoMemoryServer } from 'mongodb-memory-server'
 
 export async function connectToMongoDB() {
-  await mongoose.connect(env.MONGO_DATABASE_URL, { dbName: 'zpi_mongo' })
+  let uri
+
+  if (env.NODE_ENV === 'test') {
+    const mongoServer = await MongoMemoryServer.create({
+      binary: { version: '6.0.4' },
+    })
+
+    uri = mongoServer.getUri()
+  } else {
+    uri = env.MONGO_DATABASE_URL
+  }
+
+  await mongoose.connect(uri, { dbName: 'zpi_mongo' })
 
   console.log('✅ Connected to MongoDB')
 }

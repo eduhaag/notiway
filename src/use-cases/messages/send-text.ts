@@ -16,7 +16,7 @@ export class SendTextUseCase {
 
   async execute(request: SendTextUseCaseRequest): Promise<void> {
     const { token, text, to } = request
-
+    console.log(token)
     const clientToken = await this.clientTokensRepository.findByToken(token)
 
     if (!clientToken) {

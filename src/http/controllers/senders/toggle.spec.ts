@@ -1,15 +1,11 @@
 import request from 'supertest'
 import { app } from '@/app'
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { prisma } from '@/lib/prisma'
 import { createAndAuthenticateUser } from '@/utils/test/create-and-authenticate-user'
-import { api } from '@/lib/axios'
+import { axiosPostMock } from '@/utils/test/mocks/axios-mock'
 
-const mock = vi.spyOn(api, 'post').mockImplementation(async (data) => {
-  if (data.includes('close-session')) {
-    return { data: { status: true } }
-  }
-})
+const mock = axiosPostMock()
 
 describe('Toggle sender e2e', () => {
   beforeAll(async () => {

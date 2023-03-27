@@ -1,26 +1,17 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryConsumersRepository } from '@/respositories/in-memory/in-memory-consumers-repository'
 import { CreateSenderUseCase } from './create'
 import { InMemorySenderRepository } from '@/respositories/in-memory/in-memory-senders-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { SenderFullNumberAlreadyExists } from '../errors/sender-full-number-already-exists-error'
 import { SenderNameAlreadyExists } from '../errors/sender-name-already-exists-error'
+import { axiosPostMock } from '@/utils/test/mocks/axios-mock'
 
 let sendersRepository: InMemorySenderRepository
 let consumersRepository: InMemoryConsumersRepository
 let sut: CreateSenderUseCase
 
-vi.mock('@/lib/axios.ts', () => {
-  return {
-    api: {
-      post: vi.fn().mockImplementation((data) => {
-        if (data.includes('generate-token')) {
-          return { data: { token: 'fake-token' } }
-        }
-      }),
-    },
-  }
-})
+axiosPostMock()
 
 describe('Create sender use case', () => {
   beforeEach(() => {

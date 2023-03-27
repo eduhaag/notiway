@@ -1,20 +1,11 @@
 import request from 'supertest'
 import { app } from '@/app'
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { prisma } from '@/lib/prisma'
 import { createAndAuthenticateUser } from '@/utils/test/create-and-authenticate-user'
+import { axiosPostMock } from '@/utils/test/mocks/axios-mock'
 
-vi.mock('@/lib/axios.ts', () => {
-  return {
-    api: {
-      post: vi.fn().mockImplementation((data) => {
-        if (data.includes('start-session')) {
-          return { data: { qrcode: 'fake-qr-code', status: 'qrcode' } }
-        }
-      }),
-    },
-  }
-})
+axiosPostMock()
 
 describe('Get sender QR code e2e', () => {
   beforeAll(async () => {

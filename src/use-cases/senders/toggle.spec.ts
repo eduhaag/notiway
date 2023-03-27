@@ -1,17 +1,13 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemorySenderRepository } from '@/respositories/in-memory/in-memory-senders-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
-import { api } from '@/lib/axios'
 import { ToggleSenderUseCase } from './toggle'
+import { axiosPostMock } from '@/utils/test/mocks/axios-mock'
 
 let sendersRepository: InMemorySenderRepository
 let sut: ToggleSenderUseCase
 
-const mock = vi.spyOn(api, 'post').mockImplementation(async (data) => {
-  if (data.includes('close-session')) {
-    return { data: { status: true } }
-  }
-})
+const mock = axiosPostMock()
 
 describe('Toggle sender use case', () => {
   beforeEach(() => {

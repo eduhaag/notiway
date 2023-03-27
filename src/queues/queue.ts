@@ -26,7 +26,7 @@ export default {
     console.log('✅ Queues started')
     queues.forEach((queue) => {
       queue.bull.process(queue.handle)
-      queue.bull.on('failed', (job: Job, err) => {})
+
       queue.bull.on('completed', async (job: Job, err) => {
         if (job.queue.name === 'SendToWPP') {
           const { clientId, senderName, to, content } = job.data

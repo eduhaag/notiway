@@ -30,8 +30,9 @@ app.register(fastifyJwt, {
   },
 })
 
-queue.process()
 connectToMongoDB()
+
+queue.process()
 
 const fastiFyAdapter = new FastifyAdapter()
 
@@ -40,8 +41,8 @@ createBullBoard({
   serverAdapter: fastiFyAdapter,
 })
 
-fastiFyAdapter.setBasePath('/ui')
-app.register(fastiFyAdapter.registerPlugin(), { prefix: '/ui' })
+fastiFyAdapter.setBasePath('/queues/ui')
+app.register(fastiFyAdapter.registerPlugin(), { prefix: 'queues/ui' })
 
 app.register(fastifyCookie)
 

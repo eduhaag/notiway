@@ -34,15 +34,15 @@ export class SendTextUseCase {
       throw new ClientSenderNotReadyError()
     }
 
-    let messageContent: string = text
+    const messageContent: string = text
 
-    if (client.header) {
-      messageContent = `*${client.header}*\n\n${messageContent}`
-    }
+    // if (client.header) {
+    //   messageContent = `*${client.header}*\n\n${messageContent}`
+    // }
 
-    if (client.footer) {
-      messageContent = `${messageContent}\n\n_${client.footer}_`
-    }
+    // if (client.footer) {
+    //   messageContent = `${messageContent}\n\n_${client.footer}_`
+    // }
 
     const message: Message = {
       clientId: client.id,

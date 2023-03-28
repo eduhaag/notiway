@@ -7,7 +7,6 @@ export type BUTTON = {
   type: 'BUTTON'
   message?: string
   options: {
-    useTemplateButtons: boolean
     buttons: {
       id: string
       text?: string
@@ -23,12 +22,13 @@ export type FILE = {
   type: 'FILE'
   filename: string
   base64: string
+  message?: string
 }
 
 export type IMAGE = {
   type: 'IMAGE'
   message?: string
-  bage64: string
+  base64: string
 }
 
 export type LINK = {

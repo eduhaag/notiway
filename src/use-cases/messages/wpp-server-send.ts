@@ -93,24 +93,6 @@ export async function sendToWppConnect(body: Message) {
         apiToken,
       )
     }
-    case 'BUTTON': {
-      const { options, message } = content
-
-      const url = `/${senderName}/send-buttons`
-
-      return await send(
-        {
-          phone: to,
-          message,
-          options: {
-            useTemplateButtons: true,
-            ...options,
-          },
-        },
-        url,
-        apiToken,
-      )
-    }
   }
 }
 

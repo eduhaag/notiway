@@ -3,21 +3,6 @@ export type AUDIO = {
   base64Ptt: string
 }
 
-export type BUTTON = {
-  type: 'BUTTON'
-  message?: string
-  options: {
-    buttons: {
-      id: string
-      text?: string
-      phoneNumber?: string
-      url?: string
-    }[]
-    title?: string
-    footer?: string
-  }
-}
-
 export type FILE = {
   type: 'FILE'
   filename: string
@@ -55,5 +40,5 @@ export interface Message {
   clientId: string
   apiToken: string
   to: string
-  content: AUDIO | BUTTON | FILE | IMAGE | LINK | LOCATION | TEXT
+  content: AUDIO | FILE | IMAGE | LINK | LOCATION | TEXT
 }

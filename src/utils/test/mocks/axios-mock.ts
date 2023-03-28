@@ -22,5 +22,9 @@ export function axiosPostMock() {
     if (data.includes('status-session')) {
       return { data: { qrcode: 'fake-qr-code', status: 'qrcode' } }
     }
+
+    if (data.includes('send-location')) {
+      return { data: { status: 'success' } }
+    }
   })
 }

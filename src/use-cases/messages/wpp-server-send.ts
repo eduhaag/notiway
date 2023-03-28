@@ -8,10 +8,28 @@ export async function sendToWppConnect(body: Message) {
   switch (content.type) {
     case 'TEXT': {
       const url = `/${senderName}/send-message`
+
       return await send(
         {
           phone: to,
           message: content.message,
+        },
+        url,
+        apiToken,
+      )
+    }
+    case 'LOCATION': {
+      const { lat, lng, address, title } = content
+
+      const url = `/${senderName}/send-location`
+
+      return await send(
+        {
+          phone: to,
+          lat,
+          lng,
+          address,
+          title,
         },
         url,
         apiToken,

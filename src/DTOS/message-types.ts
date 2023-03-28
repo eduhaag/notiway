@@ -5,7 +5,7 @@ export type AUDIO = {
 
 export type FILE = {
   type: 'FILE'
-  filename: string
+  filename?: string
   base64: string
   message?: string
 }

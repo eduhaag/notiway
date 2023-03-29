@@ -24,8 +24,8 @@ export type LINK = {
 
 export type LOCATION = {
   type: 'LOCATION'
-  lat: number
-  lng: number
+  lat?: number
+  lng?: number
   title?: string
   address?: string
 }

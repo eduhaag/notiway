@@ -1,27 +1,32 @@
 import { ClientNotAuthorizedError } from '@/use-cases/errors/client-not-authorized-error'
 import { ClientNotReadyError } from '@/use-cases/errors/client-not-ready-error'
 import { ClientSenderNotReadyError } from '@/use-cases/errors/client-sender-not-ready-error'
-import { makeSendLinkUseCase } from '@/use-cases/messages/factories/make-send-link-use-case'
+import { makeSendLocationUseCase } from '@/use-cases/messages/factories/make-send-location-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-export async function sendLink(req: FastifyRequest, reply: FastifyReply) {
-  const sendLinkBodySchema = z.object({
+export async function sendLocation(req: FastifyRequest, reply: FastifyReply) {
+  const sendLocationBodySchema = z.object({
     to: z.string(),
-    url: z.string(),
-    message: z.string().optional(),
+    latitude: z.number().min(-90).max(90).optional(),
+    longitude: z.number().min(-180).max(180).optional(),
+    title: z.string().optional(),
+    address: z.string().optional(),
   })
 
-  const { message, to, url } = sendLinkBodySchema.parse(req.body)
+  const { to, latitude, longitude, address, title } =
+    sendLocationBodySchema.parse(req.body)
 
   try {
-    const sendLinkUseCase = makeSendLinkUseCase()
+    const sendLocationUseCase = makeSendLocationUseCase()
 
-    await sendLinkUseCase.execute({
+    await sendLocationUseCase.execute({
       to,
-      url,
-      caption: message,
       token: req.token,
+      latitude,
+      longitude,
+      title,
+      address,
     })
 
     return reply.status(200).send({ status: 'sended' })

@@ -8,8 +8,8 @@ import { ClientSenderNotReadyError } from '../errors/client-sender-not-ready-err
 interface SendLocationUseCaseRequest {
   token: string
   to: string
-  latitude: number
-  longitude: number
+  latitude?: number
+  longitude?: number
   title?: string
   address?: string
 }

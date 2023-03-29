@@ -26,5 +26,17 @@ export function axiosPostMock() {
     if (data.includes('send-location')) {
       return { data: { status: 'success' } }
     }
+
+    if (data.includes('contact-vcard')) {
+      return { data: { status: 'success' } }
+    }
+
+    if (data.includes('send-sticker-gif')) {
+      return { data: { status: 'success' } }
+    }
+
+    if (data.includes('send-sticker')) {
+      return { data: { status: 'success' } }
+    }
   })
 }

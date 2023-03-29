@@ -9,7 +9,9 @@ import queue from './queues/queue'
 import { connectToMongoDB } from './mongo/mongose'
 import { fastiFyRegister } from './fastify-register'
 
-export const app = fastify()
+const MAX_BODY_SIZE = 16 * 1024 * 1024 // 16MB
+
+export const app = fastify({ bodyLimit: MAX_BODY_SIZE })
 
 fastiFyRegister(app)
 

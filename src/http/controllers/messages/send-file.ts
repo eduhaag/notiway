@@ -20,6 +20,10 @@ export async function sendFile(
 
   const { message, to, base64, filename } = sendTextBodySchema.parse(req.body)
 
+  if (type === 'FILE' && !filename) {
+    return reply.status(400).send({ message: 'Filename is required' })
+  }
+
   try {
     const SendFileUseCase = makeSendFileUseCase()
 

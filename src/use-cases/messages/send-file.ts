@@ -51,7 +51,7 @@ export class SendFileUseCase {
       case 'AUDIO': {
         content = {
           type: 'AUDIO',
-          base64Ptt: base64,
+          base64,
         }
         break
       }

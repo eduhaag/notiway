@@ -49,14 +49,14 @@ export async function sendToWppConnect(body: Message) {
       )
     }
     case 'AUDIO': {
-      const { base64Ptt } = content
+      const { base64 } = content
 
       const url = `/${senderName}/send-voice-base64`
 
       return await send(
         {
           phone: to,
-          base64: base64Ptt,
+          base64Ptt: base64,
         },
         url,
         apiToken,

@@ -1,6 +1,6 @@
 export type AUDIO = {
   type: 'AUDIO'
-  base64Ptt: string
+  base64: string
 }
 
 export type FILE = {

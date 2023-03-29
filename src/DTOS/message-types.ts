@@ -3,11 +3,22 @@ export type AUDIO = {
   base64: string
 }
 
+export type CONTACT = {
+  type: 'CONTACT'
+  contact: string
+  name: string
+}
+
 export type FILE = {
   type: 'FILE'
   filename?: string
   base64: string
   message?: string
+}
+
+export type GIF = {
+  type: 'GIF'
+  url: string
 }
 
 export type IMAGE = {
@@ -30,6 +41,11 @@ export type LOCATION = {
   address?: string
 }
 
+export type STICKER = {
+  type: 'STICKER'
+  url: string
+}
+
 export type TEXT = {
   type: 'TEXT'
   message: string
@@ -40,5 +56,14 @@ export interface Message {
   clientId: string
   apiToken: string
   to: string
-  content: AUDIO | FILE | IMAGE | LINK | LOCATION | TEXT
+  content:
+    | AUDIO
+    | CONTACT
+    | FILE
+    | GIF
+    | IMAGE
+    | LINK
+    | LOCATION
+    | STICKER
+    | TEXT
 }

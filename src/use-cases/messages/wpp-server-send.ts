@@ -93,6 +93,49 @@ export async function sendToWppConnect(body: Message) {
         apiToken,
       )
     }
+    case 'CONTACT': {
+      const { contact, name } = content
+
+      const url = `/${senderName}/contact-vcard`
+
+      return await send(
+        {
+          phone: to,
+          contactsId: `${contact}@c.us`,
+          name,
+        },
+        url,
+        apiToken,
+      )
+    }
+    case 'GIF': {
+      const { url } = content
+
+      const link = `/${senderName}/send-sticker-gif`
+
+      return await send(
+        {
+          phone: to,
+          path: url,
+        },
+        link,
+        apiToken,
+      )
+    }
+    case 'STICKER': {
+      const { url } = content
+
+      const link = `/${senderName}/send-sticker`
+
+      return await send(
+        {
+          phone: to,
+          path: url,
+        },
+        link,
+        apiToken,
+      )
+    }
   }
 }
 

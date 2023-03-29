@@ -52,8 +52,6 @@ describe('Send location e2e', () => {
         longitude: 2,
       })
 
-    console.log(response.body)
-
     expect(response.statusCode).toEqual(200)
     expect(apiMock).toBeCalledTimes(1)
   })

@@ -51,8 +51,6 @@ describe('Send sticker e2e', () => {
         url: 'http://example.com',
       })
 
-    console.log(response.body)
-
     expect(response.statusCode).toEqual(200)
     expect(apiMock).toBeCalledTimes(1)
   })

@@ -51,8 +51,6 @@ describe('Send text e2e', () => {
         message: 'test message',
       })
 
-    console.log(response.body)
-
     expect(response.statusCode).toEqual(200)
     expect(apiMock).toBeCalledTimes(1)
   })

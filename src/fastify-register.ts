@@ -30,12 +30,12 @@ export async function fastiFyRegister(app: FastifyInstance) {
   app.register(fastifyCookie)
 
   // routes
-  app.register(adminRoutes)
-  app.register(usersRoutes)
-  app.register(consumersRoutes)
-  app.register(clientsRoutes)
-  app.register(sendersRoutes)
-  app.register(messagesRoutes, { prefix: '/api' })
+  app.register(adminRoutes, { prefix: 'admin' })
+  app.register(usersRoutes, { prefix: 'site' })
+  app.register(consumersRoutes, { prefix: 'site' })
+  app.register(clientsRoutes, { prefix: 'site' })
+  app.register(sendersRoutes, { prefix: 'site' })
+  app.register(messagesRoutes)
 
   // Bull Board
   const fastiFyAdapter = new FastifyAdapter()

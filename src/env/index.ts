@@ -10,6 +10,7 @@ const envSchema = z.object({
   REDIS_PORT: z.coerce.number(),
   JWT_SECRET: z.string(),
   CLIENT_TOKEN_SECRET: z.string(),
+  SENTRY_DNS: z.string(),
   WPP_SECRET: z.string(),
   WPP_URL: z.string(),
   WPP_URL_SOCKET: z.string(),

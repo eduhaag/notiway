@@ -1,4 +1,5 @@
 import fastify from 'fastify'
+import * as Sentry from '@sentry/node'
 
 import { ZodError } from 'zod'
 
@@ -21,6 +22,10 @@ queue.process()
 
 sendersLogOnSocket()
 
+Sentry.init({
+  dsn: env.SENTRY_DNS,
+})
+
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
     return reply
@@ -31,7 +36,7 @@ app.setErrorHandler((error, _, reply) => {
   if (env.NODE_ENV !== 'production') {
     console.error(error)
   } else {
-    // todo usar registro no sentry
+    Sentry.captureException(error)
   }
 
   return reply.status(500).send({ message: 'Internal server error' })

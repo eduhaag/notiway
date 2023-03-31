@@ -1,11 +1,11 @@
 import fastifyJwt from '@fastify/jwt'
 import { FastifyInstance } from 'fastify'
 import fastifyCookie from '@fastify/cookie'
+import fastifyStatic from '@fastify/static'
 import { createBullBoard } from '@bull-board/api'
 import { FastifyAdapter } from '@bull-board/fastify'
 import { BullAdapter } from '@bull-board/api/bullAdapter'
-import swagger from '@fastify/swagger'
-import swaggerUi from '@fastify/swagger-ui'
+import path from 'path'
 
 import { env } from './env'
 import queue from './queues/queue'
@@ -16,8 +16,7 @@ import { consumersRoutes } from './http/controllers/consumers/routes'
 import { clientsRoutes } from './http/controllers/clients/routes'
 import { sendersRoutes } from './http/controllers/senders/routes'
 import { messagesRoutes } from './http/controllers/messages/routes'
-import path from 'path'
-import swaggerUiConfig from './config/swagger-ui-config'
+import { readFileSync } from 'fs'
 
 export async function fastiFyRegister(app: FastifyInstance) {
   app.register(fastifyJwt, {
@@ -33,19 +32,10 @@ export async function fastiFyRegister(app: FastifyInstance) {
 
   app.register(fastifyCookie)
 
-  console.log(path.resolve())
-
-  app.register(swagger, {
-    mode: 'static',
-    specification: {
-      path: './src/documentation/docs.yaml',
-      postProcessor: function (swaggerObject) {
-        return swaggerObject
-      },
-      baseDir: path.resolve(__dirname, 'documentation', 'docs.json'),
-    },
+  app.register(fastifyStatic, {
+    root: path.join(__dirname, 'public'),
+    prefix: '/public',
   })
-  app.register(swaggerUi, swaggerUiConfig)
 
   // routes
   app.register(adminRoutes, { prefix: 'admin' })
@@ -53,7 +43,15 @@ export async function fastiFyRegister(app: FastifyInstance) {
   app.register(consumersRoutes, { prefix: 'site' })
   app.register(clientsRoutes, { prefix: 'site' })
   app.register(sendersRoutes, { prefix: 'site' })
-  app.register(messagesRoutes, { prefix: 'v1/messages' })
+  app.register(messagesRoutes, { prefix: 'v1' })
+
+  const docs = readFileSync(
+    path.resolve(__dirname, 'documentation', 'docs.html'),
+  )
+
+  app.get('/docs', (req, reply) => {
+    return reply.type('text/html').send(docs)
+  })
 
   // Bull Board
   const fastiFyAdapter = new FastifyAdapter()
@@ -66,7 +64,4 @@ export async function fastiFyRegister(app: FastifyInstance) {
     prefix: 'queues/ui',
     basePath: '',
   })
-
-  await app.ready()
-  app.swagger()
 }

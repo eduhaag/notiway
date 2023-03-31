@@ -1,49 +1,430 @@
 openapi: 3.0.3
 info: 
   title: NotiWay - Whatsapp Notifications Sender - API REST
+  x-logo: 
+    url: https://i.postimg.cc/1tCzQz4R/logo-nome-direito.png
   description: |-
-    NotiWay é uma API Rest eficiente e fácil de usar para envio de notificações via WhatsApp, voltada tanto para pequenas e médias empresas quanto para desenvolvedores de aplicações. Com a nossa API, você pode enviar mensagens personalizadas, promocionais ou informativas diretamente para os clientes, mantendo uma comunicação direta e eficaz.
+    # Introdução
+    NotiWay é uma **API Rest** eficiente e fácil de usar para envio de notificações via WhatsApp, voltada tanto para pequenas e médias empresas quanto para desenvolvedores de aplicações. Com a nossa API, você pode enviar mensagens personalizadas, promocionais ou informativas diretamente para os clientes, mantendo uma comunicação direta e eficaz.
 
     A API é baseada no modelo SaaS (Software as a Service) e pode ser integrada facilmente com outras aplicações e serviços, proporcionando mais eficiência e praticidade para a sua empresa.
 
     Nossa equipe está sempre à disposição para ajudar em qualquer dúvida ou problema que possa surgir, garantindo uma experiência de uso excepcional para nossos clientes. Se você está procurando uma solução moderna e eficiente para envio de notificações via WhatsApp, a API da NotiWay é a escolha perfeita!
+
+    # Autenticação
+    A autenticação na API é feita por meio de uma `api_key` enviada no `headers` da solicitação;
+    A `api_key` é unica para cada _client_ e deve ser solicitada a equipe de suporte por meio do email [atendimento@notiway.com.br](mailto:atendimento@notiway.com.br) ou do Whatsapp [+55(47) 9 99678-8597](https://wa.me/5547996788597).
+
+    <SecurityDefinitions />
+
   termsOfService: http://swagger.io/terms/
   contact:
-    email: suporte@notiway.com.br
+    email: atendimento@notiway.com.br
   version: 1.0.0
 servers:
-  - url: https://api.notiway.com.br/messages
+  - url: https://api.notiway.com.br/v1
 paths:
-  /send-text:
+  /send-text:    
     post:
-      tags:
-        - messages
+      operationId: sendText
       summary: Enviar mensagem de texto
-      description: Está rota é responsavel por enviar uma mensagem texto para o contato indicado.
+      description: |
+        Está rota é reponsável pelo envio de uma mensagem de texto comum para o desinatário.
+
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                to:
-                  type: string
-                  example: 5511999999999
-                message:
-                  type: string
-                  example: Esta mensagem será enviada ao contato
+              $ref: "#/components/schemas/textMessage"
         required: true
       responses:
         '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: sended
+          $ref: "#/components/responses/successResponse"
         '400':
-          description: teste de erro
-       
+          $ref: "#/components/responses/ValidationError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '425':
+          $ref: "#/components/responses/NotReadyError"
+        '5xx':
+          $ref: "#/components/responses/ServerError"
+      security: 
+        -  api_keys: []
+  /send-link:
+    post:
+      operationId: sendLink
+      summary: Enviar link preview
+      description: |
+        Esta rota é reponsável pelo envio de uma mensagem contendo um link com o preview do mesmo para o desinatário.
+        
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/linkMessage'
+        required: true
+      responses:
+        '200':
+          $ref: "#/components/responses/successResponse"
+        '400':
+          $ref: "#/components/responses/ValidationError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '425':
+          $ref: "#/components/responses/NotReadyError"
+        '5xx':
+          $ref: "#/components/responses/ServerError"
+      security: 
+        -  api_keys: []
+  /send-location:
+    post:
+      operationId: sendLocation
+      summary: Enviar localização
+      description: |
+        Esta rota é reponsável pelo envio de uma localização e/ou um endereço ao detinatário.
+        Ao destinatário será exibida uma previa da localização no map.
+
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/locationMessage'
+        required: true
+      responses:
+        '200':
+          $ref: "#/components/responses/successResponse"
+        '400':
+          $ref: "#/components/responses/ValidationError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '425':
+          $ref: "#/components/responses/NotReadyError"
+        '5xx':
+          $ref: "#/components/responses/ServerError"
+      security: 
+        -  api_keys: []
+  /send-contact:
+    post:
+      operationId: sendContact
+      summary: Enviar um contato
+      description: |
+        Esta rota é responsável por enviar um contato para o destinário, de forma que seja possivel salvar o contato da agenda do destinatário.
+
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/contactMessage"
+        required: true
+      responses:
+        '200':
+          $ref: "#/components/responses/successResponse"
+        '400':
+          $ref: "#/components/responses/ValidationError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '425':
+          $ref: "#/components/responses/NotReadyError"
+        '5xx':
+          $ref: "#/components/responses/ServerError"
+      security: 
+        -  api_keys: []
+  /send-gif:
+    post:
+      operationId: sendGif
+      summary: Enviar um gif
+      description: |
+        Esta rota é responsável por enviar um gif animado ou estático ao destinatário.
+
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/gifMessage'
+        required: true
+      responses:
+        '200':
+          $ref: "#/components/responses/successResponse"
+        '400':
+          $ref: "#/components/responses/ValidationError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '425':
+          $ref: "#/components/responses/NotReadyError"
+        '5xx':
+          $ref: "#/components/responses/ServerError"
+      security: 
+        -  api_keys: []
+  /send-sticker:
+    post:
+      operationId: sendSticker
+      summary: Enviar um sticker
+      description: |
+        Esta rota é responsável por enviar um sticker/figurinha ao destinatário.
+
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/stickerMessage'
+        required: true
+      responses:
+        '200':
+          $ref: "#/components/responses/successResponse"
+        '400':
+          $ref: "#/components/responses/ValidationError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '425':
+          $ref: "#/components/responses/NotReadyError"
+        '5xx':
+          $ref: "#/components/responses/ServerError"
+      security: 
+        - api_keys: []
+  /send-image:
+    post:
+      operationId: sendImage
+      summary: Enviar uma imagem
+      description: |
+        Esta rota é responsável por enviar uma imagem ao destinatário.
+
+        O arquivo da imagem deve ser convertido em uma URI Base64 e enviado para API apenas a  string.
+      
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/imageMessage'
+        required: true
+      responses:
+        '200':
+          $ref: "#/components/responses/successResponse"
+        '400':
+          $ref: "#/components/responses/ValidationError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '425':
+          $ref: "#/components/responses/NotReadyError"
+        '5xx':
+          $ref: "#/components/responses/ServerError"
+      security: 
+        - api_keys: []
+  /send-file:
+    post:
+      operationId: sendFile
+      summary: Enviar um arquivo
+      description: |
+        Esta rota é responsável por enviar um arquivo ao destinatário.
+
+        O arquivo deve ser convertido em uma URI Base64 e enviado para API apenas a  string.
+      
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/fileMessage'
+        required: true
+      responses:
+        '200':
+          $ref: "#/components/responses/successResponse"
+        '400':
+          $ref: "#/components/responses/ValidationError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '425':
+          $ref: "#/components/responses/NotReadyError"
+        '5xx':
+          $ref: "#/components/responses/ServerError"
+      security: 
+        - api_keys: []
+  /send-audio:
+    post:
+      operationId: sendAudio
+      summary: Enviar um arquivo de áudio
+      description: |
+        Esta rota é responsável por enviar um arquivo de áudio ao destinatário, simulando um áudio gravado no próprio Whatsapp.
+
+        O arquivo deve ser convertido em uma URI Base64 e enviado para API apenas a  string.
+      
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/audioMessage'
+        required: true
+      responses:
+        '200':
+          $ref: "#/components/responses/successResponse"
+        '400':
+          $ref: "#/components/responses/ValidationError"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        '425':
+          $ref: "#/components/responses/NotReadyError"
+        '5xx':
+          $ref: "#/components/responses/ServerError"
+      security: 
+        - api_keys: []
+components:
+  schemas:
+    textMessage:
+      required:
+        - to
+        - message
+      type: object
+      properties:
+        to:
+          type: string
+          example: '5511999999999'
+        message:
+          type: string
+          example: Esta mensagem será enviada ao contato
+    linkMessage:
+      required:
+        - to
+        - url
+      type: object
+      properties:
+        to:
+          type: string
+          example: '5511999999999'
+        url:
+          type: string
+          example: http://www.google.com.br
+        message:
+          type: string
+          example: Esta mensagem será enviada ao contato
+    locationMessage:
+      required:
+        - to
+      type: object
+      properties:
+        to:
+          type: string
+          example: '5511999999999'
+        latitude:
+          type: number
+          example: -23.561414
+        longitude:
+          type: number
+          example: -46.6558819
+        title:
+          type: string
+          example: MASP - Museu de Artes de São Paulo
+        address:
+          type: string
+          example: Av. Paulista, 1578 - Bela Vista, São Paulo - SP, 01310-200
+    contactMessage:
+      required:
+        - to
+        - name
+        - contact
+      type: object
+      properties:
+        to:
+          type: string
+          example: '5511999999999'
+        name:
+          type: string
+          example: John Doe
+        contact:
+          type: string
+          example: '5511988888888'
+    gifMessage:
+      required:
+        - to
+        - url
+      type: object
+      properties:
+        to:
+          type: string
+          example: '5511999999999'
+        url:
+          type: string
+          example: https://media.giphy.com/media/hpXFi66bfQm7e81ohw/giphy.gif
+    stickerMessage:
+      required:
+        - to
+        - url
+      type: object
+      properties:
+        to:
+          type: string
+          example: '5511999999999'
+        url:
+          type: string
+          example: https://www.camarabracodotrombudo.sc.gov.br/media/noticia/link-para-participacao-da-audiencia-publica-54.jpg
+    imageMessage:
+      required:
+        - to
+        - base64
+      type: object
+      properties:
+        to:
+          type: string
+          example: '5511999999999'
+        base64:
+          $ref: image.yaml
+        message:
+          type: string
+          example: Descrição da imagem
+    fileMessage:
+      required:
+        - to
+        - base64
+        - filename
+      type: object
+      properties:
+        to:
+          type: string
+          example: '5511999999999'
+        base64:
+          $ref: file.yaml
+        filename:
+          type: string
+          example: recibo.pdf
+    audioMessage:
+      required:
+        - to
+        - base64
+      type: object
+      properties:
+        to:
+          type: string
+          example: '5511999999999'
+        base64:
+          $ref: audio.yaml
+  responses:
+    successResponse:
+      description: Successful operation
+      content:
+        status:
+          schema: 
+            type: object
+            properties:
+              status:
+                type: string
+                example: sended  
+    UnauthorizedError:
+      description: Unauthorized.
+    NotReadyError:
+      description: Client or sender not ready.
+    ValidationError:
+      description: Validation error.
+    ServerError:
+      description: Unexpected error.
+  securitySchemes:
+    api_keys:
+      description: Solicite sua API key ao time de suporte
+      name: api_key
+      type: apiKey
+      in: header

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch --inspect src/server.ts",
     "start": "node build/server.js",
-    "build": "babel src --extensions \".ts\" --out-dir build",
+    "build": "babel src --extensions \".ts\" --out-dir build --copy-files",
     "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
     "test:install-prisma-environment": "npm link vitest-environment-prisma",
     "test": "vitest run --dir src/use-cases",
@@ -40,6 +40,7 @@
     "prisma": "4.11.0",
     "redoc-cli": "0.13.21",
     "supertest": "6.3.3",
+    "tsup": "6.6.3",
     "tsx": "3.12.5",
     "typescript": "4.9.5",
     "vite-tsconfig-paths": "4.0.7",

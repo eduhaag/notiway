@@ -2,7 +2,7 @@ openapi: 3.0.3
 info: 
   title: NotiWay - Whatsapp Notifications Sender - API REST
   x-logo: 
-    url: https://i.postimg.cc/1tCzQz4R/logo-nome-direito.png
+    url: https://docs.google.com/uc?id=1gv9kmPx0LoTN73TvBy3sjhUEZ0lqFP4w
   description: |-
     # Introdução
     NotiWay é uma **API Rest** eficiente e fácil de usar para envio de notificações via WhatsApp, voltada tanto para pequenas e médias empresas quanto para desenvolvedores de aplicações. Com a nossa API, você pode enviar mensagens personalizadas, promocionais ou informativas diretamente para os clientes, mantendo uma comunicação direta e eficaz.

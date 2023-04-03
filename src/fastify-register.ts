@@ -45,9 +45,7 @@ export async function fastiFyRegister(app: FastifyInstance) {
   app.register(sendersRoutes, { prefix: 'site' })
   app.register(messagesRoutes, { prefix: 'v1' })
 
-  const docs = readFileSync(
-    path.resolve(__dirname, 'documentation', 'docs.html'),
-  )
+  const docs = readFileSync(path.resolve('public', 'docs.html'))
 
   app.get('/docs', (req, reply) => {
     return reply.type('text/html').send(docs)

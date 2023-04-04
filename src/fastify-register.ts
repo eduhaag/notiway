@@ -1,7 +1,8 @@
-import fastifyJwt from '@fastify/jwt'
 import { FastifyInstance } from 'fastify'
+import fastifyJwt from '@fastify/jwt'
 import fastifyCookie from '@fastify/cookie'
 import fastifyStatic from '@fastify/static'
+import cors from '@fastify/cors'
 import { createBullBoard } from '@bull-board/api'
 import { FastifyAdapter } from '@bull-board/fastify'
 import { BullAdapter } from '@bull-board/api/bullAdapter'
@@ -29,6 +30,8 @@ export async function fastiFyRegister(app: FastifyInstance) {
       expiresIn: env.NODE_ENV === 'dev' ? '1d' : '10m',
     },
   })
+
+  app.register(cors, {})
 
   app.register(fastifyCookie)
 

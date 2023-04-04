@@ -12,8 +12,8 @@ info:
     Nossa equipe está sempre à disposição para ajudar em qualquer dúvida ou problema que possa surgir, garantindo uma experiência de uso excepcional para nossos clientes. Se você está procurando uma solução moderna e eficiente para envio de notificações via WhatsApp, a API da NotiWay é a escolha perfeita!
 
     # Autenticação
-    A autenticação na API é feita por meio de uma `api_key` enviada no `headers` da solicitação;
-    A `api_key` é unica para cada _client_ e deve ser solicitada a equipe de suporte por meio do email [atendimento@notiway.com.br](mailto:atendimento@notiway.com.br) ou do Whatsapp [+55(47) 9 99678-8597](https://wa.me/5547996788597).
+    A autenticação na API é feita por meio de uma `api-key` enviada no `headers` da solicitação;
+    A `api-key` é unica para cada _client_ e deve ser solicitada a equipe de suporte por meio do email [atendimento@notiway.com.br](mailto:atendimento@notiway.com.br) ou do Whatsapp [+55(47) 9 99678-8597](https://wa.me/5547996788597).
 
     <SecurityDefinitions />
 
@@ -425,6 +425,6 @@ components:
   securitySchemes:
     api_keys:
       description: Solicite sua API key ao time de suporte
-      name: api_key
+      name: api-key
       type: apiKey
       in: header

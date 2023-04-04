@@ -8,6 +8,7 @@ const envSchema = z.object({
   MONGO_DATABASE_URL: z.string(),
   REDIS_HOST: z.string(),
   REDIS_PORT: z.coerce.number(),
+  REDIS_PASSWORD: z.string().optional(),
   JWT_SECRET: z.string(),
   CLIENT_TOKEN_SECRET: z.string(),
   SENTRY_DNS: z.string(),

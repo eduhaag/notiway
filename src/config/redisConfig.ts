@@ -3,6 +3,7 @@ import { env } from '@/env'
 // let redisServer
 const port = env.REDIS_PORT
 const host = env.REDIS_HOST
+const password = env.REDIS_PASSWORD ?? undefined
 
 // if (env.NODE_ENV === 'test') {
 //   redisServer = new RedisMemoryServer()
@@ -21,4 +22,5 @@ const host = env.REDIS_HOST
 export default {
   host,
   port,
+  password,
 }

@@ -15,7 +15,7 @@ export async function connectToMongoDB() {
     uri = env.MONGO_DATABASE_URL
   }
 
-  await mongoose.connect(uri, { dbName: 'zpi_mongo' })
+  await mongoose.connect(uri, { dbName: 'notiway' })
 
   console.log('✅ Connected to MongoDB')
 }

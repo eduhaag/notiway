@@ -49,7 +49,7 @@ export async function fastiFyRegister(app: FastifyInstance) {
     path.resolve(__dirname, 'documentation', 'docs.html'),
   )
 
-  app.get('/docs', (req, reply) => {
+  app.get('/', (req, reply) => {
     return reply.type('text/html').send(docs)
   })
 

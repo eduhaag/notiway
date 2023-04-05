@@ -17,7 +17,7 @@ info:
 
     <SecurityDefinitions />
 
-  termsOfService: http://swagger.io/terms/
+  termsOfService: https://api.notiway.com.br/terms
   contact:
     email: atendimento@notiway.com.br
   version: 1.0.0

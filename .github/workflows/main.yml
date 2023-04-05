@@ -43,17 +43,6 @@ jobs:
           cd ~/app/notiway
           npm install
           
-    - name: Run migrations
-      uses: appleboy/ssh-action@v0.1.9
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        port: ${{ secrets.SSH_PORT }}
-        key: ${{ secrets.SSH_KEY }}
-        script: |
-          cd ~/app/notiway
-          npx prisma migrate deploy
-          
     - name: restart server
       uses: appleboy/ssh-action@v0.1.9
       with:

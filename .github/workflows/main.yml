@@ -22,13 +22,44 @@ jobs:
     - name: Run build
       run: npm run build
       
-    - name: Copy built to Digital Ocean
+    - name: Copy to Digital Ocean
       uses: appleboy/scp-action@master
       with:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         port: ${{ secrets.SSH_PORT }}
         key: ${{ secrets.SSH_KEY }}
-        source: "build"
-        target: "test"
+        source: ".,!node_modules"
+        target: "app/notiway"
+        
+    - name: Install dependecies
+      uses: appleboy/ssh-action@v0.1.9
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        port: ${{ secrets.SSH_PORT }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          cd ~/app/notiway
+          npm install
+          
+    - name: run migrations
+      uses: appleboy/ssh-action@v0.1.9
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        port: ${{ secrets.SSH_PORT }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          cd ~/app/notiway
+          npx prisma migrate deploy
+          
+    - name: restart server
+      uses: appleboy/ssh-action@v0.1.9
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        port: ${{ secrets.SSH_PORT }}
+        key: ${{ secrets.SSH_KEY }}
+        script: pm2 restart notiway-api
     

@@ -43,7 +43,7 @@ jobs:
           cd ~/app/notiway
           npm install
           
-    - name: run migrations
+    - name: Run migrations
       uses: appleboy/ssh-action@v0.1.9
       with:
         host: ${{ secrets.SSH_HOST }}

@@ -50,5 +50,6 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         port: ${{ secrets.SSH_PORT }}
         key: ${{ secrets.SSH_KEY }}
+        command_timeout: 200m
         script: pm2 restart notiway-api
     

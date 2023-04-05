@@ -42,16 +42,3 @@ jobs:
         script: |
           cd ~/app/notiway
           npm install
-          
-    - name: restart server
-      uses: appleboy/ssh-action@v0.1.9
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        port: ${{ secrets.SSH_PORT }}
-        key: ${{ secrets.SSH_KEY }}
-        command_timeout: 500m
-        script: |
-          cd ~/app/notiway
-          pm2 restart notiwayapi
-    

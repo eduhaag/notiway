@@ -52,8 +52,16 @@ export async function fastiFyRegister(app: FastifyInstance) {
     path.resolve(__dirname, 'documentation', 'docs.html'),
   )
 
+  const terms = readFileSync(
+    path.resolve(__dirname, 'documentation', 'terms.html'),
+  )
+
   app.get('/', (req, reply) => {
     return reply.type('text/html').send(docs)
+  })
+
+  app.get('/terms', (req, reply) => {
+    return reply.type('text/html').send(terms)
   })
 
   // Bull Board

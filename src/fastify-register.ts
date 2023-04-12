@@ -31,7 +31,7 @@ export async function fastiFyRegister(app: FastifyInstance) {
     },
   })
 
-  app.register(cors, {})
+  app.register(cors, { origin: true, credentials: true })
 
   app.register(fastifyCookie)
 

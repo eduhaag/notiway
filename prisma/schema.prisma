@@ -96,7 +96,7 @@ model Client {
 model ClientToken {
   id         String   @id @default(uuid())
   token      String   @unique
-  updated_at DateTime @default(now())
+  updated_at DateTime @updatedAt()
 
   client    Client @relation(fields: [client_id], references: [id])
   client_id String @unique

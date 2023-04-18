@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify'
 import fastifyJwt from '@fastify/jwt'
 import fastifyCookie from '@fastify/cookie'
 import fastifyStatic from '@fastify/static'
+import FastifySocket from 'fastify-socket.io'
 import cors from '@fastify/cors'
 import { createBullBoard } from '@bull-board/api'
 import { FastifyAdapter } from '@bull-board/fastify'
@@ -18,6 +19,7 @@ import { clientsRoutes } from './http/controllers/clients/routes'
 import { sendersRoutes } from './http/controllers/senders/routes'
 import { messagesRoutes } from './http/controllers/messages/routes'
 import { readFileSync } from 'fs'
+import { webHookController } from './http/controllers/webHook'
 
 export async function fastiFyRegister(app: FastifyInstance) {
   app.register(fastifyJwt, {
@@ -31,7 +33,9 @@ export async function fastiFyRegister(app: FastifyInstance) {
     },
   })
 
-  app.register(cors, {})
+  app.register(cors, { origin: true, credentials: true })
+
+  app.register(FastifySocket, { cors: { origin: true } })
 
   app.register(fastifyCookie)
 
@@ -63,6 +67,9 @@ export async function fastiFyRegister(app: FastifyInstance) {
   app.get('/terms', (req, reply) => {
     return reply.type('text/html').send(terms)
   })
+
+  // Listen wppConnect
+  app.post('/webhook', webHookController)
 
   // Bull Board
   const fastiFyAdapter = new FastifyAdapter()

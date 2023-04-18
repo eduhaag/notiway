@@ -1,3 +1,4 @@
+import { app } from '@/app'
 import { prisma } from '@/lib/prisma'
 import socket from '@/lib/socket'
 
@@ -13,5 +14,10 @@ export function sendersLogOnSocket() {
         data: { paread_at: data.status ? new Date() : null },
       })
     }
+  })
+
+  socket.off('qrCode').on('qrCode', async (data) => {
+    console.log(data)
+    app.io.emit(`sender-qrcode:${data.session}`, { base64Qr: data.data })
   })
 }

@@ -37,7 +37,14 @@ export class PrismaClientsRepository implements ClientsRepository {
   async findByConsumerId(consumerId: string) {
     const clients = await prisma.client.findMany({
       where: { consumer_id: consumerId, deleted_at: null },
-      include: { ClientToken: true },
+      include: {
+        ClientToken: true,
+        sender: {
+          select: {
+            name: true,
+          },
+        },
+      },
     })
 
     return clients

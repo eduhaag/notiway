@@ -3,6 +3,7 @@ import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { api } from '@/lib/axios'
 import { converteBase64ToDataImage } from '@/utils/convert-base64-to-data-image'
 import { SenderDisablerError } from '../errors/sender-disabled-error'
+import { watchSenderQr, watchSenderStatus } from '@/sockets/server'
 
 interface GetSenderQrCodeUseCaseRequest {
   senderId: string
@@ -41,9 +42,7 @@ export class GetSenderQrCodeUseCase {
     try {
       const { data } = (await api.post(
         `/${sender.name}/start-session`,
-        {
-          waitQrCode: true,
-        },
+        {},
         {
           headers: {
             Authorization: `Bearer ${sender.api_token}`,
@@ -56,6 +55,9 @@ export class GetSenderQrCodeUseCase {
     } catch (error) {
       throw error
     }
+
+    watchSenderQr(sender.name)
+    watchSenderStatus(sender.name)
 
     return connection
   }

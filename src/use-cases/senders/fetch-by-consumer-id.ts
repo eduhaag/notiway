@@ -19,6 +19,13 @@ export class FetchSendersByConsumerIdUseCase {
       consumerId,
     )
 
-    return { senders }
+    const sendersToReturn = senders.map((sender) => {
+      return {
+        ...sender,
+        api_token: 'ommited',
+      }
+    })
+
+    return { senders: sendersToReturn }
   }
 }

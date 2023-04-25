@@ -1,12 +1,12 @@
 import Queue, { Job } from 'bull'
 
 import * as jobs from './jobs'
-import redisConfig from '@/config/redisConfig'
 import jobsBullConfig from '@/config/jobsBullConfig'
 import { Message } from '@/mongo/mongose'
+import { redis } from '@/config/redis-config'
 
 const queues = Object.values(jobs).map((job) => ({
-  bull: new Queue(job.key, { redis: redisConfig }),
+  bull: new Queue(job.key, redis),
   name: job.key,
   handle: job.handle,
 }))

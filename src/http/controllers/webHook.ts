@@ -7,7 +7,6 @@ export async function webHookController(
   reply: FastifyReply,
 ) {
   const { event, session, status } = req.body as any
-  console.log(req.body)
   if (event === 'status-find') {
     app.io.emit(`sender-status:${session}`, { status })
 

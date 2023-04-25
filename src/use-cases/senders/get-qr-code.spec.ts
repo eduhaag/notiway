@@ -1,19 +1,39 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 import { InMemorySenderRepository } from '@/respositories/in-memory/in-memory-senders-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { GetSenderQrCodeUseCase } from './get-qr-code'
 import { SenderDisablerError } from '../errors/sender-disabled-error'
 import { axiosPostMock } from '@/utils/test/mocks/axios-mock'
+import { app } from '@/app'
 
 let sendersRepository: InMemorySenderRepository
 let sut: GetSenderQrCodeUseCase
 
+const ioOnMock = vi.fn()
+
 axiosPostMock()
 
 describe('Get sender qr code use case', () => {
+  beforeAll(() => {
+    app.io = {} as any
+    app.io.on = ioOnMock
+  })
+
   beforeEach(() => {
     sendersRepository = new InMemorySenderRepository()
     sut = new GetSenderQrCodeUseCase(sendersRepository)
+  })
+
+  afterAll(() => {
+    ioOnMock.mockClear()
   })
 
   it('should be able to get the sender QR Code', async () => {
@@ -29,6 +49,7 @@ describe('Get sender qr code use case', () => {
     })
 
     expect(base64Qr).toEqual(expect.any(String))
+    expect(ioOnMock).toBeCalledTimes(2)
   })
 
   it('should not be able to get the QR code of a non-existing sender', async () => {

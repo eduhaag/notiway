@@ -17,7 +17,6 @@ export function sendersLogOnSocket() {
   })
 
   socket.off('qrCode').on('qrCode', async (data) => {
-    console.log(data)
     app.io.emit(`sender-qrcode:${data.session}`, { base64Qr: data.data })
   })
 }

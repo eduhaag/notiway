@@ -46,7 +46,6 @@ export class SendContactUseCase {
         name,
       },
     }
-
     await queue.add('SendToWPP', message)
   }
 }

@@ -24,7 +24,7 @@ describe('Update consumer e2e', () => {
     })
 
     const response = await request(app.server)
-      .put(`/consumers/${consumer.id}`)
+      .put(`/site/consumers/${consumer.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ acceptMarketing: true })
 

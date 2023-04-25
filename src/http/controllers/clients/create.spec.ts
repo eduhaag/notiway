@@ -24,7 +24,7 @@ describe('Create client e2e', () => {
     })
 
     const response = await request(app.server)
-      .post('/clients')
+      .post('/site/clients')
       .set('Authorization', `Bearer ${token}`)
       .send({
         consumer_id: consumer.id,

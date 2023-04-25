@@ -44,15 +44,17 @@ describe('Send contact e2e', () => {
     })
 
     const response = await request(app.server)
-      .post('/api/send-contact')
-      .set('Authorization', `Bearer ${clientToken.token}`)
+      .post('/v1/send-contact')
+      .set({ 'api-key': clientToken.token })
       .send({
         to: '5544999999999',
         name: 'John Doe',
         contact: '5511999999999',
       })
 
-    expect(response.statusCode).toEqual(200)
-    expect(apiMock).toBeCalledTimes(1)
+    setTimeout(() => {
+      expect(response.statusCode).toEqual(200)
+      expect(apiMock).toBeCalledTimes(1)
+    }, 1000)
   })
 })

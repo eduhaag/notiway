@@ -49,7 +49,7 @@ describe('Fetch senders by consumer Id e2e', () => {
     })
 
     const response = await request(app.server)
-      .get(`/consumers/${consumer.id}/senders`)
+      .get(`/site/consumers/${consumer.id}/senders`)
       .set('Authorization', `Bearer ${token}`)
       .send()
 

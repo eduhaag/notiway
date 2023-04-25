@@ -21,7 +21,7 @@ export async function createAndAuthenticateUser(
     },
   })
 
-  const response = await request(app.server).post('/sessions').send({
+  const response = await request(app.server).post('/site/sessions').send({
     email,
     password,
   })

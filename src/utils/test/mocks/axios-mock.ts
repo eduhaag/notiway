@@ -3,6 +3,7 @@ import { vi } from 'vitest'
 
 export function axiosPostMock() {
   return vi.spyOn(api, 'post').mockImplementation(async (data) => {
+    console.log('chamou a api', data)
     if (data.includes('close-session')) {
       return { data: { status: true } }
     }

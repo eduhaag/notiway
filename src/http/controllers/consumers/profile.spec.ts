@@ -28,7 +28,7 @@ describe('Get consumer profile (e2e)', () => {
     })
 
     const response = await request(app.server)
-      .get(`/consumers/${consumer.id}`)
+      .get(`/site/consumers/${consumer.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send()
 

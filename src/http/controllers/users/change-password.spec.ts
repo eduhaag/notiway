@@ -19,7 +19,7 @@ describe('Change user password e2e', () => {
     })
 
     const response = await request(app.server)
-      .patch('/users/change-password')
+      .patch('/site/users/change-password')
       .set('Authorization', `Bearer ${token}`)
       .send({ oldPassword: '123456', newPassword: 'abcdef' })
 

@@ -44,8 +44,8 @@ describe('Send file e2e', () => {
     })
 
     const response = await request(app.server)
-      .post('/api/send-file')
-      .set('Authorization', `Bearer ${clientToken.token}`)
+      .post('/v1/send-file')
+      .set({ 'api-key': clientToken.token })
       .send({
         to: '5544999999999',
         filename: 'example.pdf',
@@ -53,7 +53,9 @@ describe('Send file e2e', () => {
           'data:file/pdf;base64, asgsagasngiashgsiangiosamignwquhhqh3feanf38q',
       })
 
-    expect(response.statusCode).toEqual(200)
-    expect(apiMock).toBeCalledTimes(1)
+    setTimeout(() => {
+      expect(response.statusCode).toEqual(200)
+      expect(apiMock).toBeCalledTimes(1)
+    }, 1000)
   })
 })

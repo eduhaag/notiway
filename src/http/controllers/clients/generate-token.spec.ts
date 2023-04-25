@@ -32,7 +32,7 @@ describe('Generate new client Token e2e', () => {
     })
 
     const response = await request(app.server)
-      .patch(`/clients/${client.id}/generate-token`)
+      .patch(`/site/clients/${client.id}/generate-token`)
       .set('Authorization', `Bearer ${token}`)
       .send()
 

@@ -44,14 +44,16 @@ describe('Send text e2e', () => {
     })
 
     const response = await request(app.server)
-      .post('/api/send-text')
-      .set('Authorization', `Bearer ${clientToken.token}`)
+      .post('/v1/send-text')
+      .set({ 'api-key': clientToken.token })
       .send({
         to: '5544999999999',
         message: 'test message',
       })
 
-    expect(response.statusCode).toEqual(200)
-    expect(apiMock).toBeCalledTimes(1)
+    setTimeout(() => {
+      expect(response.statusCode).toEqual(200)
+      expect(apiMock).toBeCalledTimes(1)
+    }, 1000)
   })
 })

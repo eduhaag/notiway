@@ -3,7 +3,6 @@ import { vi } from 'vitest'
 
 export function axiosPostMock() {
   return vi.spyOn(api, 'post').mockImplementation(async (data) => {
-    console.log('chamou a api', data)
     if (data.includes('close-session')) {
       return { data: { status: true } }
     }
@@ -22,6 +21,10 @@ export function axiosPostMock() {
 
     if (data.includes('status-session')) {
       return { data: { qrcode: 'fake-qr-code', status: 'qrcode' } }
+    }
+
+    if (data.includes('logout-session')) {
+      return { data: { status: true } }
     }
 
     if (data.includes('send-location')) {

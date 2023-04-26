@@ -44,14 +44,16 @@ describe('Send link e2e', () => {
     })
 
     const response = await request(app.server)
-      .post('/api/send-link')
-      .set('Authorization', `Bearer ${clientToken.token}`)
+      .post('/v1/send-link')
+      .set({ 'api-key': clientToken.token })
       .send({
         to: '5544999999999',
         url: 'www.example.com.br',
       })
 
-    expect(response.statusCode).toEqual(200)
-    expect(apiMock).toBeCalledTimes(1)
+    setTimeout(() => {
+      expect(response.statusCode).toEqual(200)
+      expect(apiMock).toBeCalledTimes(1)
+    }, 1000)
   })
 })

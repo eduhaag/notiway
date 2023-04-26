@@ -32,7 +32,7 @@ describe('Get sender QR code e2e', () => {
     })
 
     const response = await request(app.server)
-      .post(`/senders/${sender.id}/connect`)
+      .post(`/site/senders/${sender.id}/connect`)
       .set('Authorization', `Bearer ${token}`)
       .send()
 

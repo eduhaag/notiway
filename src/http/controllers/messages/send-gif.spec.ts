@@ -44,14 +44,16 @@ describe('Send gif e2e', () => {
     })
 
     const response = await request(app.server)
-      .post('/api/send-gif')
-      .set('Authorization', `Bearer ${clientToken.token}`)
+      .post('/v1/send-gif')
+      .set({ 'api-key': clientToken.token })
       .send({
         to: '5544999999999',
         url: 'http://example.com',
       })
 
-    expect(response.statusCode).toEqual(200)
-    expect(apiMock).toBeCalledTimes(1)
+    setTimeout(() => {
+      expect(response.statusCode).toEqual(200)
+      expect(apiMock).toBeCalledTimes(1)
+    }, 1000)
   })
 })

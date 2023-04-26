@@ -16,7 +16,6 @@ export default {
 
   add: (name: string, data: any) => {
     const queue = queues.find((q) => q.name === name)
-
     if (queue) {
       return queue.bull.add(data, jobsBullConfig)
     }

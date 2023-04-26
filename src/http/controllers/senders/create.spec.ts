@@ -27,7 +27,7 @@ describe('Create sender e2e', () => {
     })
 
     const response = await request(app.server)
-      .post('/senders')
+      .post('/site/senders')
       .set('Authorization', `Bearer ${token}`)
       .send({
         consumerId: consumer.id,

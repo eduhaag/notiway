@@ -32,7 +32,7 @@ describe('Get sender e2e', () => {
     })
 
     const response = await request(app.server)
-      .get(`/senders/${sender.id}`)
+      .get(`/site/senders/${sender.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send()
 

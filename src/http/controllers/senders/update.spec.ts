@@ -34,7 +34,6 @@ describe('Update sender e2e', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({ lastRecharge: new Date() })
 
-    console.log(response.body)
     expect(response.statusCode).toEqual(204)
   })
 })

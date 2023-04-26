@@ -3,8 +3,11 @@ import { app } from '@/app'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { prisma } from '@/lib/prisma'
 import { createAndAuthenticateUser } from '@/utils/test/create-and-authenticate-user'
+import { axiosPostMock } from '@/utils/test/mocks/axios-mock'
 
-describe('Generate new client Token e2e', () => {
+axiosPostMock()
+
+describe('Disconnect sender e2e', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -13,30 +16,28 @@ describe('Generate new client Token e2e', () => {
     await app.close()
   })
 
-  it.only('should be able to generate a new client token', async () => {
+  it('should be able to disconnect sender', async () => {
     const { token } = await createAndAuthenticateUser(app, {
       email: 'test@example.com',
       password: '123456',
     })
 
-    const consumer = await prisma.consumer.create({
-      data: { email: 'johndoe@example.com', name: 'John Doe' },
-    })
-
-    const client = await prisma.client.create({
+    const sender = await prisma.sender.create({
       data: {
-        name: 'client-example',
-        consumer_id: consumer.id,
-        ClientToken: { create: { token: 'token-example' } },
+        api_token: 'api-token',
+        full_number: '+5511999999999',
+        name: 'sender-test',
+        type: 'EXCLUSIVE',
+        paread_at: new Date(),
       },
     })
 
     const response = await request(app.server)
-      .patch(`/site/clients/${client.id}/generate-token`)
+      .patch(`/site/senders/${sender.id}/disconnect`)
       .set('Authorization', `Bearer ${token}`)
       .send()
 
     expect(response.statusCode).toEqual(200)
-    expect(response.body.token).toEqual(expect.any(String))
+    expect(response.body.message).toEqual(expect.any(String))
   })
 })

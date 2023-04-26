@@ -31,7 +31,7 @@ describe('Update client e2e', () => {
     })
 
     const response = await request(app.server)
-      .put(`/clients/${client.id}`)
+      .put(`/site/clients/${client.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({ name: 'client updated', status: 'new status' })
 

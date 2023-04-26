@@ -32,7 +32,7 @@ describe('Fetch clients e2e', () => {
     })
 
     const response = await request(app.server)
-      .get(`/consumers/${consumer.id}/clients`)
+      .get(`/site/consumers/${consumer.id}/clients`)
       .set('Authorization', `Bearer ${token}`)
       .send()
 

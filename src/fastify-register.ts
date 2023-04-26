@@ -77,9 +77,10 @@ export async function fastiFyRegister(app: FastifyInstance) {
     queues: queue.queues.map((q) => new BullAdapter(q.bull)),
     serverAdapter: fastiFyAdapter,
   })
+
   fastiFyAdapter.setBasePath('/queues/ui')
   app.register(fastiFyAdapter.registerPlugin(), {
-    prefix: 'queues/ui',
     basePath: '',
+    prefix: '/queues/ui',
   })
 }

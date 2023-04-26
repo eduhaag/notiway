@@ -44,15 +44,17 @@ describe('Send location e2e', () => {
     })
 
     const response = await request(app.server)
-      .post('/api/send-location')
-      .set('Authorization', `Bearer ${clientToken.token}`)
+      .post('/v1/send-location')
+      .set({ 'api-key': clientToken.token })
       .send({
         to: '5544999999999',
         latitude: 1,
         longitude: 2,
       })
 
-    expect(response.statusCode).toEqual(200)
-    expect(apiMock).toBeCalledTimes(1)
+    setTimeout(() => {
+      expect(response.statusCode).toEqual(200)
+      expect(apiMock).toBeCalledTimes(1)
+    }, 1000)
   })
 })

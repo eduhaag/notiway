@@ -32,7 +32,7 @@ describe('Remove client e2e', () => {
     })
 
     const response = await request(app.server)
-      .delete(`/clients/${client.id}`)
+      .delete(`/site/clients/${client.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send()
 

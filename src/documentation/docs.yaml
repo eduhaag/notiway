@@ -9,6 +9,8 @@ info:
 
     A API é baseada no modelo SaaS (Software as a Service) e pode ser integrada facilmente com outras aplicações e serviços, proporcionando mais eficiência e praticidade para a sua empresa.
 
+    A API atua utilizando o Web Whatsapp da Meta, simulando o envio de mensagens pelo próprio navegador, dessa forma permite a automação de envio de mensagens.
+
     Nossa equipe está sempre à disposição para ajudar em qualquer dúvida ou problema que possa surgir, garantindo uma experiência de uso excepcional para nossos clientes. Se você está procurando uma solução moderna e eficiente para envio de notificações via WhatsApp, a API da NotiWay é a escolha perfeita!
 
     # Autenticação
@@ -16,6 +18,43 @@ info:
     A `api-key` é unica para cada _client_ e deve ser solicitada a equipe de suporte por meio do email [atendimento@notiway.com.br](mailto:atendimento@notiway.com.br) ou do Whatsapp [+55(47) 9 99678-8597](https://wa.me/5547996788597).
 
     <SecurityDefinitions />
+
+    # Formatação de textos
+    É possivel formatar os textos enviados pela API, colocando o texto desejado entre caracteres especiais conforme abaixo:
+
+      - <div>
+      <p>
+        <b>Itálico</b><br />
+        Para escrever sua mensagem em <i>itálico</i>, insira o sinal de sublinhado antes e depois do texto:<br/>
+        _texto em itálico_ = <i>texto em itálico</i>
+      </p>
+      </div>
+      <br />
+      - <div>
+      <p>
+        <b>Negrito</b><br />
+        Para escrever sua mensagem em <b>negrito</b>, insira um asterisco antes e depois do texto: <br />
+        *texto em negrito* = <b>texto em negrito</b>
+      </p>
+      </div>
+      - <div>
+      <p>
+        <b>Tachado</b><br />
+        Para <s>tachar</s> sua mensagem, insira um til antes e depois do texto: <br />
+        ~texto tachado~ = <s>texto tachado</s>
+      </p>
+      </div>
+      - <div>
+      <p>
+        <b>Monoespaçado</b><br />
+        Para escrever sua mensagem <span style="font-family: monospace">monoespaçada</span>, insira três sinais graves antes e depois do texto: <br />
+        ```texto monoespaçado``` = <span style="font-family: monospace">texto monoespaçado</span>
+      </p>
+      </div>
+
+    # Usar emoji nas mensagens
+    <p>Você pode utilizar emojis nas mensagens de texto. Para isso basta incluir o emoji diretamente na mensagem.</p>
+    <p>Caso você não tenha nenhuma ferramenta que permita a inclusão de emojis, você pode utilizar o site <a href="https://getemoji.com/" target="_blanck">getemoji.com</a> para copiar o emoji desejado e colar diretamente na sua mensagem.</p>
 
   termsOfService: https://api.notiway.com.br/terms
   contact:

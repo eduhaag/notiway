@@ -21,8 +21,8 @@ export class InMemoryConsumersRepository implements ConsumersRepository {
       city: data.city ?? null,
       province: data.province ?? null,
       country: data.country ?? null,
-      accept_marketing_at: data.accept_marketing_at
-        ? new Date(data.accept_marketing_at)
+      marketing_agree_at: data.marketing_agree_at
+        ? new Date(data.marketing_agree_at)
         : null,
     }
 
@@ -52,9 +52,9 @@ export class InMemoryConsumersRepository implements ConsumersRepository {
   }
 
   async findManyWithFilter(filter: ConsumersFilter) {
-    const { name, taxId, email, acceptMarketing } = filter
+    const { name, taxId, email, marketingAgree } = filter
 
-    if (!name && !taxId && !email && acceptMarketing === undefined) {
+    if (!name && !taxId && !email && marketingAgree === undefined) {
       return this.consumers
     }
 
@@ -84,15 +84,15 @@ export class InMemoryConsumersRepository implements ConsumersRepository {
         }
       }
 
-      if (acceptMarketing !== undefined) {
-        if (acceptMarketing === true) {
-          if (item.accept_marketing_at !== null) {
+      if (marketingAgree !== undefined) {
+        if (marketingAgree === true) {
+          if (item.marketing_agree_at !== null) {
             check.push(true)
           } else {
             check.push(false)
           }
         } else {
-          if (item.accept_marketing_at === null) {
+          if (item.marketing_agree_at === null) {
             check.push(true)
           } else {
             check.push(false)

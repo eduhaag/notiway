@@ -9,18 +9,73 @@ export async function create(req: FastifyRequest, reply: FastifyReply) {
     name: z.string(),
     password: z.string(),
     email: z.string().email(),
-    tax_id: z.string().optional(),
-    fone: z.string().optional(),
-    whatsapp: z.string().optional(),
-    zip_code: z.string().optional(),
-    street: z.string().optional(),
-    number: z.string().optional(),
-    complement: z.string().optional(),
-    district: z.string().optional(),
-    city: z.string().optional(),
-    province: z.string().optional(),
-    country: z.string().optional(),
-    acceptMarketing: z.boolean().optional(),
+    tax_id: z
+      .string()
+      .optional()
+      .transform((value) => {
+        return value && value.trim() !== '' ? value : undefined
+      }),
+    fone: z
+      .string()
+      .optional()
+      .transform((value) => {
+        return value && value.trim() !== '' ? value : undefined
+      }),
+    whatsapp: z
+      .string()
+      .optional()
+      .transform((value) => {
+        return value && value.trim() !== '' ? value : undefined
+      }),
+    zip_code: z
+      .string()
+      .optional()
+      .transform((value) => {
+        return value && value.trim() !== '' ? value : undefined
+      }),
+    street: z
+      .string()
+      .optional()
+      .transform((value) => {
+        return value && value.trim() !== '' ? value : undefined
+      }),
+    number: z
+      .string()
+      .optional()
+      .transform((value) => {
+        return value && value.trim() !== '' ? value : undefined
+      }),
+    complement: z
+      .string()
+      .optional()
+      .transform((value) => {
+        return value && value.trim() !== '' ? value : undefined
+      }),
+    district: z
+      .string()
+      .optional()
+      .transform((value) => {
+        return value && value.trim() !== '' ? value : undefined
+      }),
+    city: z
+      .string()
+      .optional()
+      .transform((value) => {
+        return value && value.trim() !== '' ? value : undefined
+      }),
+    province: z
+      .string()
+      .optional()
+      .transform((value) => {
+        return value && value.trim() !== '' ? value : undefined
+      }),
+    country: z
+      .string()
+      .optional()
+      .transform((value) => {
+        return value && value.trim() !== '' ? value : undefined
+      }),
+    marketingAgree: z.boolean().optional(),
   })
 
   const data = createConsumerBodySchema.parse(req.body)

@@ -1,8 +1,8 @@
 import { ConsumersRepository } from '@/respositories/consumers-repository'
-import { Consumer } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { EmailAlreadyUsedError } from '../errors/email-already-used-error'
 import { TaxIdAlreadyExistsError } from '../errors/tax-id-already-exists-error'
+import { Consumer } from '@prisma/client'
 
 interface CreateConsumerUseCaseRequest {
   name: string

@@ -1,8 +1,8 @@
 import { ConsumersRepository } from '@/respositories/consumers-repository'
-import { Consumer } from '@prisma/client'
 import { hash } from 'bcryptjs'
 import { EmailAlreadyUsedError } from '../errors/email-already-used-error'
 import { TaxIdAlreadyExistsError } from '../errors/tax-id-already-exists-error'
+import { Consumer } from '@prisma/client'
 
 interface CreateConsumerUseCaseRequest {
   name: string
@@ -18,7 +18,8 @@ interface CreateConsumerUseCaseRequest {
   city?: string | null
   province?: string | null
   country?: string | null
-  acceptMarketing?: boolean
+  marketingAgree?: boolean
+  privacityTermsAgree: boolean
   password: string
 }
 
@@ -32,7 +33,24 @@ export class CreateConsumerUseCase {
   async execute(
     data: CreateConsumerUseCaseRequest,
   ): Promise<CreateConsumerUseCaseResponse> {
-    const { email, tax_id, acceptMarketing = true } = data
+    const {
+      email,
+      tax_id,
+      marketingAgree = true,
+      name,
+      password,
+      city,
+      complement,
+      country,
+      district,
+      fone,
+      number,
+      province,
+      street,
+      whatsapp,
+      zip_code,
+      privacityTermsAgree,
+    } = data
 
     const emailAlreadyExists = await this.consumersRepository.findByEmail(email)
 
@@ -50,13 +68,24 @@ export class CreateConsumerUseCase {
       }
     }
 
-    const password_hash = await hash(data.password, 6)
-
-    const { password, ...dataWithoutPassword } = data
+    const password_hash = await hash(password, 6)
 
     const consumer = await this.consumersRepository.create({
-      ...dataWithoutPassword,
-      accept_marketing_at: acceptMarketing ? new Date() : null,
+      name,
+      email,
+      city,
+      complement,
+      country,
+      district,
+      fone,
+      number,
+      province,
+      street,
+      tax_id,
+      whatsapp,
+      zip_code,
+      marketing_agree_at: marketingAgree ? new Date() : null,
+      privacity_agree_at: privacityTermsAgree ? new Date() : null,
       User: {
         create: {
           email,

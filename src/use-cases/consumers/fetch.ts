@@ -5,7 +5,7 @@ interface FetchUseCaseRequest {
   taxId?: string
   name?: string
   email?: string
-  acceptMarketing?: boolean
+  marketingAgree?: boolean
 }
 
 interface FetchUseCaseResponse {
@@ -16,13 +16,13 @@ export class FetchConsumersUseCase {
   constructor(private consumersRepository: ConsumersRepository) {}
 
   async execute({
-    acceptMarketing,
+    marketingAgree,
     email,
     name,
     taxId,
   }: FetchUseCaseRequest): Promise<FetchUseCaseResponse> {
     const consumers = await this.consumersRepository.findManyWithFilter({
-      acceptMarketing,
+      marketingAgree,
       email,
       name,
       taxId,

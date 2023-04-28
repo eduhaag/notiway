@@ -11,24 +11,25 @@ datasource db {
 }
 
 model Consumer {
-  id                  String    @id @default(uuid())
-  name                String
-  tax_id              String?   @unique
-  email               String    @unique
-  fone                String?
-  whatsapp            String?
-  zip_code            String?
-  street              String?
-  number              String?
-  complement          String?
-  district            String?
-  city                String?
-  province            String?
-  country             String?
-  accept_marketing_at DateTime? @default(now())
-  User                User[]
-  Sender              Sender[]
-  Client              Client[]
+  id                 String    @id @default(uuid())
+  name               String
+  tax_id             String?   @unique
+  email              String    @unique
+  fone               String?
+  whatsapp           String?
+  zip_code           String?
+  street             String?
+  number             String?
+  complement         String?
+  district           String?
+  city               String?
+  province           String?
+  country            String?
+  marketing_agree_at DateTime? @default(now())
+  privacity_agree_at DateTime?
+  User               User[]
+  Sender             Sender[]
+  Client             Client[]
 
   @@map("consumers")
 }

@@ -26,6 +26,7 @@ model Consumer {
   province           String?
   country            String?
   marketing_agree_at DateTime? @default(now())
+  privacity_agree_at DateTime?
   User               User[]
   Sender             Sender[]
   Client             Client[]

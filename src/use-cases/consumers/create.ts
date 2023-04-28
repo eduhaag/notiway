@@ -19,6 +19,7 @@ interface CreateConsumerUseCaseRequest {
   province?: string | null
   country?: string | null
   marketingAgree?: boolean
+  privacityTermsAgree: boolean
   password: string
 }
 
@@ -48,6 +49,7 @@ export class CreateConsumerUseCase {
       street,
       whatsapp,
       zip_code,
+      privacityTermsAgree,
     } = data
 
     const emailAlreadyExists = await this.consumersRepository.findByEmail(email)
@@ -83,6 +85,7 @@ export class CreateConsumerUseCase {
       whatsapp,
       zip_code,
       marketing_agree_at: marketingAgree ? new Date() : null,
+      privacity_agree_at: privacityTermsAgree ? new Date() : null,
       User: {
         create: {
           email,

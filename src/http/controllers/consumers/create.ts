@@ -76,9 +76,14 @@ export async function create(req: FastifyRequest, reply: FastifyReply) {
         return value && value.trim() !== '' ? value : undefined
       }),
     marketingAgree: z.boolean().optional(),
+    privacityTermsAgree: z.boolean(),
   })
 
   const data = createConsumerBodySchema.parse(req.body)
+
+  if (!data.privacityTermsAgree) {
+    return reply.status(401).send({ message: 'privacy terms must be accepted' })
+  }
 
   try {
     const createConsumerUseCase = makeCreateConsumerUseCase()

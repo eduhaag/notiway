@@ -3,7 +3,7 @@ import { ConsumersFilter, ConsumersRepository } from '../consumers-repository'
 import { prisma } from '@/lib/prisma'
 
 interface FilterParams {
-  accept_marketing_at?: null | { not: null }
+  marketing_agree_at?: null | { not: null }
   email?: { contains: string }
   name?: { contains: string }
   tax_id?: string
@@ -38,10 +38,10 @@ export class PrismaConsumersRepository implements ConsumersRepository {
   }
 
   async findManyWithFilter(filter: ConsumersFilter) {
-    const { acceptMarketing, email, name, taxId } = filter
+    const { marketingAgree, email, name, taxId } = filter
     const filterParams: FilterParams = {}
 
-    if (acceptMarketing === undefined && !email && !name && !taxId) {
+    if (marketingAgree === undefined && !email && !name && !taxId) {
       return await prisma.consumer.findMany()
     }
 
@@ -57,11 +57,11 @@ export class PrismaConsumersRepository implements ConsumersRepository {
       filterParams.tax_id = taxId
     }
 
-    if (acceptMarketing !== undefined) {
-      if (acceptMarketing) {
-        filterParams.accept_marketing_at = { not: null }
+    if (marketingAgree !== undefined) {
+      if (marketingAgree) {
+        filterParams.marketing_agree_at = { not: null }
       } else {
-        filterParams.accept_marketing_at = null
+        filterParams.marketing_agree_at = null
       }
     }
 

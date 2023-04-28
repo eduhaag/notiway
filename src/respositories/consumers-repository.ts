@@ -4,7 +4,7 @@ export interface ConsumersFilter {
   taxId?: string
   name?: string
   email?: string
-  acceptMarketing?: boolean
+  marketingAgree?: boolean
 }
 
 export interface ConsumersRepository {

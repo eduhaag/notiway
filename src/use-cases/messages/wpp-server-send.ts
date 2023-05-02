@@ -9,11 +9,11 @@ interface SendSeenReq {
   key: string
 }
 
-interface SetTypingReq {
+interface SetPreparing {
   senderName: string
   phone: string
   key: string
-  isTyping: boolean
+  isPreparing: boolean
 }
 
 interface SendMessageReq {
@@ -148,16 +148,49 @@ export async function sendToWppConnect(body: Message) {
   try {
     await sendSeen({ key: apiToken, phone: to, senderName })
 
-    await setTyping({ isTyping: true, key: apiToken, phone: to, senderName })
+    const PREPARING_DELAY = randomInt(1, 10) * 1000 // miliseconds
 
-    const writingDelay = randomInt(1, 10) * 1000 // miliseconds
+    if (content.type === 'AUDIO') {
+      await setRecording({
+        isPreparing: true,
+        key: apiToken,
+        phone: to,
+        senderName,
+      })
 
-    setTimeout(async () => {
-      await setTyping({ isTyping: false, key: apiToken, phone: to, senderName })
-      const response = await sendMessage({ key: apiToken, requestBody, url })
+      setTimeout(async () => {
+        await setRecording({
+          isPreparing: false,
+          key: apiToken,
+          phone: to,
+          senderName,
+        })
 
-      return response
-    }, writingDelay)
+        const response = await sendMessage({ key: apiToken, requestBody, url })
+
+        return response
+      }, PREPARING_DELAY)
+    } else {
+      await setTyping({
+        isPreparing: true,
+        key: apiToken,
+        phone: to,
+        senderName,
+      })
+
+      setTimeout(async () => {
+        await setTyping({
+          isPreparing: false,
+          key: apiToken,
+          phone: to,
+          senderName,
+        })
+
+        const response = await sendMessage({ key: apiToken, requestBody, url })
+
+        return response
+      }, PREPARING_DELAY)
+    }
   } catch (error) {
     throw error
   }
@@ -181,13 +214,43 @@ async function sendSeen({ senderName, phone, key }: SendSeenReq) {
   }
 }
 
-async function setTyping({ senderName, phone, key, isTyping }: SetTypingReq) {
+async function setTyping({
+  senderName,
+  phone,
+  key,
+  isPreparing,
+}: SetPreparing) {
   try {
     await api.post(
       `${env.WPP_URL}/${senderName}/typing`,
       {
         phone,
-        value: isTyping,
+        value: isPreparing,
+        isGroup: false,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${key}`,
+        },
+      },
+    )
+  } catch (error) {
+    throw error
+  }
+}
+
+async function setRecording({
+  senderName,
+  phone,
+  key,
+  isPreparing,
+}: SetPreparing) {
+  try {
+    await api.post(
+      `${env.WPP_URL}/${senderName}/recording`,
+      {
+        phone,
+        value: isPreparing,
         isGroup: false,
       },
       {
@@ -203,11 +266,15 @@ async function setTyping({ senderName, phone, key, isTyping }: SetTypingReq) {
 
 async function sendMessage({ url, key, requestBody }: SendMessageReq) {
   try {
-    const response = await api.post(`${env.WPP_URL}${url}`, requestBody, {
-      headers: {
-        Authorization: `Bearer ${key}`,
+    const response = await api.post(
+      `${env.WPP_URL}${url}`,
+      { ...requestBody },
+      {
+        headers: {
+          Authorization: `Bearer ${key}`,
+        },
       },
-    })
+    )
 
     return response.data
   } catch (error) {

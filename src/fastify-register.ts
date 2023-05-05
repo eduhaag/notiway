@@ -18,7 +18,6 @@ import { consumersRoutes } from './http/controllers/consumers/routes'
 import { clientsRoutes } from './http/controllers/clients/routes'
 import { sendersRoutes } from './http/controllers/senders/routes'
 import { messagesRoutes } from './http/controllers/messages/routes'
-import { readFileSync } from 'fs'
 import { webHookController } from './http/controllers/webHook'
 
 export async function fastiFyRegister(app: FastifyInstance) {
@@ -41,7 +40,7 @@ export async function fastiFyRegister(app: FastifyInstance) {
 
   app.register(fastifyStatic, {
     root: path.join(__dirname, 'public'),
-    prefix: '/public',
+    prefix: '/',
   })
 
   // routes
@@ -51,22 +50,6 @@ export async function fastiFyRegister(app: FastifyInstance) {
   app.register(clientsRoutes, { prefix: 'site' })
   app.register(sendersRoutes, { prefix: 'site' })
   app.register(messagesRoutes, { prefix: 'v1' })
-
-  const docs = readFileSync(
-    path.resolve(__dirname, 'documentation', 'docs.html'),
-  )
-
-  const terms = readFileSync(
-    path.resolve(__dirname, 'documentation', 'terms.html'),
-  )
-
-  app.get('/', (req, reply) => {
-    return reply.type('text/html').send(docs)
-  })
-
-  app.get('/terms', (req, reply) => {
-    return reply.type('text/html').send(terms)
-  })
 
   // Listen wppConnect
   app.post('/webhook', webHookController)

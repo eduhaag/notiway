@@ -30,7 +30,7 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         key: ${{ secrets.SSH_KEY }}
         source: ".,!node_modules"
-        target: "app/notiway"
+        target: "~/app/notiway"
         
     - name: Install dependecies
       uses: appleboy/ssh-action@v0.1.9

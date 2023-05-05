@@ -1,151 +1,281 @@
 import { Message } from '@/DTOS/message-types'
 import { env } from '@/env'
 import { api } from '@/lib/axios'
+import { randomInt } from 'crypto'
+
+interface SendSeenReq {
+  senderName: string
+  phone: string
+  key: string
+}
+
+interface SetPreparing {
+  senderName: string
+  phone: string
+  key: string
+  isPreparing: boolean
+}
+
+interface SendMessageReq {
+  url: string
+  requestBody: {}
+  key: string
+}
 
 export async function sendToWppConnect(body: Message) {
   const { apiToken, content, to, senderName } = body
 
+  let url: string
+  let requestBody: {}
+
   switch (content.type) {
     case 'TEXT': {
-      const url = `/${senderName}/send-message`
+      url = `/${senderName}/send-message`
 
-      return await send(
-        {
-          phone: to,
-          message: content.message,
-        },
-        url,
-        apiToken,
-      )
+      requestBody = {
+        phone: to,
+        message: content.message,
+      }
+
+      break
     }
+
     case 'LOCATION': {
       const { lat, lng, address, title } = content
 
-      const url = `/${senderName}/send-location`
+      url = `/${senderName}/send-location`
 
-      return await send(
-        {
-          phone: to,
-          lat,
-          lng,
-          address,
-          title,
-        },
-        url,
-        apiToken,
-      )
+      requestBody = {
+        phone: to,
+        lat,
+        lng,
+        address,
+        title,
+      }
+
+      break
     }
+
     case 'LINK': {
-      const url = `/${senderName}/send-link-preview`
+      url = `/${senderName}/send-link-preview`
 
-      return await send(
-        {
-          phone: to,
-          url: content.url,
-          caption: content.caption,
-        },
-        url,
-        apiToken,
-      )
+      requestBody = {
+        phone: to,
+        url: content.url,
+        caption: content.caption,
+      }
+
+      break
     }
+
     case 'AUDIO': {
       const { base64 } = content
 
-      const url = `/${senderName}/send-voice-base64`
+      url = `/${senderName}/send-voice-base64`
 
-      return await send(
-        {
-          phone: to,
-          base64Ptt: base64,
-        },
-        url,
-        apiToken,
-      )
+      requestBody = {
+        phone: to,
+        base64Ptt: base64,
+      }
+
+      break
     }
+
     case 'FILE': {
       const { base64, filename, message } = content
 
-      const url = `/${senderName}/send-file-base64`
+      url = `/${senderName}/send-file-base64`
 
-      return await send(
-        {
-          phone: to,
-          base64,
-          filename,
-          message,
-        },
-        url,
-        apiToken,
-      )
+      requestBody = {
+        phone: to,
+        base64,
+        filename,
+        message,
+      }
+
+      break
     }
+
     case 'IMAGE': {
       const { base64, message } = content
 
-      const url = `/${senderName}/send-image`
+      url = `/${senderName}/send-image`
 
-      return await send(
-        {
-          phone: to,
-          base64,
-          message,
-        },
-        url,
-        apiToken,
-      )
+      requestBody = {
+        phone: to,
+        base64,
+        message,
+      }
+
+      break
     }
+
     case 'CONTACT': {
       const { contact, name } = content
 
-      const url = `/${senderName}/contact-vcard`
+      url = `/${senderName}/contact-vcard`
 
-      return await send(
-        {
-          phone: to,
-          contactsId: `${contact}@c.us`,
-          name,
-        },
-        url,
-        apiToken,
-      )
+      requestBody = {
+        phone: to,
+        contactsId: `${contact}@c.us`,
+        name,
+      }
+
+      break
     }
+
     case 'GIF': {
-      const { url } = content
+      url = `/${senderName}/send-sticker-gif`
 
-      const link = `/${senderName}/send-sticker-gif`
+      requestBody = {
+        phone: to,
+        path: content.url,
+      }
 
-      return await send(
-        {
-          phone: to,
-          path: url,
-        },
-        link,
-        apiToken,
-      )
+      break
     }
+
     case 'STICKER': {
-      const { url } = content
+      url = `/${senderName}/send-sticker`
 
-      const link = `/${senderName}/send-sticker`
-
-      return await send(
-        {
-          phone: to,
-          path: url,
-        },
-        link,
-        apiToken,
-      )
+      requestBody = {
+        phone: to,
+        path: content.url,
+      }
     }
+  }
+
+  try {
+    await sendSeen({ key: apiToken, phone: to, senderName })
+
+    const PREPARING_DELAY = randomInt(1, 10) * 1000 // miliseconds
+
+    if (content.type === 'AUDIO') {
+      await setRecording({
+        isPreparing: true,
+        key: apiToken,
+        phone: to,
+        senderName,
+      })
+
+      setTimeout(async () => {
+        await setRecording({
+          isPreparing: false,
+          key: apiToken,
+          phone: to,
+          senderName,
+        })
+
+        const response = await sendMessage({ key: apiToken, requestBody, url })
+
+        return response
+      }, PREPARING_DELAY)
+    } else {
+      await setTyping({
+        isPreparing: true,
+        key: apiToken,
+        phone: to,
+        senderName,
+      })
+
+      setTimeout(async () => {
+        await setTyping({
+          isPreparing: false,
+          key: apiToken,
+          phone: to,
+          senderName,
+        })
+
+        const response = await sendMessage({ key: apiToken, requestBody, url })
+
+        return response
+      }, PREPARING_DELAY)
+    }
+  } catch (error) {
+    throw error
   }
 }
 
-async function send(data: any, url: string, key: string) {
+async function sendSeen({ senderName, phone, key }: SendSeenReq) {
   try {
-    const response = await api.post(`${env.WPP_URL}${url}`, data, {
-      headers: {
-        Authorization: `Bearer ${key}`,
+    await api.post(
+      `${env.WPP_URL}/${senderName}/send-seen`,
+      {
+        phone,
       },
-    })
+      {
+        headers: {
+          Authorization: `Bearer ${key}`,
+        },
+      },
+    )
+  } catch (error) {
+    throw error
+  }
+}
+
+async function setTyping({
+  senderName,
+  phone,
+  key,
+  isPreparing,
+}: SetPreparing) {
+  try {
+    await api.post(
+      `${env.WPP_URL}/${senderName}/typing`,
+      {
+        phone,
+        value: isPreparing,
+        isGroup: false,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${key}`,
+        },
+      },
+    )
+  } catch (error) {
+    throw error
+  }
+}
+
+async function setRecording({
+  senderName,
+  phone,
+  key,
+  isPreparing,
+}: SetPreparing) {
+  try {
+    await api.post(
+      `${env.WPP_URL}/${senderName}/recording`,
+      {
+        phone,
+        value: isPreparing,
+        isGroup: false,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${key}`,
+        },
+      },
+    )
+  } catch (error) {
+    throw error
+  }
+}
+
+async function sendMessage({ url, key, requestBody }: SendMessageReq) {
+  try {
+    const response = await api.post(
+      `${env.WPP_URL}${url}`,
+      { ...requestBody },
+      {
+        headers: {
+          Authorization: `Bearer ${key}`,
+        },
+      },
+    )
+
     return response.data
   } catch (error) {
     throw error

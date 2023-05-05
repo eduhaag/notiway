@@ -1,8 +1,8 @@
 openapi: 3.0.3
 info: 
   title: NotiWay - Whatsapp Notifications Sender - API REST
-  x-logo: 
-    url: https://raw.githubusercontent.com/eduhaag/notiway-repository/main/logo_n.png
+  x-logo:
+    url: https://api.notiway.com.br/images/logo.png
   description: |-
     # Introdução
     NotiWay é uma **API Rest** eficiente e fácil de usar para envio de notificações via WhatsApp, voltada tanto para pequenas e médias empresas quanto para desenvolvedores de aplicações. Com a nossa API, você pode enviar mensagens personalizadas, promocionais ou informativas diretamente para os clientes, mantendo uma comunicação direta e eficaz.
@@ -15,9 +15,46 @@ info:
 
     # Autenticação
     A autenticação na API é feita por meio de uma `api-key` enviada no `headers` da solicitação;
-    A `api-key` é unica para cada _client_ e deve ser solicitada a equipe de suporte por meio do email [atendimento@notiway.com.br](mailto:atendimento@notiway.com.br) ou do Whatsapp [+55(47) 9 99678-8597](https://wa.me/5547996788597).
+
+    Para obter a `api-key` você deve acessar sua conta em <a href="https://notiway.com.br" target="_blank">notiway.com.br</a>, selecionar a opção "Clients" no menu, em seguida clicar sobre o _client_ desejado e então será exibida uma caixa de texto com a `api-key` oculta. Você tem as opções de exibir ou copiar a chave para área de transferência conforme imagem abaixo:
+
+    <img src="/images/client_key.png" alt=""/>
+
+    **Atenção!** Clicar em *Gerar nova chave*, invalida a `api-key` anterior, sendo necessário substituí-la nas suas aplicações em produção.
 
     <SecurityDefinitions />
+
+    # Sincronização do Whatsapp
+    Nossa API funciona através do Whastapp Web, dessa forma caso você não tenha feito a assinatura de um número virtual conosco ou não tenha contratado o plano com número compartilhado, é necessário que você realize a sincronização da sua conta do Whatsapp com a API. Para isso, siga os passos abaixo:
+
+    <ol style="display: flex; flex-direction:column; gap:1rem;">
+      <li> Acesse a opção <b>Senders</b> no menu em <a href="https://notiway.com.br/senders" target="_blank">notiway.com.br</a>;</li>
+      <li> Clique sobre o <i>sender</i> desejado;</li>
+      <li> Confirme se o número do telefone cadastrado está correto, caso contrário nos comunique o mais rápido possível clicando <a href="https://wa.me/5547996788597" target="_blank">aqui</a>;</li>
+      <li> Acesse o Whatsapp em seu celular e siga de acordo com seu sistema:
+        <ul style="display:flex; flex-direction:column; gap: 0.5rem;">    
+          <li><strong>Android:</strong> toque em <b>Mais opções</b><img src="/images/dot_menu.png" style="max-width: 25px; max-height: 25px;" alt="Atalho de menu de 3 pontos do whatsapp" /> >  <b>Aparelhos conetados</b> > <b>Conectar aparelho</b>.</li>
+          <li><strong>IPhone:</strong> toque em <b>Configurações</b>&nbsp<img src="/images/iphone_config.png" style="max-width: 25px; max-height: 25px" alt="Icone de engrenagem" /> > <b>Aparelhos conetados</b> > <b>Conectar aparelho</b>.</li>
+          <span style="display:block; margin-bottom: 1rem;">Lembre-se que cada conta do Whatsapp pode estar conectada a no máximo 4 dispositivos diferentes. Caso você já tenha atingido este limite, será necessário desconectar algum dispositivo para sincronizar com a API.</span>
+        </ul>
+      </li>
+      <li> Desbloqueie seu celular:
+        <ul style="display:flex; flex-direction:column; gap: 0.5rem;">
+          <li> Se a autenticação biométrica estiver ativada, siga as instruções exibidas na tela.</li>
+          <li> Se a autenticação biométrica não estiver ativada, será necessário informar o código usado para desbloquear o celular.</li>
+        </ul>
+      </li>
+      <li> Clique na opção <b>Conectar</b> no <i>sender</i> selecionado no site e aguarde gerar o <b>QR Code</b>;
+          <img src="/images/connect.png" alt="Tela de conexão no site Notiway.com.br" style="display:block; margin-bottom:1rem;" />
+      </li>
+      <li> Quando o <b>QR Code</b> for exibido, basta fazer o escaneamento com a câmera do seu celular. Para esta operação você terá cerca de 50 segundos. Caso o tempo encerre sem que ocorra a leitura do QR Code, será exibido um alerta informando falha na leitura e você poderá iniciar novamente do passo 6.
+          <img src="/images/qr_code.png" alt="Tela de leitura do QR Code" style="display:block; margin-bottom:1rem;" />
+      </li>
+      <li>Após a leitura ser realizada com sucesso, aguarde até que o <b>status da conexão em seu celular</b> esteja como <b>Ativo</b>.
+          <img src="/images/connection_status.jpeg" alt="Tela de status da conexão no Whatsapp" style="display: block; max-width:300px"/>
+      </li>
+      <li><b>Pronto!</b> Agora você já pode utilizar a API com a sua conta do Whatsapp.</li>
+    </ul>
 
     # Formatação de textos
     É possivel formatar os textos enviados pela API, colocando o texto desejado entre caracteres especiais conforme abaixo:
@@ -25,7 +62,7 @@ info:
       - <div>
       <p>
         <b>Itálico</b><br />
-        Para escrever sua mensagem em <i>itálico</i>, insira o sinal de sublinhado antes e depois do texto:<br/>
+        Para escrever sua mensagem em <i>itálico</i>, insira o sinal de sublinhado (<i>underline</i>) antes e depois do texto:<br/>
         _texto em itálico_ = <i>texto em itálico</i>
       </p>
       </div>
@@ -70,7 +107,11 @@ paths:
       description: |
         Está rota é reponsável pelo envio de uma mensagem de texto comum para o desinatário.
 
-        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. 
+
+        Ex.: para o telefone brasileiro **(11) 9 9999-9999** usar `to:'5511999999999'`.</br>        
+        Obs.: O 55 corresponde ao +55 que identifica os telefones brasileiros internacionalmente.
+
       requestBody:
         content:
           application/json:
@@ -97,7 +138,10 @@ paths:
       description: |
         Esta rota é reponsável pelo envio de uma mensagem contendo um link com o preview do mesmo para o desinatário.
         
-        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. 
+
+        Ex.: para o telefone brasileiro **(11) 9 9999-9999** usar `to:'5511999999999'`.</br>        
+        Obs.: O 55 corresponde ao +55 que identifica os telefones brasileiros internacionalmente.
       requestBody:
         content:
           application/json:
@@ -123,9 +167,12 @@ paths:
       summary: Enviar localização
       description: |
         Esta rota é reponsável pelo envio de uma localização e/ou um endereço ao detinatário.
-        Ao destinatário será exibida uma previa da localização no map.
+        Ao destinatário será exibida uma prévia da localização no maps.
 
-        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. 
+
+        Ex.: para o telefone brasileiro **(11) 9 9999-9999** usar `to:'5511999999999'`.</br>        
+        Obs.: O 55 corresponde ao +55 que identifica os telefones brasileiros internacionalmente.
       requestBody:
         content:
           application/json:
@@ -152,7 +199,10 @@ paths:
       description: |
         Esta rota é responsável por enviar um contato para o destinário, de forma que seja possivel salvar o contato da agenda do destinatário.
 
-        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. 
+
+        Ex.: para o telefone brasileiro **(11) 9 9999-9999** usar `to:'5511999999999'`.</br>        
+        Obs.: O 55 corresponde ao +55 que identifica os telefones brasileiros internacionalmente.
       requestBody:
         content:
           application/json:
@@ -179,7 +229,10 @@ paths:
       description: |
         Esta rota é responsável por enviar um gif animado ou estático ao destinatário.
 
-        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. 
+
+        Ex.: para o telefone brasileiro **(11) 9 9999-9999** usar `to:'5511999999999'`.</br>        
+        Obs.: O 55 corresponde ao +55 que identifica os telefones brasileiros internacionalmente.
       requestBody:
         content:
           application/json:
@@ -206,7 +259,10 @@ paths:
       description: |
         Esta rota é responsável por enviar um sticker/figurinha ao destinatário.
 
-        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. 
+
+        Ex.: para o telefone brasileiro **(11) 9 9999-9999** usar `to:'5511999999999'`.</br>        
+        Obs.: O 55 corresponde ao +55 que identifica os telefones brasileiros internacionalmente.
       requestBody:
         content:
           application/json:
@@ -235,7 +291,10 @@ paths:
 
         O arquivo da imagem deve ser convertido em uma URI Base64 e enviado para API apenas a  string.
       
-        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. 
+
+        Ex.: para o telefone brasileiro **(11) 9 9999-9999** usar `to:'5511999999999'`.</br>        
+        Obs.: O 55 corresponde ao +55 que identifica os telefones brasileiros internacionalmente.
       requestBody:
         content:
           application/json:
@@ -264,7 +323,10 @@ paths:
 
         O arquivo deve ser convertido em uma URI Base64 e enviado para API apenas a  string.
       
-        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. 
+
+        Ex.: para o telefone brasileiro **(11) 9 9999-9999** usar `to:'5511999999999'`.</br>        
+        Obs.: O 55 corresponde ao +55 que identifica os telefones brasileiros internacionalmente.
       requestBody:
         content:
           application/json:
@@ -293,7 +355,10 @@ paths:
 
         O arquivo deve ser convertido em uma URI Base64 e enviado para API apenas a  string.
       
-        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. Ex.:`to:'5511999999999'`
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. 
+
+        Ex.: para o telefone brasileiro **(11) 9 9999-9999** usar `to:'5511999999999'`.</br>        
+        Obs.: O 55 corresponde ao +55 que identifica os telefones brasileiros internacionalmente.
       requestBody:
         content:
           application/json:
@@ -463,7 +528,7 @@ components:
       description: Unexpected error.
   securitySchemes:
     api_keys:
-      description: Solicite sua API key ao time de suporte
+      description: Consulte a API Key em <a href="https://notiway.com.br" target="_blank">notiway.com.br</a>
       name: api-key
       type: apiKey
       in: header

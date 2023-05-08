@@ -1,28 +1,26 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryUsersRepository } from '@/respositories/in-memory/in-memory-users-repository'
 import { hash } from 'bcryptjs'
 import { ForgotPasswordUseCase } from './forgot-password'
 import { InMemoryUserTokensRepository } from '@/respositories/in-memory/in-memory-user-tokens-repository'
-import { EtherealMailProvider } from '@/providers/mail-provider/implementations/etherealMailProvider'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
+import { mailMock, mailProvider } from '@/utils/test/mocks/mail-mock'
 
 let usersRepository: InMemoryUsersRepository
 let userTokensRepository: InMemoryUserTokensRepository
-let mailProvider: EtherealMailProvider
 let sut: ForgotPasswordUseCase
+
+mailMock()
 
 describe('Authenticate use case', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
     userTokensRepository = new InMemoryUserTokensRepository()
-    mailProvider = new EtherealMailProvider()
     sut = new ForgotPasswordUseCase(
       usersRepository,
       userTokensRepository,
       mailProvider,
     )
-
-    vi.spyOn(mailProvider, 'sendMail').mockImplementation(async () => {})
   })
 
   it('should be able send a forgot password mail', async () => {

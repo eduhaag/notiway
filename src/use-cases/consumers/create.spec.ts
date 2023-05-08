@@ -18,6 +18,7 @@ describe('Create consumer use case', () => {
       email: 'johndoe@example.com',
       name: 'John Doe',
       password: '123456',
+      privacityTermsAgree: true,
     })
 
     expect(consumer.id).toEqual(expect.any(String))
@@ -28,6 +29,7 @@ describe('Create consumer use case', () => {
       name: 'John Doe',
       email: 'johndoe@example.com',
       password: '123456',
+      privacityTermsAgree: true,
     })
 
     expect(async () => {
@@ -35,6 +37,7 @@ describe('Create consumer use case', () => {
         name: 'John Doe',
         email: 'johndoe@example.com',
         password: '123456',
+        privacityTermsAgree: true,
       })
     }).rejects.toBeInstanceOf(EmailAlreadyUsedError)
   })
@@ -45,6 +48,7 @@ describe('Create consumer use case', () => {
       email: 'johndoe@example.com',
       password: '123456',
       tax_id: '999.999.999-99',
+      privacityTermsAgree: true,
     })
 
     expect(async () => {
@@ -53,6 +57,7 @@ describe('Create consumer use case', () => {
         email: 'mariedoe@example.com',
         password: '123456',
         tax_id: '999.999.999-99',
+        privacityTermsAgree: true,
       })
     }).rejects.toBeInstanceOf(TaxIdAlreadyExistsError)
   })

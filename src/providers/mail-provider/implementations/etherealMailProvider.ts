@@ -1,3 +1,4 @@
+import { env } from '@/env'
 import { MailProvider, SendMailProps } from '../email-provider'
 import nodeMailer, { Transporter } from 'nodemailer'
 
@@ -5,24 +6,14 @@ export class EtherealMailProvider implements MailProvider {
   private client!: Transporter
 
   constructor() {
-    nodeMailer
-      .createTestAccount()
-      .then((account) => {
-        const transporter = nodeMailer.createTransport({
-          host: account.smtp.host,
-          port: account.smtp.port,
-          secure: account.smtp.secure,
-          auth: {
-            user: account.user,
-            pass: account.pass,
-          },
-        })
-
-        this.client = transporter
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+    this.client = nodeMailer.createTransport({
+      host: env.MAIL_HOST,
+      port: env.MAIL_PORT,
+      auth: {
+        user: env.MAIL_USER,
+        pass: env.MAIL_PASS,
+      },
+    })
   }
 
   async sendMail({ to, body, subject }: SendMailProps): Promise<void> {

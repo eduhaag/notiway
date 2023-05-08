@@ -40,10 +40,21 @@ model User {
   password_hash String
   access_level  Int    @default(10)
 
-  consumer    Consumer? @relation(fields: [consumer_id], references: [id])
+  consumer    Consumer?   @relation(fields: [consumer_id], references: [id])
   consumer_id String?
+  UserTokens  UserToken[]
 
   @@map("users")
+}
+
+model UserToken {
+  token        String   @id @default(uuid())
+  expires_date DateTime
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  @@map("user_tokens")
 }
 
 enum SendeType {

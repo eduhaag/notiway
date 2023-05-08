@@ -2,7 +2,7 @@ import { UsersRepository } from '@/respositories/users-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { UserTokensRepository } from '@/respositories/user-tokens-repository'
 import dayjs from 'dayjs'
-import { MailProvider } from '@/providers/mail-provider/email-provider'
+import queue from '@/providers/queues/queue'
 
 interface ForgotPasswordUseCaseRequest {
   email: string
@@ -14,7 +14,6 @@ export class ForgotPasswordUseCase {
   constructor(
     private usersRepository: UsersRepository,
     private userTokesRepository: UserTokensRepository,
-    private mailProvider: MailProvider,
   ) {}
 
   async execute({
@@ -33,7 +32,7 @@ export class ForgotPasswordUseCase {
       expires_date: expiresDate,
     })
 
-    await this.mailProvider.sendMail({
+    await queue.add('SendMail', {
       to: email,
       subject: 'Recuperação de senha',
       body: `O link para o reset é ${token}`,

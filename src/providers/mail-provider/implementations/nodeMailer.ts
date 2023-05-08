@@ -2,7 +2,7 @@ import { env } from '@/env'
 import { MailProvider, SendMailProps } from '../email-provider'
 import nodeMailer, { Transporter } from 'nodemailer'
 
-export class EtherealMailProvider implements MailProvider {
+export class NodeMailer implements MailProvider {
   private client!: Transporter
 
   constructor() {

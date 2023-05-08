@@ -36,14 +36,6 @@ export class SendTextUseCase {
 
     const messageContent: string = text
 
-    // if (client.header) {
-    //   messageContent = `*${client.header}*\n\n${messageContent}`
-    // }
-
-    // if (client.footer) {
-    //   messageContent = `${messageContent}\n\n_${client.footer}_`
-    // }
-
     const message: Message = {
       clientId: client.id,
       senderName: sender.name,

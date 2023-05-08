@@ -95,7 +95,7 @@ describe('Fetch consumers use case', () => {
     await consumersRepository.create({
       email: 'johndoe@example.com',
       name: 'John Doe',
-      accept_marketing_at: new Date(),
+      marketing_agree_at: new Date(),
     })
 
     await consumersRepository.create({
@@ -103,14 +103,14 @@ describe('Fetch consumers use case', () => {
       name: 'Marie Doe',
     })
 
-    let response = await sut.execute({ acceptMarketing: true })
+    let response = await sut.execute({ marketingAgree: true })
 
     expect(response.consumers).toHaveLength(1)
     expect(response.consumers).toEqual([
       expect.objectContaining({ email: 'johndoe@example.com' }),
     ])
 
-    response = await sut.execute({ acceptMarketing: false })
+    response = await sut.execute({ marketingAgree: false })
 
     expect(response.consumers).toHaveLength(1)
     expect(response.consumers).toEqual([

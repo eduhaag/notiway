@@ -1,6 +1,6 @@
 import { InMemoryClientTokensRepository } from '@/respositories/in-memory/in-memory-client-tokens-repository'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import queue from '@/queues/queue'
+import queue from '@/providers/queues/queue'
 import { ClientNotAuthorizedError } from '../errors/client-not-authorized-error'
 import { ClientNotReadyError } from '../errors/client-not-ready-error'
 import { ClientSenderNotReadyError } from '../errors/client-sender-not-ready-error'

@@ -10,7 +10,7 @@ import { BullAdapter } from '@bull-board/api/bullAdapter'
 import path from 'path'
 
 import { env } from './env'
-import queue from './queues/queue'
+import queue from './providers/queues/queue'
 
 import { adminRoutes } from './http/controllers/adminRoutes'
 import { usersRoutes } from './http/controllers/users/routes'

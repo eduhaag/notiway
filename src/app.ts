@@ -6,7 +6,7 @@ import { ZodError } from 'zod'
 import { env } from './env'
 
 import { sendersLogOnSocket } from './sockets'
-import queue from './queues/queue'
+import queue from './providers/queues/queue'
 import { connectToMongoDB } from './mongo/mongose'
 import { fastiFyRegister } from './fastify-register'
 

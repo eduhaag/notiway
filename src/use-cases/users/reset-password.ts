@@ -32,6 +32,7 @@ export class ResetPasswordUseCase {
     const checkTokenIsExpired = dayjs().isAfter(userToken.expires_date)
 
     if (checkTokenIsExpired) {
+      this.userTokensRepository.delete(userToken.token)
       throw new InvalidTokenError()
     }
 

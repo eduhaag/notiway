@@ -26,7 +26,7 @@ export class ForgotPasswordUseCase {
       throw new ResourceNotFoundError()
     }
 
-    const expiresDate = dayjs().add(3, 'hour').toDate()
+    const expiresDate = dayjs().add(48, 'hour').toDate()
 
     const { token } = await this.userTokesRepository.create({
       user_id: user.id,

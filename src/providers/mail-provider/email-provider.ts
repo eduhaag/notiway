@@ -1,7 +1,8 @@
 export interface SendMailProps {
   to: string
   subject: string
-  body: string
+  variables: any
+  path: string
 }
 
 export interface MailProvider {

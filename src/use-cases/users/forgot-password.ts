@@ -3,6 +3,7 @@ import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { UserTokensRepository } from '@/respositories/user-tokens-repository'
 import dayjs from 'dayjs'
 import queue from '@/providers/queues/queue'
+import path from 'path'
 
 interface ForgotPasswordUseCaseRequest {
   email: string
@@ -32,10 +33,23 @@ export class ForgotPasswordUseCase {
       expires_date: expiresDate,
     })
 
-    await queue.add('SendMail', {
+    const templatePath = path.resolve(
+      __dirname,
+      '..',
+      '..',
+      'views',
+      'emails',
+      'test.hbs',
+    )
+
+    await queue.add('sendMail', {
       to: email,
       subject: 'Recuperação de senha',
-      body: `O link para o reset é ${token}`,
+      path: templatePath,
+      variables: {
+        mail: email,
+        token,
+      },
     })
 
     return {}

@@ -5,13 +5,14 @@ import { Job } from 'bull'
 export default {
   key: 'sendMail',
   async handle({ data }: Job<SendMailProps>) {
-    const { to, body, subject } = data
+    const { to, path, variables, subject } = data
 
     const mailProvider = new NodeMailer()
 
     mailProvider.sendMail({
       to,
-      body,
+      path,
+      variables,
       subject,
     })
   },

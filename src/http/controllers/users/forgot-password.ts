@@ -12,7 +12,6 @@ export async function forgotPassword(req: FastifyRequest, reply: FastifyReply) {
 
   try {
     const forgotPasswordUseCase = makeForgotPasswordUseCase()
-    console.log('controller')
     await forgotPasswordUseCase.execute({ email })
 
     return reply.status(204).send()

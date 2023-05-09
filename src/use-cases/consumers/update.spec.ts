@@ -22,7 +22,6 @@ describe('Update consumer use case', () => {
 
     const response = await consumersRepository.findById(consumer.id)
 
-    console.log(response)
     expect(response?.marketing_agree_at).toEqual(expect.any(Date))
   })
 

@@ -4,6 +4,7 @@ import queue from '@/providers/queues/queue'
 import path from 'path'
 import { InvalidTokenError } from '../errors/invalid-token-error'
 import { hash } from 'bcryptjs'
+import dayjs from 'dayjs'
 
 interface ResetPasswordUseCaseRequest {
   newPassword: string
@@ -25,6 +26,12 @@ export class ResetPasswordUseCase {
     const userToken = await this.userTokensRepository.findByToken(token)
 
     if (!userToken) {
+      throw new InvalidTokenError()
+    }
+
+    const checkTokenIsExpired = dayjs().isAfter(userToken.expires_date)
+
+    if (checkTokenIsExpired) {
       throw new InvalidTokenError()
     }
 

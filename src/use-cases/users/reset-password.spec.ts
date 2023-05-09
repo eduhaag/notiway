@@ -1,4 +1,12 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 import { InMemoryUsersRepository } from '@/respositories/in-memory/in-memory-users-repository'
 import { compare } from 'bcryptjs'
 import { InMemoryUserTokensRepository } from '@/respositories/in-memory/in-memory-user-tokens-repository'
@@ -13,10 +21,18 @@ let sut: ResetPasswordUseCase
 const addToQueue = vi.spyOn(queue, 'add')
 
 describe('Authenticate use case', () => {
+  beforeAll(() => {
+    vi.useFakeTimers()
+  })
+
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
     userTokensRepository = new InMemoryUserTokensRepository(usersRepository)
     sut = new ResetPasswordUseCase(usersRepository, userTokensRepository)
+  })
+
+  afterAll(() => {
+    vi.useRealTimers()
   })
 
   it('should be able reset password', async () => {
@@ -25,6 +41,7 @@ describe('Authenticate use case', () => {
       password_hash: '123345',
     })
 
+    vi.setSystemTime(new Date(2023, 5, 1, 0, 0, 0))
     const { token } = await userTokensRepository.create({
       user_id: user.id,
       expires_date: new Date(),
@@ -51,6 +68,28 @@ describe('Authenticate use case', () => {
       await sut.execute({
         newPassword: '123456',
         token: 'fake-token',
+      })
+    }).rejects.toBeInstanceOf(InvalidTokenError)
+  })
+
+  it('should not be able to reset password with a expired token', async () => {
+    const user = await usersRepository.create({
+      email: 'johndoe@example.com',
+      password_hash: '123345',
+    })
+
+    vi.setSystemTime(new Date(2023, 5, 1, 0, 0, 0))
+    const { token } = await userTokensRepository.create({
+      user_id: user.id,
+      expires_date: new Date(),
+    })
+
+    vi.setSystemTime(new Date(2023, 5, 1, 0, 0, 1))
+
+    expect(async () => {
+      await sut.execute({
+        newPassword: '123456',
+        token,
       })
     }).rejects.toBeInstanceOf(InvalidTokenError)
   })

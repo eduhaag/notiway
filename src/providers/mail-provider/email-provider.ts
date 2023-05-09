@@ -1,7 +1,7 @@
 export interface SendMailProps {
   to: string
   subject: string
-  variables: any
+  variables?: any
   path: string
 }
 

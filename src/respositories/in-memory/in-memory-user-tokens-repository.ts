@@ -1,9 +1,12 @@
-import { Prisma, UserToken } from '@prisma/client'
+import { Prisma, User, UserToken } from '@prisma/client'
 import { UserTokensRepository } from '../user-tokens-repository'
 import { randomUUID } from 'node:crypto'
+import { UsersRepository } from '../users-repository'
 
 export class InMemoryUserTokensRepository implements UserTokensRepository {
   userTokens: UserToken[] = []
+
+  constructor(public users?: UsersRepository) {}
 
   async create({
     user_id,
@@ -26,6 +29,26 @@ export class InMemoryUserTokensRepository implements UserTokensRepository {
   }
 
   async findByToken(token: string) {
-    return this.userTokens.find((item) => item.token === token) ?? null
+    const userToken =
+      this.userTokens.find((item) => item.token === token) ?? null
+
+    if (!userToken) {
+      return null
+    }
+
+    const user = await this.users?.findById(userToken.user_id)
+
+    if (!user) {
+      return null
+    }
+
+    const response: (UserToken & { user: User }) | null = {
+      expires_date: userToken?.expires_date,
+      token: userToken?.token,
+      user_id: userToken?.user_id,
+      user,
+    }
+
+    return response
   }
 }

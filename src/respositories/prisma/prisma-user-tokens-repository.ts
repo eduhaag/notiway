@@ -15,6 +15,9 @@ export class PrismaUserTokensRepository implements UserTokensRepository {
   }
 
   async findByToken(token: string) {
-    return await prisma.userToken.findUnique({ where: { token } })
+    return await prisma.userToken.findUnique({
+      where: { token },
+      include: { user: true },
+    })
   }
 }

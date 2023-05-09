@@ -39,7 +39,7 @@ export class ForgotPasswordUseCase {
       '..',
       'views',
       'emails',
-      'test.hbs',
+      'forgot-password.hbs',
     )
 
     await queue.add('sendMail', {

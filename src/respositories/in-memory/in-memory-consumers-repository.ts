@@ -6,7 +6,7 @@ import { InMemoryUsersRepository } from './in-memory-users-repository'
 export class InMemoryConsumersRepository implements ConsumersRepository {
   consumers: Consumer[] = []
 
-  constructor(private usersRepository: InMemoryUsersRepository) {}
+  constructor(private usersRepository?: InMemoryUsersRepository) {}
 
   async create(data: Prisma.ConsumerCreateWithoutSenderInput) {
     const consumer: Consumer = {
@@ -34,10 +34,12 @@ export class InMemoryConsumersRepository implements ConsumersRepository {
 
     this.consumers.push(consumer)
 
-    await this.usersRepository.create({
-      email: data.email,
-      password_hash: '',
-    })
+    if (this.usersRepository) {
+      await this.usersRepository.create({
+        email: data.email,
+        password_hash: '',
+      })
+    }
 
     return consumer
   }

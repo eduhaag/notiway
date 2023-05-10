@@ -3,9 +3,8 @@ import { app } from '@/app'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { createAndAuthenticateUser } from '@/utils/test/create-and-authenticate-user'
 import { prisma } from '@/lib/prisma'
-import dayjs from 'dayjs'
 
-describe('ResetPassword (e2e)', () => {
+describe('Mail Verify (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -14,7 +13,7 @@ describe('ResetPassword (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to reset  a user password', async () => {
+  it('should be able to verify a email', async () => {
     const { user } = await createAndAuthenticateUser(app, {
       email: 'johndoe@example.com',
       password: '123456',
@@ -22,15 +21,15 @@ describe('ResetPassword (e2e)', () => {
 
     const { token } = await prisma.userToken.create({
       data: {
-        expires_date: dayjs().add(48, 'hour').toDate(),
+        expires_date: null,
         user_id: user.id,
-        type: 'PASSWORD_RESET',
+        type: 'MAIL_CONFIRM',
       },
     })
 
     const response = await request(app.server)
-      .patch('/site/users/reset-password')
-      .send({ newPassword: 'abcdef', token })
+      .patch('/site/users/verify')
+      .query({ token })
 
     expect(response.statusCode).toEqual(204)
   })

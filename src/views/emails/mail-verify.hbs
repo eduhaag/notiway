@@ -6,10 +6,10 @@
     <meta name="x-apple-disable-message-reformatting">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="telephone=no" name="format-detection">
-    <title>Esqueci a senha</title>
+    <title>Verificação de email</title>
     <link href="https://fonts.googleapis.com/css2?family=Imprima&display=swap" rel="stylesheet"><!--<![endif]-->
     <style type="text/css">
-/* CONFIG STYLES Please do not delete and edit CSS styles below */
+        /* CONFIG STYLES Please do not delete and edit CSS styles below */
 /* IMPORTANT THIS STYLES MUST BE ON FINAL EMAIL */
 #outlook a {
     padding: 0;
@@ -749,9 +749,13 @@ body {
                                                                                     <td align="center" class="esd-block-image es-p10t" style="font-size: 0px;"><a target="_blank" href="https://notiway.com.br"><img class="adapt-img" src="https://mdejey.stripocdn.email/content/guids/CABINET_b3c4cdcd09e8cfc16dd881c74324d5fb672ce585bd237181694782ebc5291ee3/images/logo_zg5.png" alt="Logo da Notiway" style="display: block;" width="150" title="Logo da Notiway"></a></td>
                                                                                 </tr>
                                                                                 <tr>
-                                                                                    <td align="left" class="esd-block-text es-p20">
-                                                                                        <p>Uma solicitação de recuperação de senha foi realizada para sua conta ({{mail}}) na Notiway. Se você não foi o autor, apenas descarte esse e-mail.</p>
-                                                                                        <p><br>Para continuar com a recuperação de senha clique no botão abaixo para criar uma nova senha. Ah, esse link expira em 48h.</p>
+                                                                                    <td align="left" class="esd-block-text es-p20" esd-links-color="#1d59fe">
+                                                                                        <p>Olá, tudo bem?</p>
+                                                                                        <p>Seu cadastro em nossa plataforma foi realizado com sucesso. Agora falta pouco pra você poder transformar a forma como se comunica com seus clientes.</p>
+                                                                                        <p><br></p>
+                                                                                        <p>Antes de contiuar é necessário confirmar o seu cadastro <a target="_blank" href="https://notiway.com.br/verify?token={{token}}" style="color: #1d59fe;">clicando aqui</a>.</p>
+                                                                                        <p><br></p>
+                                                                                        <p>Se tiver qualquer dúvida é só responder <a target="_blank" style="color: #1d59fe;" href="mailto:atendimento@notiway.com.br">esse e-mail</a> :)</p>
                                                                                         <p><br>Até mais!&nbsp;😉<br>Equipe Notiway</p>
                                                                                     </td>
                                                                                 </tr>
@@ -785,14 +789,14 @@ body {
                                                                             <tbody>
                                                                                 <tr>
                                                                                     <td align="center" class="esd-block-button">
-                                                                                        <!--[if mso]><a href="https://notiway.com.br/reset?token={{token}}" target="_blank" hidden>
-	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://notiway.com.br/reset?token={{token}}" 
-                style="height:56px; v-text-anchor:middle; width:520px" arcsize="50%" stroke="f"  fillcolor="#8bc34a">
+                                                                                        <!--[if mso]><a href="https://notiway.com.br/verify?token={{token}}" target="_blank" hidden>
+	<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="https://notiway.com.br/verify?token={{token}}" 
+                style="height:56px; v-text-anchor:middle; width:538px" arcsize="50%" stroke="f"  fillcolor="#8bc34a">
 		<w:anchorlock></w:anchorlock>
 		<center style='color:#ffffff; font-family:Imprima, Arial, sans-serif; font-size:22px; font-weight:700; line-height:22px;  mso-text-raise:1px'>Criar nova senha</center>
 	</v:roundrect></a>
 <![endif]-->
-                                                                                        <!--[if !mso]><!-- --><span class="msohide es-button-border" style="display: block; background: #8bc34a;"><a href="https://notiway.com.br/reset?token={{token}}" class="es-button msohide" target="_blank" style="padding-left: 5px; padding-right: 5px; display: block; background: #8bc34a; border-color: #8bc34a;">Criar nova senha</a></span>
+                                                                                        <!--[if !mso]><!-- --><span class="msohide es-button-border" style="display: block; background: #8bc34a;"><a href="https://notiway.com.br/verify?token={{token}}" class="es-button msohide" target="_blank" style="padding-left: 5px; padding-right: 5px; display: block; background: #8bc34a; border-color: #8bc34a;">Criar nova senha</a></span>
                                                                                         <!--<![endif]-->
                                                                                     </td>
                                                                                 </tr>
@@ -825,20 +829,7 @@ body {
                                                                         <table cellpadding="0" cellspacing="0" width="100%">
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td align="center" class="esd-block-spacer es-p20" style="font-size:0">
-                                                                                        <table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0">
-                                                                                            <tbody>
-                                                                                                <tr>
-                                                                                                    <td style="border-bottom: 1px solid #cccccc; background: unset; height:1px; width:100%; margin:0px 0px 0px 0px;"></td>
-                                                                                                </tr>
-                                                                                            </tbody>
-                                                                                        </table>
-                                                                                    </td>
-                                                                                </tr>
-                                                                                <tr>
-                                                                                    <td align="center" class="esd-block-text">
-                                                                                        <p style="font-size: 14px;">Não responda este e-mail</p>
-                                                                                    </td>
+                                                                                    <td align="center" class="esd-empty-container" style="display: none;"></td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>

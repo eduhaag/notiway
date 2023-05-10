@@ -1,9 +1,12 @@
 import { Prisma, Consumer } from '@prisma/client'
 import { ConsumersFilter, ConsumersRepository } from '../consumers-repository'
 import { randomUUID } from 'node:crypto'
+import { InMemoryUsersRepository } from './in-memory-users-repository'
 
 export class InMemoryConsumersRepository implements ConsumersRepository {
   consumers: Consumer[] = []
+
+  constructor(private usersRepository: InMemoryUsersRepository) {}
 
   async create(data: Prisma.ConsumerCreateWithoutSenderInput) {
     const consumer: Consumer = {
@@ -24,9 +27,17 @@ export class InMemoryConsumersRepository implements ConsumersRepository {
       marketing_agree_at: data.marketing_agree_at
         ? new Date(data.marketing_agree_at)
         : null,
+      privacity_agree_at: data.privacity_agree_at
+        ? new Date(data.privacity_agree_at)
+        : null,
     }
 
     this.consumers.push(consumer)
+
+    await this.usersRepository.create({
+      email: data.email,
+      password_hash: '',
+    })
 
     return consumer
   }

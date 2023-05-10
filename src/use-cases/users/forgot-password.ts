@@ -45,7 +45,7 @@ export class ForgotPasswordUseCase {
 
     await queue.add('sendMail', {
       to: email,
-      subject: 'Recuperação de senha',
+      subject: 'Notiway | Recuperação de senha',
       path: templatePath,
       variables: {
         mail: email,

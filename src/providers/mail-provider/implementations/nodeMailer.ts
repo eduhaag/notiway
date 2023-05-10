@@ -17,6 +17,7 @@ export class NodeMailer implements MailProvider {
     subject,
     variables,
     path,
+    from,
   }: SendMailProps): Promise<void> {
     const templateFileContent = fs.readFileSync(path).toString('utf-8')
 
@@ -26,7 +27,7 @@ export class NodeMailer implements MailProvider {
 
     const message = await this.client!.sendMail({
       to,
-      from: 'Notiway <noreplay@notiway.com.br>',
+      from,
       subject,
       html: templateHtml,
     })

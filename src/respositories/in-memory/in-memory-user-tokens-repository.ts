@@ -11,11 +11,13 @@ export class InMemoryUserTokensRepository implements UserTokensRepository {
   async create({
     user_id,
     expires_date,
+    type,
   }: Prisma.UserTokenUncheckedCreateInput) {
     const userToken = {
       token: randomUUID(),
       user_id,
-      expires_date: new Date(expires_date),
+      type,
+      expires_date: expires_date ? new Date(expires_date) : null,
     }
 
     this.userTokens.push(userToken)
@@ -45,6 +47,7 @@ export class InMemoryUserTokensRepository implements UserTokensRepository {
     const response: (UserToken & { user: User }) | null = {
       expires_date: userToken?.expires_date,
       token: userToken?.token,
+      type: userToken.type,
       user_id: userToken?.user_id,
       user,
     }

@@ -6,8 +6,11 @@ export class PrismaUserTokensRepository implements UserTokensRepository {
   async create({
     user_id,
     expires_date,
+    type,
   }: Prisma.UserTokenUncheckedCreateInput) {
-    return await prisma.userToken.create({ data: { expires_date, user_id } })
+    return await prisma.userToken.create({
+      data: { expires_date, user_id, type },
+    })
   }
 
   async delete(token: string) {

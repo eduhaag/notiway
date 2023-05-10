@@ -31,6 +31,7 @@ export class ForgotPasswordUseCase {
     const { token } = await this.userTokesRepository.create({
       user_id: user.id,
       expires_date: expiresDate,
+      type: 'PASSWORD_RESET',
     })
 
     const templatePath = path.resolve(

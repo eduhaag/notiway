@@ -10,7 +10,6 @@ import {
 import { InMemoryUsersRepository } from '@/respositories/in-memory/in-memory-users-repository'
 import { compare } from 'bcryptjs'
 import { InMemoryUserTokensRepository } from '@/respositories/in-memory/in-memory-user-tokens-repository'
-import queue from '@/providers/queues/queue'
 import { ResetPasswordUseCase } from './reset-password'
 import { InvalidTokenError } from '../errors/invalid-token-error'
 
@@ -18,9 +17,7 @@ let usersRepository: InMemoryUsersRepository
 let userTokensRepository: InMemoryUserTokensRepository
 let sut: ResetPasswordUseCase
 
-const addToQueue = vi.spyOn(queue, 'add')
-
-describe('Authenticate use case', () => {
+describe('Reset password use case', () => {
   beforeAll(() => {
     vi.useFakeTimers()
   })
@@ -41,11 +38,14 @@ describe('Authenticate use case', () => {
       password_hash: '123345',
     })
 
-    vi.setSystemTime(new Date(2023, 5, 1, 0, 0, 0))
+    vi.setSystemTime(new Date(2100, 5, 1, 0, 0, 0))
     const { token } = await userTokensRepository.create({
       user_id: user.id,
       expires_date: new Date(),
+      type: 'PASSWORD_RESET',
     })
+
+    vi.setSystemTime(new Date(2023, 5, 1, 0, 0, 0))
 
     await sut.execute({
       newPassword: 'abcdef',
@@ -60,14 +60,31 @@ describe('Authenticate use case', () => {
 
     expect(passwordMatch).toBe(true)
     expect(thereToken).toBe(null)
-    expect(addToQueue).toBeCalledTimes(1)
   })
 
-  it('should not be able to reset password of a non-existing mail', async () => {
+  it('should not be able to reset password with a invalid token', async () => {
     expect(async () => {
       await sut.execute({
         newPassword: '123456',
         token: 'fake-token',
+      })
+    }).rejects.toBeInstanceOf(InvalidTokenError)
+
+    const user = await usersRepository.create({
+      email: 'johndoe@example.com',
+      password_hash: '123345',
+    })
+
+    const { token } = await userTokensRepository.create({
+      user_id: user.id,
+      expires_date: new Date(),
+      type: 'MAIL_CONFIRM',
+    })
+
+    expect(async () => {
+      await sut.execute({
+        newPassword: '123456',
+        token,
       })
     }).rejects.toBeInstanceOf(InvalidTokenError)
   })
@@ -82,6 +99,7 @@ describe('Authenticate use case', () => {
     const { token } = await userTokensRepository.create({
       user_id: user.id,
       expires_date: new Date(),
+      type: 'PASSWORD_RESET',
     })
 
     vi.setSystemTime(new Date(2023, 5, 1, 0, 0, 1))

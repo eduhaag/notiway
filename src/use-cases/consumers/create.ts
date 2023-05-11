@@ -121,7 +121,7 @@ export class CreateConsumerUseCase {
 
     await queue.add('sendMail', {
       to: email,
-      from: 'edu@notiway.com.br',
+      from: 'atendimento@notiway.com.br',
       subject: 'Notiway | Verificação de E-mail',
       path: templatePath,
       variables: {

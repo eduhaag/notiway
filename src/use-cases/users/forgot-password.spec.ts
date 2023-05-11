@@ -12,7 +12,7 @@ let sut: ForgotPasswordUseCase
 
 const addToQueue = vi.spyOn(queue, 'add')
 
-describe('Authenticate use case', () => {
+describe('Forgot Password use case', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
     userTokensRepository = new InMemoryUserTokensRepository()

@@ -54,4 +54,8 @@ export class InMemoryUserTokensRepository implements UserTokensRepository {
 
     return response
   }
+
+  async findByUserId(userId: string) {
+    return this.userTokens.filter((userToken) => userToken.user_id === userId)
+  }
 }

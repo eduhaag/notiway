@@ -23,4 +23,8 @@ export class PrismaUserTokensRepository implements UserTokensRepository {
       include: { user: true },
     })
   }
+
+  async findByUserId(userId: string) {
+    return prisma.userToken.findMany({ where: { user_id: userId } })
+  }
 }

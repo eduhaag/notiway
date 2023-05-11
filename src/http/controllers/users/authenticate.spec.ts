@@ -18,6 +18,7 @@ describe('Authenticate e2e', () => {
       data: {
         email: 'johndoe@example.com',
         password_hash: await hash('123456', 6),
+        mail_confirm_at: new Date(),
       },
     })
 

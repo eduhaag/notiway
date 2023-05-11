@@ -18,7 +18,7 @@ export async function resetPassword(req: FastifyRequest, reply: FastifyReply) {
     return reply.status(204).send()
   } catch (error) {
     if (error instanceof InvalidTokenError) {
-      return reply.status(409).send({ message: error.message })
+      return reply.status(401).send({ message: error.message })
     }
 
     throw error

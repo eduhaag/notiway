@@ -1,34 +1,40 @@
 import { UsersRepository } from '@/respositories/users-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { UserTokensRepository } from '@/respositories/user-tokens-repository'
-import dayjs from 'dayjs'
 import queue from '@/providers/queues/queue'
 import path from 'path'
+import { EmailAlreadyValidatedError } from '../errors/email-already-valitadet-error'
 
-interface ForgotPasswordUseCaseRequest {
+interface ResendVerificationUseCaseRequest {
   email: string
 }
 
-export class ForgotPasswordUseCase {
+export class ResendVerificationUseCase {
   constructor(
     private usersRepository: UsersRepository,
     private userTokesRepository: UserTokensRepository,
   ) {}
 
-  async execute({ email }: ForgotPasswordUseCaseRequest): Promise<void> {
+  async execute({ email }: ResendVerificationUseCaseRequest): Promise<void> {
     const user = await this.usersRepository.findByEmail(email)
 
     if (!user) {
       throw new ResourceNotFoundError()
     }
 
-    const expiresDate = dayjs().add(48, 'hour').toDate()
+    if (user.mail_confirm_at) {
+      throw new EmailAlreadyValidatedError()
+    }
 
-    const { token } = await this.userTokesRepository.create({
-      user_id: user.id,
-      expires_date: expiresDate,
-      type: 'PASSWORD_RESET',
-    })
+    const userToken = (
+      await this.userTokesRepository.findByUserId(user.id)
+    ).find((userToken) => userToken.type === 'MAIL_CONFIRM')
+
+    if (!userToken) {
+      throw new ResourceNotFoundError()
+    }
+
+    const { token } = userToken
 
     const templatePath = path.resolve(
       __dirname,
@@ -36,15 +42,15 @@ export class ForgotPasswordUseCase {
       '..',
       'views',
       'emails',
-      'forgot-password.hbs',
+      'mail-verify.hbs',
     )
 
     await queue.add('sendMail', {
       to: email,
-      subject: 'Notiway | Recuperação de senha',
+      from: 'atendimento@notiway.com.br',
+      subject: 'Notiway | Verificação de E-mail',
       path: templatePath,
       variables: {
-        mail: email,
         token,
       },
     })

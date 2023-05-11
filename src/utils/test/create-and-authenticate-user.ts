@@ -7,17 +7,19 @@ interface User {
   email: string
   password: string
   accessLevl?: number
+  verified?: boolean
 }
 
 export async function createAndAuthenticateUser(
   app: FastifyInstance,
-  { email, password, accessLevl = 10 }: User,
+  { email, password, accessLevl = 10, verified = true }: User,
 ) {
   const user = await prisma.user.create({
     data: {
       email,
       password_hash: await hash(password, 6),
       access_level: accessLevl,
+      mail_confirm_at: verified ? new Date() : null,
     },
   })
 

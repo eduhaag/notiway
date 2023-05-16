@@ -4,11 +4,11 @@ import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
 export async function mailVerify(req: FastifyRequest, reply: FastifyReply) {
-  const mailVerifyQuerySchema = z.object({
+  const mailVerifyParamsSchema = z.object({
     token: z.string(),
   })
 
-  const { token } = mailVerifyQuerySchema.parse(req.query)
+  const { token } = mailVerifyParamsSchema.parse(req.params)
 
   try {
     const mailVerifyUseCase = makeMailVerifyUseCase()

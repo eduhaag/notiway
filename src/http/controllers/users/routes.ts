@@ -15,7 +15,7 @@ export async function usersRoutes(app: FastifyInstance) {
 
   app.post('/users/forgot-password', forgotPassword)
   app.post('/users/resend-verification', resendVerification)
-  app.patch('/users/verify', mailVerify)
+  app.patch('/users/mail-verify/:token', mailVerify)
   app.patch('/users/reset-password', resetPassword)
   app.patch('/users/change-password', { onRequest: verifyJWT }, changePassword)
 

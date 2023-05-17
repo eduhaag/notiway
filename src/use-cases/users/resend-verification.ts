@@ -17,14 +17,11 @@ export class ResendVerificationUseCase {
 
   async execute({ email }: ResendVerificationUseCaseRequest): Promise<void> {
     const user = await this.usersRepository.findByEmail(email)
-    console.log(1)
     if (!user) {
-      console.log(2)
       throw new ResourceNotFoundError()
     }
     console.log(3)
     if (user.mail_confirm_at) {
-      console.log(4)
       throw new EmailAlreadyValidatedError()
     }
 

@@ -30,6 +30,7 @@ model Consumer {
   User               User[]
   Sender             Sender[]
   Client             Client[]
+  created_at         DateTime? @default(now())
 
   @@map("consumers")
 }

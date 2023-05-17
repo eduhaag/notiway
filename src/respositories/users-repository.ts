@@ -5,13 +5,10 @@ export interface UsersRepository {
   save(user: User): Promise<void>
   findById(id: string): Promise<User | null>
   findByEmail(email: string): Promise<
-    Prisma.Prisma__UserClient<
-      | (User & {
-          consumer: Consumer | null
-        })
-      | null,
-      null
-    >
+    | (User & {
+        consumer: Consumer | null
+      })
+    | null
   >
   getAll(accessLevel?: number): Promise<User[]>
 }

@@ -16,6 +16,7 @@ describe('Create consumer e2e', () => {
       email: 'johndoe@example.com',
       password: '123456',
       name: 'John doe',
+      privacityTermsAgree: true,
     })
 
     expect(response.statusCode).toEqual(201)

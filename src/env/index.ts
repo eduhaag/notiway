@@ -15,6 +15,10 @@ const envSchema = z.object({
   WPP_SECRET: z.string(),
   WPP_URL: z.string(),
   WPP_URL_SOCKET: z.string(),
+  MAIL_HOST: z.string(),
+  MAIL_PORT: z.coerce.number(),
+  MAIL_USER: z.string(),
+  MAIL_PASS: z.string(),
 })
 
 const _env = envSchema.safeParse(process.env)

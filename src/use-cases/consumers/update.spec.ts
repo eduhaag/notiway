@@ -22,7 +22,7 @@ describe('Update consumer use case', () => {
 
     const response = await consumersRepository.findById(consumer.id)
 
-    expect(response?.accept_marketing_at).toEqual(expect.any(Date))
+    expect(response?.marketing_agree_at).toEqual(expect.any(Date))
   })
 
   it('shoud not be able to to update a non existing consumer', async () => {

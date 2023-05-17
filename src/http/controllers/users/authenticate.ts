@@ -1,4 +1,5 @@
 import { InvalidCredentialsError } from '@/use-cases/errors/invalid-credentials-error'
+import { MailValidationError } from '@/use-cases/errors/mail-validation-error'
 import { makeAuthenticateUseCase } from '@/use-cases/users/factories/make-authenticate-use-case'
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
@@ -52,6 +53,10 @@ export async function authenticate(req: FastifyRequest, reply: FastifyReply) {
   } catch (error) {
     if (error instanceof InvalidCredentialsError) {
       return reply.status(400).send({ message: error.message })
+    }
+
+    if (error instanceof MailValidationError) {
+      return reply.status(401).send({ message: error.message })
     }
 
     throw error

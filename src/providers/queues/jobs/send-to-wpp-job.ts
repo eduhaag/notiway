@@ -1,7 +1,8 @@
 import { Message } from '@/DTOS/message-types'
 import { env } from '@/env'
 import { api } from '@/lib/axios'
-import { randomInt } from 'crypto'
+import { Job } from 'bull'
+import { randomInt } from 'node:crypto'
 
 interface SendSeenReq {
   senderName: string
@@ -22,8 +23,15 @@ interface SendMessageReq {
   key: string
 }
 
-export async function sendToWppConnect(body: Message) {
-  const { apiToken, content, to, senderName } = body
+export default {
+  key: 'SendToWPP',
+  async handle({ data }: Job<Message>) {
+    await sendToWppConnect(data)
+  },
+}
+
+async function sendToWppConnect(data: Message) {
+  const { apiToken, content, to, senderName } = data
 
   let url: string
   let requestBody: {}

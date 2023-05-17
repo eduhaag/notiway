@@ -32,11 +32,11 @@ export class UpdateConsumerUseCase {
     const consumerToSave = { ...consumer, ...dataWithoutAcceptMarketing }
 
     if (data.acceptMarketing !== undefined) {
-      if (data.acceptMarketing && !consumer?.accept_marketing_at) {
-        consumerToSave.accept_marketing_at = new Date()
+      if (data.acceptMarketing && !consumer?.marketing_agree_at) {
+        consumerToSave.marketing_agree_at = new Date()
       }
       if (!data.acceptMarketing) {
-        consumerToSave.accept_marketing_at = null
+        consumerToSave.marketing_agree_at = null
       }
     }
 

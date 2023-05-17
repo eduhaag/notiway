@@ -33,6 +33,7 @@ export class CreateUserUseCase {
       email,
       password_hash,
       access_level: accessLevel,
+      mail_confirm_at: new Date(),
     })
 
     return { user }

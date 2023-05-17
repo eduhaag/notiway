@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 import { createAndAuthenticateUser } from '@/utils/test/create-and-authenticate-user'
 import { prisma } from '@/lib/prisma'
 
-describe('Check-in history (e2e)', () => {
+describe('Fetch users (e2e)', () => {
   beforeAll(async () => {
     await app.ready()
   })
@@ -13,7 +13,7 @@ describe('Check-in history (e2e)', () => {
     await app.close()
   })
 
-  it('should be able to get the user check-in history', async () => {
+  it('should be able to fetch users', async () => {
     const { token } = await createAndAuthenticateUser(app, {
       email: 'admin@example.com',
       password: '123456',

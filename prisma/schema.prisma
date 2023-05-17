@@ -35,15 +35,33 @@ model Consumer {
 }
 
 model User {
-  id            String @id @default(uuid())
-  email         String @unique
-  password_hash String
-  access_level  Int    @default(10)
+  id              String    @id @default(uuid())
+  email           String    @unique
+  password_hash   String
+  access_level    Int       @default(10)
+  mail_confirm_at DateTime?
 
-  consumer    Consumer? @relation(fields: [consumer_id], references: [id])
+  consumer    Consumer?   @relation(fields: [consumer_id], references: [id])
   consumer_id String?
+  UserTokens  UserToken[]
 
   @@map("users")
+}
+
+enum TokenType {
+  PASSWORD_RESET
+  MAIL_CONFIRM
+}
+
+model UserToken {
+  token        String    @id @default(uuid())
+  type         TokenType
+  expires_date DateTime?
+
+  user    User   @relation(fields: [user_id], references: [id])
+  user_id String
+
+  @@map("user_tokens")
 }
 
 enum SendeType {

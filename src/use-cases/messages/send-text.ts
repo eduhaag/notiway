@@ -1,5 +1,5 @@
 import { Message } from '@/DTOS/message-types'
-import queue from '@/queues/queue'
+import queue from '@/providers/queues/queue'
 import { ClientTokensRepository } from '@/respositories/client-tokens-repository'
 import { ClientNotAuthorizedError } from '../errors/client-not-authorized-error'
 import { ClientNotReadyError } from '../errors/client-not-ready-error'
@@ -35,14 +35,6 @@ export class SendTextUseCase {
     }
 
     const messageContent: string = text
-
-    // if (client.header) {
-    //   messageContent = `*${client.header}*\n\n${messageContent}`
-    // }
-
-    // if (client.footer) {
-    //   messageContent = `${messageContent}\n\n_${client.footer}_`
-    // }
 
     const message: Message = {
       clientId: client.id,

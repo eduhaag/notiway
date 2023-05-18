@@ -1,21 +1,22 @@
 import { Message } from '@/DTOS/message-types'
-import queue from '@/providers/queues/queue'
 import { ClientTokensRepository } from '@/respositories/client-tokens-repository'
 import { ClientNotAuthorizedError } from '../errors/client-not-authorized-error'
 import { ClientNotReadyError } from '../errors/client-not-ready-error'
 import { ClientSenderNotReadyError } from '../errors/client-sender-not-ready-error'
+import { queue } from '@/app'
 
 interface SendGifUseCaseRequest {
   token: string
   to: string
   url: string
+  sendOn?: Date
 }
 
 export class SendGifUseCase {
   constructor(private clientTokensRepository: ClientTokensRepository) {}
 
   async execute(request: SendGifUseCaseRequest): Promise<void> {
-    const { token, url, to } = request
+    const { token, url, to, sendOn } = request
 
     const clientToken = await this.clientTokensRepository.findByToken(token)
 
@@ -45,6 +46,8 @@ export class SendGifUseCase {
       },
     }
 
-    await queue.add('SendToWPP', message)
+    const date = sendOn ? new Date(sendOn) : new Date()
+
+    queue.sendMessage({ date, message })
   }
 }

@@ -9,9 +9,10 @@ export async function sendGif(req: FastifyRequest, reply: FastifyReply) {
   const sendGifBodySchema = z.object({
     to: z.string(),
     url: z.string(),
+    send_on: z.coerce.date().optional(),
   })
 
-  const { to, url } = sendGifBodySchema.parse(req.body)
+  const { to, url, send_on } = sendGifBodySchema.parse(req.body)
 
   try {
     const sendGifUseCase = makeSendGifUseCase()
@@ -20,6 +21,7 @@ export async function sendGif(req: FastifyRequest, reply: FastifyReply) {
       to,
       token: req.token,
       url,
+      sendOn: send_on,
     })
 
     return reply.status(200).send({ status: 'sended' })

@@ -1,9 +1,9 @@
 import { Message } from '@/DTOS/message-types'
-import queue from '@/providers/queues/queue'
 import { ClientTokensRepository } from '@/respositories/client-tokens-repository'
 import { ClientNotAuthorizedError } from '../errors/client-not-authorized-error'
 import { ClientNotReadyError } from '../errors/client-not-ready-error'
 import { ClientSenderNotReadyError } from '../errors/client-sender-not-ready-error'
+import { queue } from '@/app'
 
 interface SendLocationUseCaseRequest {
   token: string
@@ -12,13 +12,14 @@ interface SendLocationUseCaseRequest {
   longitude?: number
   title?: string
   address?: string
+  sendOn?: Date
 }
 
 export class SendLocationUseCase {
   constructor(private clientTokensRepository: ClientTokensRepository) {}
 
   async execute(request: SendLocationUseCaseRequest): Promise<void> {
-    const { token, to, title, address, longitude, latitude } = request
+    const { token, to, title, address, longitude, latitude, sendOn } = request
 
     const clientToken = await this.clientTokensRepository.findByToken(token)
 
@@ -51,6 +52,8 @@ export class SendLocationUseCase {
       },
     }
 
-    await queue.add('SendToWPP', message)
+    const date = sendOn ? new Date(sendOn) : new Date()
+
+    queue.sendMessage({ date, message })
   }
 }

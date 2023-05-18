@@ -10,9 +10,10 @@ export async function sendLink(req: FastifyRequest, reply: FastifyReply) {
     to: z.string(),
     url: z.string(),
     message: z.string().optional(),
+    send_on: z.coerce.date().optional(),
   })
 
-  const { message, to, url } = sendLinkBodySchema.parse(req.body)
+  const { message, to, url, send_on } = sendLinkBodySchema.parse(req.body)
 
   try {
     const sendLinkUseCase = makeSendLinkUseCase()
@@ -22,6 +23,7 @@ export async function sendLink(req: FastifyRequest, reply: FastifyReply) {
       url,
       caption: message,
       token: req.token,
+      sendOn: send_on,
     })
 
     return reply.status(200).send({ status: 'sended' })

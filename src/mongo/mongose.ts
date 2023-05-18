@@ -2,7 +2,7 @@ import { env } from '@/env'
 import mongoose from 'mongoose'
 import { MongoMemoryServer } from 'mongodb-memory-server'
 
-export async function connectToMongoDB() {
+export async function connectToMongoDB(): Promise<typeof mongoose> {
   let uri
 
   if (env.NODE_ENV === 'test') {
@@ -15,9 +15,9 @@ export async function connectToMongoDB() {
     uri = env.MONGO_DATABASE_URL
   }
 
-  await mongoose.connect(uri, { dbName: 'notiway' })
-
   console.log('✅ Connected to MongoDB')
+
+  return await mongoose.connect(uri, { dbName: 'notiway' })
 }
 
 export const Message = mongoose.model(

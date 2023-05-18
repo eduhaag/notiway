@@ -6,9 +6,9 @@ import { ZodError } from 'zod'
 import { env } from './env'
 
 import { sendersLogOnSocket } from './sockets'
-import queue from './providers/queues/queue'
 import { connectToMongoDB } from './mongo/mongose'
 import { fastiFyRegister } from './fastify-register'
+import { Queues } from './providers/queues'
 
 const MAX_BODY_SIZE = 16 * 1024 * 1024 // 16MB
 
@@ -18,13 +18,13 @@ fastiFyRegister(app)
 
 connectToMongoDB()
 
-queue.process()
-
 sendersLogOnSocket()
 
 Sentry.init({
   dsn: env.SENTRY_DNS,
 })
+
+export const queue = new Queues()
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {
@@ -33,10 +33,10 @@ app.setErrorHandler((error, _, reply) => {
       .send({ message: 'Validation error.', issues: error.format() })
   }
 
-  if (env.NODE_ENV !== 'production') {
-    console.error(error)
-  } else {
+  if (env.NODE_ENV === 'production') {
     Sentry.captureException(error)
+  } else {
+    console.error(error)
   }
 
   return reply.status(500).send({ message: 'Internal server error' })

@@ -1,3 +1,5 @@
+import { Document, InsertOneResult, WithId } from 'mongodb'
+
 export interface Job {
   name: string
   data: any
@@ -14,6 +16,7 @@ export interface Job {
 }
 
 export interface JobsRepository {
-  get(id: string): Promise<Job>
-  delete(id: string): Promise<void>
+  findById(id: string): Promise<WithId<Document> | null>
+  deleteById(id: string): Promise<void>
+  create(job: Job): Promise<InsertOneResult>
 }

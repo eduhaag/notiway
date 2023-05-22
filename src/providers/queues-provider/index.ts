@@ -70,7 +70,7 @@ export class Queues {
       })
     }
 
-    await this.JobsRepository.delete(job.attrs._id.toString())
+    await this.JobsRepository.deleteById(job.attrs._id.toString())
   }
 
   private async jobErrorHandler(err: any, job: Job) {

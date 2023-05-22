@@ -1,5 +1,5 @@
-import { JobsRepository } from '../jobs-repository'
-import { Collection, MongoClient, ObjectId } from 'mongodb'
+import { Job, JobsRepository } from '../jobs-repository'
+import { Collection, InsertOneResult, MongoClient, ObjectId } from 'mongodb'
 import { mongoDb } from '@/app'
 
 export class MongoJobsRepository implements JobsRepository {
@@ -11,11 +11,15 @@ export class MongoJobsRepository implements JobsRepository {
     this.jobsCollection = this.client.db('notiway').collection('agendaJobs')
   }
 
-  async get(id: string): Promise<any> {
+  async findById(id: string) {
     return await this.jobsCollection.findOne({ _id: new ObjectId(id) })
   }
 
-  async delete(id: string): Promise<any> {
+  async deleteById(id: string) {
     await this.jobsCollection.deleteOne({ _id: new ObjectId(id) })
+  }
+
+  async create(job: Job): Promise<InsertOneResult> {
+    return await this.jobsCollection.insertOne(job)
   }
 }

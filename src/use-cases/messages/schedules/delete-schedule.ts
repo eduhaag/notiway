@@ -24,16 +24,16 @@ export class DeleteScheduleUseCase {
       throw new ClientNotAuthorizedError()
     }
 
-    const job = await this.jobsRepository.get(scheduleId)
+    const job = await this.jobsRepository.findById(scheduleId)
 
     if (!job) {
       throw new ResourceNotFoundError()
     }
 
-    if (job.data.cliendId !== clientToken.client.id) {
+    if (job.data.clientId !== clientToken.client.id) {
       throw new ClientNotAuthorizedError()
     }
 
-    await this.jobsRepository.delete(scheduleId)
+    await this.jobsRepository.deleteById(scheduleId)
   }
 }

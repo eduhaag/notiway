@@ -62,6 +62,10 @@ export class Queues {
     return job[0]
   }
 
+  async findJobByClientId(clientId: string): Promise<Job[]> {
+    return await this._queues.jobs({ 'data.clientId': clientId })
+  }
+
   async deleteJob(job: Job) {
     await job.remove()
   }

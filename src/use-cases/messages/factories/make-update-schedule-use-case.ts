@@ -1,9 +1,9 @@
 import { PrismaClientTokensRepository } from '@/respositories/prisma/prisma-client-tokens-repository'
-import { DeleteScheduleUseCase } from '../schedules/delete-schedule'
+import { UpdateScheduleUseCase } from '../schedules/update-schedule'
 
-export function makeDeleteScheduleUseCase() {
+export function makeUpdateScheduleUseCase() {
   const clientTokensRepository = new PrismaClientTokensRepository()
-  const useCase = new DeleteScheduleUseCase(clientTokensRepository)
+  const useCase = new UpdateScheduleUseCase(clientTokensRepository)
 
   return useCase
 }

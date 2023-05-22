@@ -9,6 +9,7 @@ import { MessagesRepository } from '@/respositories/messages-repository'
 import { MongoMessagesRepository } from '@/respositories/mongo/mongo-messages-repository'
 import { JobsRepository } from '@/respositories/jobs-repository'
 import { MongoJobsRepository } from '@/respositories/mongo/mongo-jobs-repository'
+import { ObjectId } from 'mongodb'
 
 interface AddJobProps {
   queue: string
@@ -54,6 +55,15 @@ export class Queues {
 
   async add({ date, data, queue }: AddJobProps) {
     return await this._queues.schedule(date, queue, data)
+  }
+
+  async findJobById(id: string): Promise<Job> {
+    const job = await this._queues.jobs({ _id: new ObjectId(id) })
+    return job[0]
+  }
+
+  async deleteJob(job: Job) {
+    await job.remove()
   }
 
   private async completeJob(job: Job) {

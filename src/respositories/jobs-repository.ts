@@ -1,22 +1,35 @@
-import { Document, InsertOneResult, WithId } from 'mongodb'
+import {
+  AUDIO,
+  CONTACT,
+  FILE,
+  GIF,
+  IMAGE,
+  LINK,
+  LOCATION,
+  STICKER,
+  TEXT,
+} from '@/DTOS/message-types'
+import { Document, WithId } from 'mongodb'
 
-export interface Job {
-  name: string
-  data: any
-  type: string
-  repeatInterval?: string
-  repeatTimezone?: string
-  nextRunAt?: Date
-  lastRunAt?: Date
-  lockedAt?: Date
-  lastFinishedAt?: Date
-  failCount?: number
-  failedAt?: Date
-  failReason?: string
+export interface UpdateJobProps {
+  token: string
+  scheduleId: string
+  sendOn?: Date
+  to?: string
+  content?:
+    | AUDIO
+    | CONTACT
+    | FILE
+    | GIF
+    | IMAGE
+    | LINK
+    | LOCATION
+    | STICKER
+    | TEXT
 }
 
 export interface JobsRepository {
   findById(id: string): Promise<WithId<Document> | null>
   deleteById(id: string): Promise<void>
-  create(job: Job): Promise<InsertOneResult>
+  update(data: UpdateJobProps): Promise<any>
 }

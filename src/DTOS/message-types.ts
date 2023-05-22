@@ -51,20 +51,22 @@ export type TEXT = {
   message: string
 }
 
+export type MessageTypes =
+  | AUDIO
+  | CONTACT
+  | FILE
+  | GIF
+  | IMAGE
+  | LINK
+  | LOCATION
+  | STICKER
+  | TEXT
+
 export interface Message {
   senderName: string
   clientId: string
   apiToken: string
   to: string
   sendedOn?: Date
-  content:
-    | AUDIO
-    | CONTACT
-    | FILE
-    | GIF
-    | IMAGE
-    | LINK
-    | LOCATION
-    | STICKER
-    | TEXT
+  content: MessageTypes
 }

@@ -1,5 +1,5 @@
-import { Job, JobsRepository } from '../jobs-repository'
-import { Collection, InsertOneResult, MongoClient, ObjectId } from 'mongodb'
+import { JobsRepository, UpdateJobProps } from '../jobs-repository'
+import { Collection, MongoClient, ObjectId } from 'mongodb'
 import { mongoDb } from '@/app'
 
 export class MongoJobsRepository implements JobsRepository {
@@ -19,7 +19,10 @@ export class MongoJobsRepository implements JobsRepository {
     await this.jobsCollection.deleteOne({ _id: new ObjectId(id) })
   }
 
-  async create(job: Job): Promise<InsertOneResult> {
-    return await this.jobsCollection.insertOne(job)
+  async update(data: UpdateJobProps): Promise<any> {
+    await this.jobsCollection.updateOne(
+      { _id: new ObjectId(data.scheduleId) },
+      { nextRunAt: data.sendOn },
+    )
   }
 }

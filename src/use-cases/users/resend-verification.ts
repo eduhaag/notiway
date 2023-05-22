@@ -1,9 +1,9 @@
 import { UsersRepository } from '@/respositories/users-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { UserTokensRepository } from '@/respositories/user-tokens-repository'
-import queue from '@/providers/queues/queue'
 import path from 'path'
 import { EmailAlreadyValidatedError } from '../errors/email-already-valitadet-error'
+import { queue } from '@/app'
 
 interface ResendVerificationUseCaseRequest {
   email: string
@@ -20,7 +20,6 @@ export class ResendVerificationUseCase {
     if (!user) {
       throw new ResourceNotFoundError()
     }
-    console.log(3)
     if (user.mail_confirm_at) {
       throw new EmailAlreadyValidatedError()
     }
@@ -44,7 +43,7 @@ export class ResendVerificationUseCase {
       'mail-verify.hbs',
     )
 
-    await queue.add('sendMail', {
+    const mail = {
       to: email,
       from: 'atendimento@notiway.com.br',
       subject: 'Notiway | Verificação de E-mail',
@@ -52,6 +51,8 @@ export class ResendVerificationUseCase {
       variables: {
         token,
       },
-    })
+    }
+
+    await queue.add({ data: mail, date: new Date(), queue: 'send-mail' })
   }
 }

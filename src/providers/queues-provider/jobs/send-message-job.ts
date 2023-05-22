@@ -22,7 +22,7 @@ interface SendMessageReq {
   key: string
 }
 
-export async function sendMessage(data: Message) {
+export async function sendMessage(data: Message, jobId: string) {
   const { apiToken, content, to, senderName } = data
 
   let url: string
@@ -166,9 +166,7 @@ export async function sendMessage(data: Message) {
           senderName,
         })
 
-        const response = await sendToWpp({ key: apiToken, requestBody, url })
-
-        return response
+        await sendToWpp({ key: apiToken, requestBody, url })
       }, PREPARING_DELAY)
     } else {
       await setTyping({
@@ -186,9 +184,7 @@ export async function sendMessage(data: Message) {
           senderName,
         })
 
-        const response = await sendToWpp({ key: apiToken, requestBody, url })
-
-        return response
+        await sendToWpp({ key: apiToken, requestBody, url })
       }, PREPARING_DELAY)
     }
   } catch (error) {
@@ -266,7 +262,7 @@ async function setRecording({
 
 async function sendToWpp({ url, key, requestBody }: SendMessageReq) {
   try {
-    const response = await api.post(
+    await api.post(
       `${env.WPP_URL}${url}`,
       { ...requestBody },
       {
@@ -275,8 +271,6 @@ async function sendToWpp({ url, key, requestBody }: SendMessageReq) {
         },
       },
     )
-
-    return response.data
   } catch (error) {
     throw error
   }

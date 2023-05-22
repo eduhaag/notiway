@@ -56,6 +56,7 @@ export interface Message {
   clientId: string
   apiToken: string
   to: string
+  sendedOn?: Date
   content:
     | AUDIO
     | CONTACT

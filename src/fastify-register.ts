@@ -15,6 +15,7 @@ import { clientsRoutes } from './http/controllers/clients/routes'
 import { sendersRoutes } from './http/controllers/senders/routes'
 import { messagesRoutes } from './http/controllers/messages/routes'
 import { webHookController } from './http/controllers/webHook'
+import { schedulesRoutes } from './http/controllers/schedules/routes'
 
 export async function fastiFyRegister(app: FastifyInstance) {
   app.register(fastifyJwt, {
@@ -46,6 +47,7 @@ export async function fastiFyRegister(app: FastifyInstance) {
   app.register(clientsRoutes, { prefix: 'site' })
   app.register(sendersRoutes, { prefix: 'site' })
   app.register(messagesRoutes, { prefix: 'v1' })
+  app.register(schedulesRoutes, { prefix: 'v1/schedules' })
 
   // Listen wppConnect
   app.post('/webhook', webHookController)

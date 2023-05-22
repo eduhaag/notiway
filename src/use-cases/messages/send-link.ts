@@ -50,6 +50,6 @@ export class SendLinkUseCase {
 
     const date = sendOn ? new Date(sendOn) : new Date()
 
-    queue.sendMessage({ date, message })
+    queue.add({ date, data: message, queue: 'send-message' })
   }
 }

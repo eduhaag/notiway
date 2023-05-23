@@ -1,22 +1,26 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryUsersRepository } from '@/respositories/in-memory/in-memory-users-repository'
 import { hash } from 'bcryptjs'
 import { ForgotPasswordUseCase } from './forgot-password'
 import { InMemoryUserTokensRepository } from '@/respositories/in-memory/in-memory-user-tokens-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
-import queue from '@/providers/queues/queue'
+import { queuesProviderMock } from '@/utils/test/mocks/queues-mock'
 
 let usersRepository: InMemoryUsersRepository
 let userTokensRepository: InMemoryUserTokensRepository
 let sut: ForgotPasswordUseCase
 
-const addToQueue = vi.spyOn(queue, 'add')
+const { queuesProvider, mocks } = queuesProviderMock()
 
 describe('Forgot Password use case', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
     userTokensRepository = new InMemoryUserTokensRepository()
-    sut = new ForgotPasswordUseCase(usersRepository, userTokensRepository)
+    sut = new ForgotPasswordUseCase(
+      usersRepository,
+      userTokensRepository,
+      queuesProvider,
+    )
   })
 
   it('should be able send a forgot password mail', async () => {
@@ -34,7 +38,7 @@ describe('Forgot Password use case', () => {
     )
 
     expect(token).toBeTruthy()
-    expect(addToQueue).toBeCalledTimes(1)
+    expect(mocks.addMock).toBeCalledTimes(1)
   })
 
   it('should not be able to send forgot password to a non-existing mail', async () => {

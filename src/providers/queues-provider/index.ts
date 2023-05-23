@@ -66,8 +66,10 @@ export class QueuesProvider {
     return this._agenda
   }
 
-  async add({ date, data, queue }: AddJobProps) {
-    await this._agenda.schedule(date, queue, data)
+  async add({ date, data, queue }: AddJobProps): Promise<string> {
+    const job = await this._agenda.schedule(date, queue, data)
+
+    return job.attrs._id.toString()
   }
 
   async findJobById(id: string): Promise<JobAttributes | undefined> {

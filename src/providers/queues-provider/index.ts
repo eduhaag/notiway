@@ -7,8 +7,6 @@ import { env } from '@/env'
 import { errorHandler } from '@/error-handler'
 import { MessagesRepository } from '@/respositories/messages-repository'
 import { MongoMessagesRepository } from '@/respositories/mongo/mongo-messages-repository'
-import { JobsRepository } from '@/respositories/jobs-repository'
-import { MongoJobsRepository } from '@/respositories/mongo/mongo-jobs-repository'
 import { ObjectId } from 'mongodb'
 
 interface AddJobProps {
@@ -20,11 +18,9 @@ interface AddJobProps {
 export class Queues {
   private _queues: Agenda
   private MessagesRepository: MessagesRepository
-  private JobsRepository: JobsRepository
 
   constructor() {
     this.MessagesRepository = new MongoMessagesRepository()
-    this.JobsRepository = new MongoJobsRepository()
     this._queues = new Agenda({
       db: { address: env.MONGO_DATABASE_URL },
       maxConcurrency: 5,

@@ -10,7 +10,7 @@ let usersRepository: InMemoryUsersRepository
 let userTokensRepository: InMemoryUserTokensRepository
 let sut: ForgotPasswordUseCase
 
-const { queuesProvider, mocks } = queuesProviderMock()
+const queuesProvider = queuesProviderMock()
 
 describe('Forgot Password use case', () => {
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('Forgot Password use case', () => {
     sut = new ForgotPasswordUseCase(
       usersRepository,
       userTokensRepository,
-      queuesProvider,
+      queuesProvider.queuesProvider,
     )
   })
 
@@ -38,7 +38,7 @@ describe('Forgot Password use case', () => {
     )
 
     expect(token).toBeTruthy()
-    expect(mocks.addMock).toBeCalledTimes(1)
+    expect(queuesProvider.mocks.addMock).toBeCalledTimes(1)
   })
 
   it('should not be able to send forgot password to a non-existing mail', async () => {

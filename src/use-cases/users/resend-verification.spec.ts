@@ -11,7 +11,7 @@ let usersRepository: InMemoryUsersRepository
 let userTokensRepository: InMemoryUserTokensRepository
 let sut: ResendVerificationUseCase
 
-const { queuesProvider, mocks } = queuesProviderMock()
+const queuesProvider = queuesProviderMock()
 
 describe('Resend verification mail use case', () => {
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('Resend verification mail use case', () => {
     sut = new ResendVerificationUseCase(
       usersRepository,
       userTokensRepository,
-      queuesProvider,
+      queuesProvider.queuesProvider,
     )
   })
 
@@ -39,7 +39,7 @@ describe('Resend verification mail use case', () => {
       email: 'johndoe@example.com',
     })
 
-    expect(mocks.addMock).toBeCalledTimes(1)
+    expect(queuesProvider.mocks.addMock).toBeCalledTimes(1)
   })
 
   it('should not be able to resend verification for a non-existing mail', async () => {

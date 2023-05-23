@@ -70,6 +70,10 @@ export class Queues {
     await job.remove()
   }
 
+  async listJobsWithFail() {
+    return await this._queues.jobs({ failCount: { $gte: 3 } })
+  }
+
   private async completeJob(job: Job) {
     if (job.attrs.name === 'send-message') {
       const { clientId, senderName, to, content, apiToken } = job.attrs

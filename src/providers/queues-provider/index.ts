@@ -30,23 +30,9 @@ export class Queues {
       console.log('✅ Queues starded.')
     })
 
-    this._queues.define('send-message', async (job: Job) => {
-      await sendMessage(job.attrs.data as Message, job.attrs._id.toString())
-    })
-
-    this._queues.define('send-mail', async (job: Job) => {
-      await sendMail(job.attrs.data as SendMailProps)
-    })
-
     this._queues.start()
 
-    this._queues.on('success:send-message', (job: Job) => {
-      this.completeJob(job)
-    })
-
-    this._queues.on('fail', async (err: any, job: Job) => {
-      await this.jobErrorHandler(err, job)
-    })
+    this.jobsConfig()
   }
 
   async add({ date, data, queue }: AddJobProps) {
@@ -101,5 +87,23 @@ export class Queues {
     }
 
     errorHandler(err)
+  }
+
+  private jobsConfig() {
+    this._queues.define('send-message', async (job: Job) => {
+      await sendMessage(job.attrs.data as Message, job.attrs._id.toString())
+    })
+
+    this._queues.define('send-mail', async (job: Job) => {
+      await sendMail(job.attrs.data as SendMailProps)
+    })
+
+    this._queues.on('success', (job: Job) => {
+      this.completeJob(job)
+    })
+
+    this._queues.on('fail', async (err: any, job: Job) => {
+      await this.jobErrorHandler(err, job)
+    })
   }
 }

@@ -6,7 +6,9 @@ export function queuesProviderMock() {
 
   const addMock = vi
     .spyOn(queuesProvider, 'add')
-    .mockImplementation(async () => {})
+    .mockImplementation(async () => {
+      return 'id'
+    })
 
   const findJobById = vi
     .spyOn(queuesProvider, 'findJobById')
@@ -20,5 +22,9 @@ export function queuesProviderMock() {
       }
     })
 
-  return { queuesProvider, mocks: { addMock, findJobById } }
+  const runFailedJobs = vi
+    .spyOn(queuesProvider, 'runFailedJobs')
+    .mockImplementation(async () => {})
+
+  return { queuesProvider, mocks: { addMock, findJobById, runFailedJobs } }
 }

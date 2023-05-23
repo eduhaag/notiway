@@ -102,7 +102,7 @@ export class QueuesProvider {
     await job[0].run()
   }
 
-  async runJobsWithFail(clientId?: string) {
+  async runFailedJobs(clientId?: string) {
     const filter = clientId
       ? { $and: [{ failCount: { $gte: 3 } }, { 'data.clientId': clientId }] }
       : { failCount: { $gte: 3 } }

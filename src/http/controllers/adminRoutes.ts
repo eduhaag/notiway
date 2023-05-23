@@ -8,7 +8,7 @@ import { fetch as fetchConsumers } from './consumers/fetch'
 import { fetchSenders } from './senders/fetch'
 import { toggle } from './senders/toggle'
 import { updateSender } from './senders/update'
-import { runFailJobs } from './schedules/run-fail-jobs'
+import { runFailedSchedules } from './schedules/run-failed-schedules'
 
 export async function adminRoutes(app: FastifyInstance) {
   app.addHook('onRequest', verifyJWT)
@@ -52,6 +52,6 @@ export async function adminRoutes(app: FastifyInstance) {
   app.post(
     '/schedules/fail/run',
     { onRequest: [verifyAdminAccess(50)] },
-    runFailJobs,
+    runFailedSchedules,
   )
 }

@@ -3,7 +3,7 @@ import fastify from 'fastify'
 import { sendersLogOnSocket } from './sockets'
 
 import { fastiFyRegister } from './fastify-register'
-import { Queues } from './providers/queues-provider'
+import { QueuesProvider } from './providers/queues-provider'
 import { errorHandler } from './error-handler'
 import { MongoDb } from './DB/mongoDb'
 
@@ -18,7 +18,7 @@ export const mongoDb = new MongoDb()
 
 sendersLogOnSocket()
 
-export const queue = new Queues()
+export const queuesProvider = new QueuesProvider()
 
 app.setErrorHandler((error, _, reply) => {
   errorHandler(error, reply)

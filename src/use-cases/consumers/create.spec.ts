@@ -1,18 +1,18 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { EmailAlreadyUsedError } from '../errors/email-already-used-error'
 import { CreateConsumerUseCase } from './create'
 import { InMemoryConsumersRepository } from '@/respositories/in-memory/in-memory-consumers-repository'
 import { TaxIdAlreadyExistsError } from '../errors/tax-id-already-exists-error'
 import { InMemoryUserTokensRepository } from '@/respositories/in-memory/in-memory-user-tokens-repository'
 import { InMemoryUsersRepository } from '@/respositories/in-memory/in-memory-users-repository'
-import queue from '@/providers/queues/queue'
+import { queuesProviderMock } from '@/utils/test/mocks/queues-mock'
 
 let consumersRepository: InMemoryConsumersRepository
 let usersRepository: InMemoryUsersRepository
 let userTokensRepository: InMemoryUserTokensRepository
 let sut: CreateConsumerUseCase
 
-const addToQueue = vi.spyOn(queue, 'add')
+const queuesProvider = queuesProviderMock()
 
 describe('Create consumer use case', () => {
   beforeEach(() => {
@@ -23,6 +23,7 @@ describe('Create consumer use case', () => {
       consumersRepository,
       usersRepository,
       userTokensRepository,
+      queuesProvider.queuesProvider,
     )
   })
 
@@ -35,7 +36,7 @@ describe('Create consumer use case', () => {
     })
 
     expect(consumer.id).toEqual(expect.any(String))
-    expect(addToQueue).toBeCalledTimes(1)
+    expect(queuesProvider.mocks.addMock).toBeCalledTimes(1)
   })
 
   it('shoud not be able to create two user with the same email', async () => {

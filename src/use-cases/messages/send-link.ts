@@ -3,7 +3,7 @@ import { ClientTokensRepository } from '@/respositories/client-tokens-repository
 import { ClientNotAuthorizedError } from '../errors/client-not-authorized-error'
 import { ClientNotReadyError } from '../errors/client-not-ready-error'
 import { ClientSenderNotReadyError } from '../errors/client-sender-not-ready-error'
-import { queue } from '@/app'
+import { QueuesProvider } from '@/providers/queues-provider'
 
 interface SendLinkUseCaseRequest {
   token: string
@@ -14,7 +14,10 @@ interface SendLinkUseCaseRequest {
 }
 
 export class SendLinkUseCase {
-  constructor(private clientTokensRepository: ClientTokensRepository) {}
+  constructor(
+    private clientTokensRepository: ClientTokensRepository,
+    private queuesProvider: QueuesProvider,
+  ) {}
 
   async execute(request: SendLinkUseCaseRequest): Promise<void> {
     const { token, to, url, caption, sendOn } = request
@@ -50,6 +53,10 @@ export class SendLinkUseCase {
 
     const date = sendOn ? new Date(sendOn) : new Date()
 
-    queue.add({ date, data: message, queue: 'send-message' })
+    await this.queuesProvider.add({
+      date,
+      data: message,
+      queue: 'send-message',
+    })
   }
 }

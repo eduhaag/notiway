@@ -1,15 +1,13 @@
-import { queue } from '@/app'
+import { QueuesProvider } from '@/providers/queues-provider'
 
 interface RunFailJobsUseCaseRequest {
   clientId?: string
 }
 
 export class RunFailJobsUseCase {
-  async execute({ clientId }: RunFailJobsUseCaseRequest): Promise<void> {
-    const jobs = await queue.listJobsWithFail(clientId)
+  constructor(private queuesProvider: QueuesProvider) {}
 
-    jobs.forEach(async (job) => {
-      await job.run()
-    })
+  async execute({ clientId }: RunFailJobsUseCaseRequest): Promise<void> {
+    await this.queuesProvider.runJobsWithFail(clientId)
   }
 }

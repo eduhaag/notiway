@@ -6,7 +6,7 @@ import { Consumer } from '@prisma/client'
 import path from 'path'
 import { UserTokensRepository } from '@/respositories/user-tokens-repository'
 import { UsersRepository } from '@/respositories/users-repository'
-import { queue } from '@/app'
+import { QueuesProvider } from '@/providers/queues-provider'
 
 interface CreateConsumerUseCaseRequest {
   name: string
@@ -36,6 +36,7 @@ export class CreateConsumerUseCase {
     private consumersRepository: ConsumersRepository,
     private usersRepository: UsersRepository,
     private usertTokensRepository: UserTokensRepository,
+    private queues: QueuesProvider,
   ) {}
 
   async execute(
@@ -129,7 +130,7 @@ export class CreateConsumerUseCase {
       },
     }
 
-    await queue.add({ data: mail, date: new Date(), queue: 'send-mail' })
+    await this.queues.add({ data: mail, date: new Date(), queue: 'send-mail' })
 
     return { consumer }
   }

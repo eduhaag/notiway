@@ -1,8 +1,8 @@
-import { queue } from '@/app'
 import { ClientTokensRepository } from '@/respositories/client-tokens-repository'
 import { ClientNotAuthorizedError } from '@/use-cases/errors/client-not-authorized-error'
 import { jobToMessageMapper } from '../mappers/job-to-message-mapper'
 import { MessageTypes } from '@/DTOS/message-types'
+import { QueuesProvider } from '@/providers/queues-provider'
 
 interface FindByClientTokenUseCaseRequest {
   token: string
@@ -18,7 +18,10 @@ interface FindByClientTokenUseCaseResponse {
 }
 
 export class FindByClientTokenUseCase {
-  constructor(private clientTokensRepository: ClientTokensRepository) {}
+  constructor(
+    private clientTokensRepository: ClientTokensRepository,
+    private queuesProvider: QueuesProvider,
+  ) {}
 
   async execute({
     token,
@@ -29,10 +32,12 @@ export class FindByClientTokenUseCase {
       throw new ClientNotAuthorizedError()
     }
 
-    const jobs = await queue.findJobByClientId(clientToken.client.id)
+    const jobs = await this.queuesProvider.findJobByClientId(
+      clientToken.client.id,
+    )
 
     const response = jobs
-      .filter((job) => !job.attrs.failCount)
+      .filter((job) => !job.failCount)
       .map((job) => {
         return jobToMessageMapper(job)
       })

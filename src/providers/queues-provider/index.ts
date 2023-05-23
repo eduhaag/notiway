@@ -3,11 +3,10 @@ import Agenda, { Job } from 'agenda'
 import { sendMessage } from './jobs/send-message-job'
 import { SendMailProps } from '../mail-provider/email-provider'
 import { sendMail } from './jobs/send-mail-job'
-import { env } from '@/env'
 import { errorHandler } from '@/error-handler'
-import { MessagesRepository } from '@/respositories/messages-repository'
-import { MongoMessagesRepository } from '@/respositories/mongo/mongo-messages-repository'
 import { ObjectId } from 'mongodb'
+import { MongoDb } from '@/DB/mongoDb'
+import { agendaJobToDomain } from './mappers/agenda-job-to-domain'
 
 interface AddJobProps {
   queue: string
@@ -15,56 +14,124 @@ interface AddJobProps {
   data: any
 }
 
-export class Queues {
-  private _queues: Agenda
-  private MessagesRepository: MessagesRepository
+export interface JobAttributes {
+  id: string
+  name: string
+  data: any
+  priority: number | string
+  shouldSaveResult?: boolean
+  type: string
+  nextRunAt?: Date | null
+  lastModifiedBy?: string
+  lastRunAt?: Date | null
+  failCount?: number
+  failReason?: string
+  failedAt?: Date | null
+  lastFinishedAt?: Date | null
+}
+
+export interface JobUpdateProps {
+  jobId: string
+  to?: string
+  sendOn?: Date
+}
+
+export class QueuesProvider {
+  private _agenda!: Agenda
+  private mongo: MongoDb
 
   constructor() {
-    this.MessagesRepository = new MongoMessagesRepository()
-    this._queues = new Agenda({
-      db: { address: env.MONGO_DATABASE_URL },
+    this.mongo = new MongoDb()
+
+    this.start()
+  }
+
+  private async start() {
+    await this.mongo.connect()
+
+    this._agenda = new Agenda({
+      db: { address: this.mongo.uri },
       maxConcurrency: 5,
     })
 
-    this._queues.on('ready', () => {
+    this._agenda.on('ready', () => {
       console.log('✅ Queues starded.')
     })
 
-    this._queues.start()
-
+    await this._agenda.start()
     this.jobsConfig()
   }
 
+  get agenda() {
+    return this._agenda
+  }
+
   async add({ date, data, queue }: AddJobProps) {
-    return await this._queues.schedule(date, queue, data)
+    await this._agenda.schedule(date, queue, data)
   }
 
-  async findJobById(id: string): Promise<Job> {
-    const job = await this._queues.jobs({ _id: new ObjectId(id) })
-    return job[0]
+  async findJobById(id: string): Promise<JobAttributes | undefined> {
+    const job = await this._agenda.jobs({ _id: new ObjectId(id) })
+
+    if (job.length === 0) {
+      return undefined
+    }
+
+    return { ...agendaJobToDomain(job[0].attrs) }
   }
 
-  async findJobByClientId(clientId: string): Promise<Job[]> {
-    return await this._queues.jobs({ 'data.clientId': clientId })
+  async findJobByClientId(clientId: string): Promise<JobAttributes[]> {
+    const jobs = await this._agenda.jobs({ 'data.clientId': clientId })
+
+    return jobs.map((job) => {
+      return agendaJobToDomain(job.attrs)
+    })
   }
 
-  async deleteJob(job: Job) {
-    await job.remove()
+  async deleteJob(jobId: string) {
+    const job = await this._agenda.jobs({ _id: new ObjectId(jobId) })
+
+    await job[0].remove()
   }
 
-  async listJobsWithFail(clientId?: string) {
+  async runJob(jobId: string) {
+    const job = await this._agenda.jobs({ _id: new ObjectId(jobId) })
+
+    await job[0].run()
+  }
+
+  async runJobsWithFail(clientId?: string) {
     const filter = clientId
       ? { $and: [{ failCount: { $gte: 3 } }, { 'data.clientId': clientId }] }
       : { failCount: { $gte: 3 } }
 
-    return await this._queues.jobs(filter)
+    const jobs = await this._agenda.jobs(filter)
+
+    jobs.forEach((job) => {
+      job.run()
+    })
+  }
+
+  async jobUpdate({ jobId, sendOn, to }: JobUpdateProps) {
+    const job = await this._agenda.jobs({ _id: new ObjectId(jobId) })
+
+    if (sendOn) {
+      job[0].schedule(sendOn)
+    }
+
+    if (to) {
+      job[0].attrs.data.to = to
+    }
+
+    job[0].save()
   }
 
   private async completeJob(job: Job) {
     if (job.attrs.name === 'send-message') {
       const { clientId, senderName, to, content, apiToken } = job.attrs
         .data as Message
-      await this.MessagesRepository.create({
+
+      await this.mongo.client.db('notiway').collection('messages').insertOne({
         clientId,
         apiToken,
         senderName,
@@ -90,19 +157,19 @@ export class Queues {
   }
 
   private jobsConfig() {
-    this._queues.define('send-message', async (job: Job) => {
+    this._agenda.define('send-message', async (job: Job) => {
       await sendMessage(job.attrs.data as Message, job.attrs._id.toString())
     })
 
-    this._queues.define('send-mail', async (job: Job) => {
+    this._agenda.define('send-mail', async (job: Job) => {
       await sendMail(job.attrs.data as SendMailProps)
     })
 
-    this._queues.on('success', (job: Job) => {
+    this._agenda.on('success', (job: Job) => {
       this.completeJob(job)
     })
 
-    this._queues.on('fail', async (err: any, job: Job) => {
+    this._agenda.on('fail', async (err: any, job: Job) => {
       await this.jobErrorHandler(err, job)
     })
   }

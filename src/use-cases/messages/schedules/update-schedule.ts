@@ -1,4 +1,4 @@
-import { queue } from '@/app'
+import { QueuesProvider } from '@/providers/queues-provider'
 import { ClientTokensRepository } from '@/respositories/client-tokens-repository'
 import { ClientNotAuthorizedError } from '@/use-cases/errors/client-not-authorized-error'
 import { ResourceNotFoundError } from '@/use-cases/errors/resource-not-found'
@@ -11,7 +11,10 @@ interface UpdateScheduleUseCaseRequest {
 }
 
 export class UpdateScheduleUseCase {
-  constructor(private clientTokensRepository: ClientTokensRepository) {}
+  constructor(
+    private clientTokensRepository: ClientTokensRepository,
+    private queuesProvider: QueuesProvider,
+  ) {}
 
   async execute({
     scheduleId,
@@ -25,24 +28,20 @@ export class UpdateScheduleUseCase {
       throw new ClientNotAuthorizedError()
     }
 
-    const job = await queue.findJobById(scheduleId)
+    const job = await this.queuesProvider.findJobById(scheduleId)
 
     if (!job) {
       throw new ResourceNotFoundError()
     }
 
-    if (job.attrs.data.clientId !== clientToken.client.id) {
+    if (job.data.clientId !== clientToken.client.id) {
       throw new ClientNotAuthorizedError()
     }
 
-    if (to) {
-      job.attrs.data.to = to
-    }
-
-    if (sendOn) {
-      job.schedule(new Date(sendOn))
-    }
-
-    job.save()
+    await this.queuesProvider.jobUpdate({
+      jobId: job.id,
+      to,
+      sendOn: sendOn && new Date(sendOn),
+    })
   }
 }

@@ -3,7 +3,7 @@ import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { UserTokensRepository } from '@/respositories/user-tokens-repository'
 import path from 'path'
 import { EmailAlreadyValidatedError } from '../errors/email-already-valitadet-error'
-import { queue } from '@/app'
+import { QueuesProvider } from '@/providers/queues-provider'
 
 interface ResendVerificationUseCaseRequest {
   email: string
@@ -13,6 +13,7 @@ export class ResendVerificationUseCase {
   constructor(
     private usersRepository: UsersRepository,
     private userTokesRepository: UserTokensRepository,
+    private queuesProvider: QueuesProvider,
   ) {}
 
   async execute({ email }: ResendVerificationUseCaseRequest): Promise<void> {
@@ -53,6 +54,10 @@ export class ResendVerificationUseCase {
       },
     }
 
-    await queue.add({ data: mail, date: new Date(), queue: 'send-mail' })
+    await this.queuesProvider.add({
+      data: mail,
+      date: new Date(),
+      queue: 'send-mail',
+    })
   }
 }

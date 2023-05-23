@@ -88,7 +88,7 @@ export class Queues {
       })
     }
 
-    await this.JobsRepository.deleteById(job.attrs._id.toString())
+    await job.remove()
   }
 
   private async jobErrorHandler(err: any, job: Job) {

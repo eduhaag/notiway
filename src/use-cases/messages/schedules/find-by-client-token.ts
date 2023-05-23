@@ -31,9 +31,11 @@ export class FindByClientTokenUseCase {
 
     const jobs = await queue.findJobByClientId(clientToken.client.id)
 
-    const response = jobs.map((job) => {
-      return jobToMessageMapper(job)
-    })
+    const response = jobs
+      .filter((job) => !job.attrs.failCount)
+      .map((job) => {
+        return jobToMessageMapper(job)
+      })
 
     return { messages: response }
   }

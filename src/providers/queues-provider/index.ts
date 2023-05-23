@@ -66,8 +66,12 @@ export class Queues {
     await job.remove()
   }
 
-  async listJobsWithFail() {
-    return await this._queues.jobs({ failCount: { $gte: 3 } })
+  async listJobsWithFail(clientId?: string) {
+    const filter = clientId
+      ? { $and: [{ failCount: { $gte: 3 } }, { 'data.clientId': clientId }] }
+      : { failCount: { $gte: 3 } }
+
+    return await this._queues.jobs(filter)
   }
 
   private async completeJob(job: Job) {

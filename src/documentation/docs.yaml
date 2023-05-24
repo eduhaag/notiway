@@ -109,7 +109,7 @@ info:
     *Exemplo:*
     Para agendar o envio de uma mensagem para 10 de janeiro de 2025 às 14:05 no horário de São Paulo (UTC-3) deve ser utilizado `send_on:"2025-01-10T14:05:00-03:00"`.
 
-    **Atenção:** Quando for enviado uma data anterior a data corrente, a mensagem será enviada instantaneamente.
+    **Atenção:** Quando for enviado uma data e hora anterior a data e hora atual, a mensagem será enviada instantaneamente.
 
   termsOfService: https://api.notiway.com.br/terms
   contact:
@@ -120,7 +120,7 @@ servers:
 paths:
   /send-text:    
     post:
-      tags: ['Messages']
+      tags: ['Envio de mensagens']
       operationId: sendText
       summary: Enviar mensagem de texto
       description: |
@@ -152,7 +152,7 @@ paths:
         -  api_keys: []
   /send-link:
     post:
-      tags: ['Messages']
+      tags: ['Envio de mensagens']
       operationId: sendLink
       summary: Enviar link preview
       description: |
@@ -183,7 +183,7 @@ paths:
         -  api_keys: []
   /send-location:
     post:
-      tags: ['Messages']
+      tags: ['Envio de mensagens']
       operationId: sendLocation
       summary: Enviar localização
       description: |
@@ -215,7 +215,7 @@ paths:
         -  api_keys: []
   /send-contact:
     post:
-      tags: ['Messages']
+      tags: ['Envio de mensagens']
       operationId: sendContact
       summary: Enviar um contato
       description: |
@@ -246,7 +246,7 @@ paths:
         -  api_keys: []
   /send-gif:
     post:
-      tags: ['Messages']
+      tags: ['Envio de mensagens']
       operationId: sendGif
       summary: Enviar um gif
       description: |
@@ -277,7 +277,7 @@ paths:
         -  api_keys: []
   /send-sticker:
     post:
-      tags: ['Messages']
+      tags: ['Envio de mensagens']
       operationId: sendSticker
       summary: Enviar um sticker
       description: |
@@ -308,7 +308,7 @@ paths:
         - api_keys: []
   /send-image:
     post:
-      tags: ['Messages']
+      tags: ['Envio de mensagens']
       operationId: sendImage
       summary: Enviar uma imagem
       description: |
@@ -341,7 +341,7 @@ paths:
         - api_keys: []
   /send-file:
     post:
-      tags: ['Messages']
+      tags: ['Envio de mensagens']
       operationId: sendFile
       summary: Enviar um arquivo
       description: |
@@ -374,7 +374,7 @@ paths:
         - api_keys: []
   /send-audio:
     post:
-      tags: ['Messages']
+      tags: ['Envio de mensagens']
       operationId: sendAudio
       summary: Enviar um arquivo de áudio
       description: |
@@ -405,6 +405,122 @@ paths:
           $ref: "#/components/responses/ServerError"
       security: 
         - api_keys: []
+  /schedules:
+    get:
+      tags: ['Gestão de agendamentos']
+      operadtionId: getSchedules
+      summary: Listar mensagens agendadas
+      description: |
+        Busca todas as mensagens que estão com o envio agendado ordenadas de forma crescente pela data de envio.
+      responses:
+        '200':
+          $ref: "#/components/responses/successListSchedules"
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+      security: 
+        - api_keys: []
+  /schedules/{schedule_id}:
+    put:
+      tags: ['Gestão de agendamentos']
+      operadtionId: updateSchedule
+      summary: Atualizar agendamento
+      description: |
+        Esta rota permite a atualização da data de envio e do número do destinatário de uma mensagem agendada.
+
+        O destinatário presente no campo `to` deve ser em formato string contendo apenas os números do contato. 
+
+        Ex.: para o telefone brasileiro **(11) 9 9999-9999** usar `to:'5511999999999'`.</br>        
+        Obs.: O 55 corresponde ao +55 que identifica os telefones brasileiros internacionalmente.
+
+        O formato do campo `send_on` deve seguir as regras encontradas em: [Agendar envio das mensagens](#section/Agendar-envio-das-mensagens)
+      parameters:
+        - 
+          name: schedule_id
+          in: path
+          description: ID do agendamento obtido na criação ou na listagem de agendamentos.
+          required: true
+          schema:
+            type: string
+            example: 646cd85670d9cb9d6845e303
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateScheduleBody'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                required:
+                  - ok: boolean
+                  - message: string
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: updated
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        "404": 
+          $ref: "#/components/responses/ResourceNotFound"
+      security: 
+        -  api_keys: []
+    delete:
+      tags: ['Gestão de agendamentos']
+      operadtionId: deleteSchedule
+      summary: Cancelar agendamento
+      description: |
+        Esta rota permite realizar o cancelamento de uma mensagem agendada para ser enviada.
+
+        **Atenção:** Após o cancelamento não é possivel recuperar a mensagem ou reativar o agendamento.
+      parameters:
+        - 
+          name: schedule_id
+          in: path
+          description: ID do agendamento obtido na criação ou na listagem de agendamentos.
+          required: true
+          schema:
+            type: string
+            example: 646cd85670d9cb9d6845e303
+      responses:
+        '204':
+          description: Successful operation
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        "404": 
+          $ref: "#/components/responses/ResourceNotFound"
+      security: 
+        -  api_keys: []
+  /schedules/{schedule_id}/send:
+    post:
+      tags: ['Gestão de agendamentos']
+      operadtionId: runSchedule
+      summary: Antecipar envio
+      description: |
+        Esta rota permite enviar imediatamente uma mensagem que está com o envio agendado.
+      parameters:
+        - 
+          name: schedule_id
+          in: path
+          description: ID do agendamento obtido na criação ou na listagem de agendamentos.
+          required: true
+          schema:
+            type: string
+            example: 646cd85670d9cb9d6845e303
+      responses:
+        '204':
+          description: Successful operation
+        '401':
+          $ref: "#/components/responses/UnauthorizedError"
+        "404": 
+          $ref: "#/components/responses/ResourceNotFound"
+
 components:
   schemas:
     textMessage:
@@ -414,7 +530,7 @@ components:
       type: object
       properties:
         send_on:
-          type: Date | string
+          type: string
           example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
@@ -429,7 +545,7 @@ components:
       type: object
       properties:
         send_on:
-          type: Date | string
+          type: string
           example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
@@ -446,7 +562,7 @@ components:
       type: object
       properties:
         send_on:
-          type: Date | string
+          type: string
           example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
@@ -471,7 +587,7 @@ components:
       type: object
       properties:
         send_on:
-          type: Date | string
+          type: string
           example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
@@ -489,7 +605,7 @@ components:
       type: object
       properties:
         send_on:
-          type: Date | string
+          type: string
           example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
@@ -504,7 +620,7 @@ components:
       type: object
       properties:
         send_on:
-          type: Date | string
+          type: string
           example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
@@ -519,7 +635,7 @@ components:
       type: object
       properties:
         send_on:
-          type: Date | string
+          type: string
           example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
@@ -537,7 +653,7 @@ components:
       type: object
       properties:
         send_on:
-          type: Date | string
+          type: string
           example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
@@ -554,13 +670,22 @@ components:
       type: object
       properties:
         send_on:
-          type: Date | string
+          type: string
           example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
           example: '5511999999999'
         base64:
           $ref: audio.yaml
+    updateScheduleBody:
+      type: object
+      properties:
+        send_on:
+          type: string
+          example: '2025-01-10T14:05:00-03:00'
+        to:
+          type: string
+          example: '5511888888888'
   responses:
     successResponse:
       description: Successful operation
@@ -589,14 +714,141 @@ components:
               is_scheduled: true
               schedule_id: '646e2b1731d984419e2399c5'
               scheduled_for: "2025-01-10T14:05:00-03:00"
+    successListSchedules:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            required:
+              - messages: array
+            type: object
+            properties:
+              messages:
+                type: array
+                items: 
+                  required:
+                    - schedule_id: string
+                    - send_on: string
+                    - to: string
+                    - content: object
+                  type: object
+                  properties:
+                    schedule_id:
+                      type: string
+                    send_on:
+                      description: Retornará a hora em UTC
+                      type: string
+                    to:
+                      type: string
+                    content:
+                      type: object
+            example:
+              messages: 
+                - 
+                  schedule_id: "646e14ca777c3a9d1889b7ec"
+                  send_on: "2023-05-25T14:38:00.000Z"
+                  to: "5511999999999"
+                  content: 
+                    type: "TEXT"
+                    message: "Esta mensagem será enviada."
+                -
+                  schedule_id: "646e14ed777c3a9d1889b7ee"
+                  send_on: "2023-05-26T14:38:00.000Z"
+                  to: "5511999999999"
+                  content: 
+                    type: "LINK"
+                    url: "https://www.pp.com.br"
     UnauthorizedError:
       description: Unauthorized.
+      content:
+        application/json:
+          schema:
+            required:
+              - ok: boolean
+              - message: string
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Unauthorized
+    ResourceNotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            required:
+              - ok: boolean
+              - message: string
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Resource not found
     NotReadyError:
       description: Client or sender not ready.
+      content:
+        application/json:
+          schema:
+            required:
+              - ok: boolean
+              - message: string
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Client or sender not ready
     ValidationError:
       description: Validation error.
+      content:
+        application/json:
+          schema:
+            required:
+              - ok: boolean
+              - message: string
+              - issues: object
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Validation error.
+              issues: 
+                type: object
+                example: {
+                  _errors: [],
+                  to: {
+                    _errors: [
+                      "Required"
+                    ]
+                  }
+                }
     ServerError:
       description: Unexpected error.
+      content:
+        application/json:
+          schema:
+            required:
+              - ok: boolean
+              - message: string
+            type: object
+            properties:
+              ok:
+                type: boolean
+                example: false
+              message:
+                type: string
+                example: Internal server erro'
   securitySchemes:
     api_keys:
       description: Consulte a API Key em <a href="https://notiway.com.br" target="_blank">notiway.com.br</a>

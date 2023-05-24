@@ -29,15 +29,15 @@ export async function sendLink(req: FastifyRequest, reply: FastifyReply) {
     return reply.status(200).send(response)
   } catch (error) {
     if (error instanceof ClientNotAuthorizedError) {
-      return reply.status(401).send({ message: error.message })
+      return reply.status(401).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientNotReadyError) {
-      return reply.status(425).send({ message: error.message })
+      return reply.status(425).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientSenderNotReadyError) {
-      return reply.status(425).send({ message: error.message })
+      return reply.status(425).send({ ok: false, message: error.message })
     }
 
     throw error

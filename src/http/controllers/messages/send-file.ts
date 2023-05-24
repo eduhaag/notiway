@@ -24,7 +24,9 @@ export async function sendFile(
   )
 
   if (type === 'FILE' && !filename) {
-    return reply.status(400).send({ message: 'Filename is required' })
+    return reply
+      .status(400)
+      .send({ ok: false, message: 'Filename is required' })
   }
 
   try {
@@ -43,15 +45,15 @@ export async function sendFile(
     return reply.status(200).send(response)
   } catch (error) {
     if (error instanceof ClientNotAuthorizedError) {
-      return reply.status(401).send({ message: error.message })
+      return reply.status(401).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientNotReadyError) {
-      return reply.status(425).send({ message: error.message })
+      return reply.status(425).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientSenderNotReadyError) {
-      return reply.status(425).send({ message: error.message })
+      return reply.status(425).send({ ok: false, message: error.message })
     }
 
     throw error

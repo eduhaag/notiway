@@ -94,7 +94,7 @@ info:
     <p>Caso você não tenha nenhuma ferramenta que permita a inclusão de emojis, você pode utilizar o site <a href="https://getemoji.com/" target="_blanck">getemoji.com</a> para copiar o emoji desejado e colar diretamente na sua mensagem.</p>
 
     # Agendar envio das mensagens
-    Todas as rotas para envios de mensagem possuem como propriedade opcional o campo `send_on` que recebe como valor uma data no formato `yyyy-MM-ddThh:mm:ss-zz:00`.
+    Todas as rotas para envios de mensagem possuem como propriedade opcional o campo `send_on` que recebe como valor uma *string* no formato de data como `yyyy-MM-ddThh:mm:ss-zz:00`.
 
     *Legenda:*
     - `yyyy` : Ano completo com 4 dígitos;
@@ -415,7 +415,7 @@ components:
       properties:
         send_on:
           type: Date | string
-          example: 2025-01-10T14:05:00-03:00
+          example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
           example: '5511999999999'
@@ -430,7 +430,7 @@ components:
       properties:
         send_on:
           type: Date | string
-          example: 2025-01-10T14:05:00-03:00
+          example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
           example: '5511999999999'
@@ -447,7 +447,7 @@ components:
       properties:
         send_on:
           type: Date | string
-          example: 2025-01-10T14:05:00-03:00
+          example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
           example: '5511999999999'
@@ -472,7 +472,7 @@ components:
       properties:
         send_on:
           type: Date | string
-          example: 2025-01-10T14:05:00-03:00
+          example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
           example: '5511999999999'
@@ -490,7 +490,7 @@ components:
       properties:
         send_on:
           type: Date | string
-          example: 2025-01-10T14:05:00-03:00
+          example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
           example: '5511999999999'
@@ -505,7 +505,7 @@ components:
       properties:
         send_on:
           type: Date | string
-          example: 2025-01-10T14:05:00-03:00
+          example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
           example: '5511999999999'
@@ -520,7 +520,7 @@ components:
       properties:
         send_on:
           type: Date | string
-          example: 2025-01-10T14:05:00-03:00
+          example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
           example: '5511999999999'
@@ -538,7 +538,7 @@ components:
       properties:
         send_on:
           type: Date | string
-          example: 2025-01-10T14:05:00-03:00
+          example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
           example: '5511999999999'
@@ -555,7 +555,7 @@ components:
       properties:
         send_on:
           type: Date | string
-          example: 2025-01-10T14:05:00-03:00
+          example: '2025-01-10T14:05:00-03:00'
         to:
           type: string
           example: '5511999999999'
@@ -565,13 +565,30 @@ components:
     successResponse:
       description: Successful operation
       content:
-        status:
-          schema: 
+        application/json:
+          schema:
+            required:
+              - ok: boolean
+              - sended: boolean
+              - is_scheduled: boolean
             type: object
             properties:
-              status:
+              ok:
+                type: boolean
+              sended:
+                type: boolean
+              is_scheduled:
+                type: boolean
+              schedule_id:
                 type: string
-                example: sended  
+              scheduled_for:
+                type: string
+            example:
+              ok: true
+              sended: false
+              is_scheduled: true
+              schedule_id: '646e2b1731d984419e2399c5'
+              scheduled_for: "2025-01-10T14:05:00-03:00"
     UnauthorizedError:
       description: Unauthorized.
     NotReadyError:

@@ -8,7 +8,7 @@ export function errorHandler(error: Error, reply?: FastifyReply) {
   if (error instanceof ZodError && reply) {
     return reply
       .status(400)
-      .send({ message: 'Validation error.', issues: error.format() })
+      .send({ ok: false, message: 'Validation error.', issues: error.format() })
   }
 
   if (env.NODE_ENV === 'production') {
@@ -20,5 +20,8 @@ export function errorHandler(error: Error, reply?: FastifyReply) {
     console.error(error)
   }
 
-  return reply && reply.status(500).send({ message: 'Internal server error' })
+  return (
+    reply &&
+    reply.status(500).send({ ok: false, message: 'Internal server error' })
+  )
 }

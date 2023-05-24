@@ -16,7 +16,7 @@ export async function finScheduleByClientToken(
     return reply.status(200).send(messages)
   } catch (error) {
     if (error instanceof ClientNotAuthorizedError) {
-      return reply.status(401).send({ message: error.message })
+      return reply.status(401).send({ ok: false, message: error.message })
     }
 
     throw error

@@ -83,7 +83,10 @@ export class QueuesProvider {
   }
 
   async findJobByClientId(clientId: string): Promise<JobAttributes[]> {
-    const jobs = await this._agenda.jobs({ 'data.clientId': clientId })
+    const jobs = await this._agenda.jobs(
+      { 'data.clientId': clientId },
+      { nextRunAt: 1 },
+    )
 
     return jobs.map((job) => {
       return agendaJobToDomain(job.attrs)

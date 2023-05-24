@@ -16,7 +16,7 @@ export async function sendFile(
     base64: z.string(),
     message: z.string().optional(),
     filename: z.string().optional(),
-    send_on: z.coerce.date().optional(),
+    send_on: z.string().optional(),
   })
 
   const { message, to, base64, filename, send_on } = sendTextBodySchema.parse(
@@ -24,13 +24,15 @@ export async function sendFile(
   )
 
   if (type === 'FILE' && !filename) {
-    return reply.status(400).send({ message: 'Filename is required' })
+    return reply
+      .status(400)
+      .send({ ok: false, message: 'Filename is required' })
   }
 
   try {
     const SendFileUseCase = makeSendFileUseCase()
 
-    await SendFileUseCase.execute({
+    const response = await SendFileUseCase.execute({
       base64,
       to,
       text: message,
@@ -40,18 +42,18 @@ export async function sendFile(
       sendOn: send_on,
     })
 
-    return reply.status(200).send({ status: 'sended' })
+    return reply.status(200).send(response)
   } catch (error) {
     if (error instanceof ClientNotAuthorizedError) {
-      return reply.status(401).send({ message: error.message })
+      return reply.status(401).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientNotReadyError) {
-      return reply.status(425).send({ message: error.message })
+      return reply.status(425).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientSenderNotReadyError) {
-      return reply.status(425).send({ message: error.message })
+      return reply.status(425).send({ ok: false, message: error.message })
     }
 
     throw error

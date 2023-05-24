@@ -12,7 +12,7 @@ export async function sendLocation(req: FastifyRequest, reply: FastifyReply) {
     longitude: z.number().min(-180).max(180).optional(),
     title: z.string().optional(),
     address: z.string().optional(),
-    send_on: z.coerce.date().optional(),
+    send_on: z.string().optional(),
   })
 
   const { to, latitude, longitude, address, title, send_on } =
@@ -21,7 +21,7 @@ export async function sendLocation(req: FastifyRequest, reply: FastifyReply) {
   try {
     const sendLocationUseCase = makeSendLocationUseCase()
 
-    await sendLocationUseCase.execute({
+    const response = await sendLocationUseCase.execute({
       to,
       token: req.token,
       latitude,
@@ -31,18 +31,18 @@ export async function sendLocation(req: FastifyRequest, reply: FastifyReply) {
       sendOn: send_on,
     })
 
-    return reply.status(200).send({ status: 'sended' })
+    return reply.status(200).send(response)
   } catch (error) {
     if (error instanceof ClientNotAuthorizedError) {
-      return reply.status(401).send({ message: error.message })
+      return reply.status(401).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientNotReadyError) {
-      return reply.status(425).send({ message: error.message })
+      return reply.status(425).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientSenderNotReadyError) {
-      return reply.status(425).send({ message: error.message })
+      return reply.status(425).send({ ok: false, message: error.message })
     }
 
     throw error

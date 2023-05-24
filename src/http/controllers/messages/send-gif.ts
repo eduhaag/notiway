@@ -9,7 +9,7 @@ export async function sendGif(req: FastifyRequest, reply: FastifyReply) {
   const sendGifBodySchema = z.object({
     to: z.string(),
     url: z.string(),
-    send_on: z.coerce.date().optional(),
+    send_on: z.string().optional(),
   })
 
   const { to, url, send_on } = sendGifBodySchema.parse(req.body)
@@ -17,25 +17,25 @@ export async function sendGif(req: FastifyRequest, reply: FastifyReply) {
   try {
     const sendGifUseCase = makeSendGifUseCase()
 
-    await sendGifUseCase.execute({
+    const response = await sendGifUseCase.execute({
       to,
       token: req.token,
       url,
       sendOn: send_on,
     })
 
-    return reply.status(200).send({ status: 'sended' })
+    return reply.status(200).send(response)
   } catch (error) {
     if (error instanceof ClientNotAuthorizedError) {
-      return reply.status(401).send({ message: error.message })
+      return reply.status(401).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientNotReadyError) {
-      return reply.status(425).send({ message: error.message })
+      return reply.status(425).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientSenderNotReadyError) {
-      return reply.status(425).send({ message: error.message })
+      return reply.status(425).send({ ok: false, message: error.message })
     }
 
     throw error

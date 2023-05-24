@@ -22,11 +22,11 @@ export async function runSchedule(req: FastifyRequest, reply: FastifyReply) {
     return reply.status(204).send()
   } catch (error) {
     if (error instanceof ResourceNotFoundError) {
-      return reply.status(404).send({ message: error.message })
+      return reply.status(404).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientNotAuthorizedError) {
-      return reply.status(401).send({ message: error.message })
+      return reply.status(401).send({ ok: false, message: error.message })
     }
 
     throw error

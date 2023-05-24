@@ -10,7 +10,7 @@ export async function sendContact(req: FastifyRequest, reply: FastifyReply) {
     to: z.string(),
     name: z.string(),
     contact: z.string(),
-    send_on: z.coerce.date().optional(),
+    send_on: z.string().optional(),
   })
 
   const { to, contact, name, send_on } = sendContactBodySchema.parse(req.body)
@@ -18,7 +18,7 @@ export async function sendContact(req: FastifyRequest, reply: FastifyReply) {
   try {
     const sendContactUseCase = makeSendContactUseCase()
 
-    await sendContactUseCase.execute({
+    const response = await sendContactUseCase.execute({
       to,
       token: req.token,
       contact,
@@ -26,18 +26,18 @@ export async function sendContact(req: FastifyRequest, reply: FastifyReply) {
       sendOn: send_on,
     })
 
-    return reply.status(200).send({ status: 'sended' })
+    return reply.status(200).send(response)
   } catch (error) {
     if (error instanceof ClientNotAuthorizedError) {
-      return reply.status(401).send({ message: error.message })
+      return reply.status(401).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientNotReadyError) {
-      return reply.status(425).send({ message: error.message })
+      return reply.status(425).send({ ok: false, message: error.message })
     }
 
     if (error instanceof ClientSenderNotReadyError) {
-      return reply.status(425).send({ message: error.message })
+      return reply.status(425).send({ ok: false, message: error.message })
     }
 
     throw error

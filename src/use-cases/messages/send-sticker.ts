@@ -4,12 +4,21 @@ import { ClientNotAuthorizedError } from '../errors/client-not-authorized-error'
 import { ClientNotReadyError } from '../errors/client-not-ready-error'
 import { ClientSenderNotReadyError } from '../errors/client-sender-not-ready-error'
 import { QueuesProvider } from '@/providers/queues-provider'
+import dayjs from 'dayjs'
 
 interface SendStickerUseCaseRequest {
   token: string
   to: string
   url: string
-  sendOn?: Date
+  sendOn?: string
+}
+
+interface SendStickerUseCaseResponse {
+  ok: boolean
+  sended: boolean
+  is_scheduled: boolean
+  schedule_id?: string
+  scheduledFor?: string
 }
 
 export class SendStickerUseCase {
@@ -18,7 +27,9 @@ export class SendStickerUseCase {
     private queuesProvider: QueuesProvider,
   ) {}
 
-  async execute(request: SendStickerUseCaseRequest): Promise<void> {
+  async execute(
+    request: SendStickerUseCaseRequest,
+  ): Promise<SendStickerUseCaseResponse> {
     const { token, url, to, sendOn } = request
 
     const clientToken = await this.clientTokensRepository.findByToken(token)
@@ -51,10 +62,26 @@ export class SendStickerUseCase {
 
     const date = sendOn ? new Date(sendOn) : new Date()
 
-    await this.queuesProvider.add({
+    const scheduleId = await this.queuesProvider.add({
       date,
       data: message,
       queue: 'send-message',
     })
+
+    if (dayjs().isBefore(date)) {
+      return {
+        ok: true,
+        sended: false,
+        is_scheduled: true,
+        schedule_id: scheduleId,
+        scheduledFor: sendOn,
+      }
+    }
+
+    return {
+      ok: true,
+      is_scheduled: false,
+      sended: true,
+    }
   }
 }

@@ -10,7 +10,7 @@ export async function sendLink(req: FastifyRequest, reply: FastifyReply) {
     to: z.string(),
     url: z.string(),
     message: z.string().optional(),
-    send_on: z.coerce.date().optional(),
+    send_on: z.string().optional(),
   })
 
   const { message, to, url, send_on } = sendLinkBodySchema.parse(req.body)
@@ -18,7 +18,7 @@ export async function sendLink(req: FastifyRequest, reply: FastifyReply) {
   try {
     const sendLinkUseCase = makeSendLinkUseCase()
 
-    await sendLinkUseCase.execute({
+    const response = await sendLinkUseCase.execute({
       to,
       url,
       caption: message,
@@ -26,7 +26,7 @@ export async function sendLink(req: FastifyRequest, reply: FastifyReply) {
       sendOn: send_on,
     })
 
-    return reply.status(200).send({ status: 'sended' })
+    return reply.status(200).send(response)
   } catch (error) {
     if (error instanceof ClientNotAuthorizedError) {
       return reply.status(401).send({ message: error.message })

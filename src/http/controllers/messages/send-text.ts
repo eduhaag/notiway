@@ -9,7 +9,7 @@ export async function sendText(req: FastifyRequest, reply: FastifyReply) {
   const sendTextBodySchema = z.object({
     to: z.string(),
     message: z.string(),
-    send_on: z.coerce.date().optional(),
+    send_on: z.string().optional(),
   })
 
   const { message, to, send_on } = sendTextBodySchema.parse(req.body)
@@ -17,14 +17,14 @@ export async function sendText(req: FastifyRequest, reply: FastifyReply) {
   try {
     const sendTexUseCase = makeSendTextUseCase()
 
-    await sendTexUseCase.execute({
+    const response = await sendTexUseCase.execute({
       text: message,
       to,
       token: req.token,
       sendOn: send_on,
     })
 
-    return reply.status(200).send({ status: 'sended' })
+    return reply.status(200).send(response)
   } catch (error) {
     if (error instanceof ClientNotAuthorizedError) {
       return reply.status(401).send({ message: error.message })

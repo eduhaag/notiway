@@ -1,20 +1,23 @@
 import { InMemoryClientTokensRepository } from '@/respositories/in-memory/in-memory-client-tokens-repository'
-import { beforeEach, describe, expect, it, vi } from 'vitest'
-import queue from '@/providers/queues/queue'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { ClientNotAuthorizedError } from '../errors/client-not-authorized-error'
 import { ClientNotReadyError } from '../errors/client-not-ready-error'
 import { ClientSenderNotReadyError } from '../errors/client-sender-not-ready-error'
 import { SendContactUseCase } from './send-contact'
+import { queuesProviderMock } from '@/utils/test/mocks/queues-mock'
 
 let clientTokensRepository: InMemoryClientTokensRepository
 let sut: SendContactUseCase
 
-const addToQueue = vi.spyOn(queue, 'add')
+const queuesProvider = queuesProviderMock()
 
 describe('Send contact use case', () => {
   beforeEach(async () => {
     clientTokensRepository = new InMemoryClientTokensRepository()
-    sut = new SendContactUseCase(clientTokensRepository)
+    sut = new SendContactUseCase(
+      clientTokensRepository,
+      queuesProvider.queuesProvider,
+    )
 
     await clientTokensRepository.createFakeClient({
       status: 'ready',
@@ -43,7 +46,7 @@ describe('Send contact use case', () => {
       token: 'token-example',
     })
 
-    expect(addToQueue).toBeCalledTimes(1)
+    expect(queuesProvider.mocks.addMock).toBeCalledTimes(1)
   })
 
   it('should not be able to contact with a invalid token', async () => {

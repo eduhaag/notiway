@@ -16,9 +16,12 @@ export async function sendFile(
     base64: z.string(),
     message: z.string().optional(),
     filename: z.string().optional(),
+    send_on: z.coerce.date().optional(),
   })
 
-  const { message, to, base64, filename } = sendTextBodySchema.parse(req.body)
+  const { message, to, base64, filename, send_on } = sendTextBodySchema.parse(
+    req.body,
+  )
 
   if (type === 'FILE' && !filename) {
     return reply.status(400).send({ message: 'Filename is required' })
@@ -34,6 +37,7 @@ export async function sendFile(
       token: req.token,
       fileType: type,
       fileName: filename,
+      sendOn: send_on,
     })
 
     return reply.status(200).send({ status: 'sended' })

@@ -9,9 +9,10 @@ export async function sendSticker(req: FastifyRequest, reply: FastifyReply) {
   const sendStickerBodySchema = z.object({
     to: z.string(),
     url: z.string(),
+    send_on: z.coerce.date().optional(),
   })
 
-  const { to, url } = sendStickerBodySchema.parse(req.body)
+  const { to, url, send_on } = sendStickerBodySchema.parse(req.body)
 
   try {
     const sendSticker = makeSendStickerUseCase()
@@ -20,6 +21,7 @@ export async function sendSticker(req: FastifyRequest, reply: FastifyReply) {
       to,
       token: req.token,
       url,
+      sendOn: send_on,
     })
 
     return reply.status(200).send({ status: 'sended' })

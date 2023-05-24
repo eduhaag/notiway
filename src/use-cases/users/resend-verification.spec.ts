@@ -1,23 +1,27 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { InMemoryUsersRepository } from '@/respositories/in-memory/in-memory-users-repository'
 import { hash } from 'bcryptjs'
 import { InMemoryUserTokensRepository } from '@/respositories/in-memory/in-memory-user-tokens-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
-import queue from '@/providers/queues/queue'
 import { ResendVerificationUseCase } from './resend-verification'
 import { EmailAlreadyValidatedError } from '../errors/email-already-valitadet-error'
+import { queuesProviderMock } from '@/utils/test/mocks/queues-mock'
 
 let usersRepository: InMemoryUsersRepository
 let userTokensRepository: InMemoryUserTokensRepository
 let sut: ResendVerificationUseCase
 
-const addToQueue = vi.spyOn(queue, 'add')
+const queuesProvider = queuesProviderMock()
 
 describe('Resend verification mail use case', () => {
   beforeEach(() => {
     usersRepository = new InMemoryUsersRepository()
     userTokensRepository = new InMemoryUserTokensRepository()
-    sut = new ResendVerificationUseCase(usersRepository, userTokensRepository)
+    sut = new ResendVerificationUseCase(
+      usersRepository,
+      userTokensRepository,
+      queuesProvider.queuesProvider,
+    )
   })
 
   it('should be able to resend verification mail', async () => {
@@ -35,7 +39,7 @@ describe('Resend verification mail use case', () => {
       email: 'johndoe@example.com',
     })
 
-    expect(addToQueue).toBeCalledTimes(1)
+    expect(queuesProvider.mocks.addMock).toBeCalledTimes(1)
   })
 
   it('should not be able to resend verification for a non-existing mail', async () => {

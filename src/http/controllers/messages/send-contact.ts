@@ -10,9 +10,10 @@ export async function sendContact(req: FastifyRequest, reply: FastifyReply) {
     to: z.string(),
     name: z.string(),
     contact: z.string(),
+    send_on: z.coerce.date().optional(),
   })
 
-  const { to, contact, name } = sendContactBodySchema.parse(req.body)
+  const { to, contact, name, send_on } = sendContactBodySchema.parse(req.body)
 
   try {
     const sendContactUseCase = makeSendContactUseCase()
@@ -22,6 +23,7 @@ export async function sendContact(req: FastifyRequest, reply: FastifyReply) {
       token: req.token,
       contact,
       name,
+      sendOn: send_on,
     })
 
     return reply.status(200).send({ status: 'sended' })

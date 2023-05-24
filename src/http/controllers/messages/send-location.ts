@@ -12,9 +12,10 @@ export async function sendLocation(req: FastifyRequest, reply: FastifyReply) {
     longitude: z.number().min(-180).max(180).optional(),
     title: z.string().optional(),
     address: z.string().optional(),
+    send_on: z.coerce.date().optional(),
   })
 
-  const { to, latitude, longitude, address, title } =
+  const { to, latitude, longitude, address, title, send_on } =
     sendLocationBodySchema.parse(req.body)
 
   try {
@@ -27,6 +28,7 @@ export async function sendLocation(req: FastifyRequest, reply: FastifyReply) {
       longitude,
       title,
       address,
+      sendOn: send_on,
     })
 
     return reply.status(200).send({ status: 'sended' })

@@ -1,21 +1,25 @@
 import { Message } from '@/DTOS/message-types'
-import queue from '@/providers/queues/queue'
 import { ClientTokensRepository } from '@/respositories/client-tokens-repository'
 import { ClientNotAuthorizedError } from '../errors/client-not-authorized-error'
 import { ClientNotReadyError } from '../errors/client-not-ready-error'
 import { ClientSenderNotReadyError } from '../errors/client-sender-not-ready-error'
+import { QueuesProvider } from '@/providers/queues-provider'
 
 interface SendStickerUseCaseRequest {
   token: string
   to: string
   url: string
+  sendOn?: Date
 }
 
 export class SendStickerUseCase {
-  constructor(private clientTokensRepository: ClientTokensRepository) {}
+  constructor(
+    private clientTokensRepository: ClientTokensRepository,
+    private queuesProvider: QueuesProvider,
+  ) {}
 
   async execute(request: SendStickerUseCaseRequest): Promise<void> {
-    const { token, url, to } = request
+    const { token, url, to, sendOn } = request
 
     const clientToken = await this.clientTokensRepository.findByToken(token)
 
@@ -45,6 +49,12 @@ export class SendStickerUseCase {
       },
     }
 
-    await queue.add('SendToWPP', message)
+    const date = sendOn ? new Date(sendOn) : new Date()
+
+    await this.queuesProvider.add({
+      date,
+      data: message,
+      queue: 'send-message',
+    })
   }
 }

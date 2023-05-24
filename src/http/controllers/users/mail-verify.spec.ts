@@ -27,9 +27,9 @@ describe('Mail Verify (e2e)', () => {
       },
     })
 
-    const response = await request(app.server)
-      .patch('/site/users/verify')
-      .query({ token })
+    const response = await request(app.server).patch(
+      `/site/users/mail-verify/${token}`,
+    )
 
     expect(response.statusCode).toEqual(204)
   })

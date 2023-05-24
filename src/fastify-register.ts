@@ -4,13 +4,9 @@ import fastifyCookie from '@fastify/cookie'
 import fastifyStatic from '@fastify/static'
 import FastifySocket from 'fastify-socket.io'
 import cors from '@fastify/cors'
-import { createBullBoard } from '@bull-board/api'
-import { FastifyAdapter } from '@bull-board/fastify'
-import { BullAdapter } from '@bull-board/api/bullAdapter'
 import path from 'path'
 
 import { env } from './env'
-import queue from './providers/queues/queue'
 
 import { adminRoutes } from './http/controllers/adminRoutes'
 import { usersRoutes } from './http/controllers/users/routes'
@@ -19,6 +15,7 @@ import { clientsRoutes } from './http/controllers/clients/routes'
 import { sendersRoutes } from './http/controllers/senders/routes'
 import { messagesRoutes } from './http/controllers/messages/routes'
 import { webHookController } from './http/controllers/webHook'
+import { schedulesRoutes } from './http/controllers/schedules/routes'
 
 export async function fastiFyRegister(app: FastifyInstance) {
   app.register(fastifyJwt, {
@@ -50,20 +47,8 @@ export async function fastiFyRegister(app: FastifyInstance) {
   app.register(clientsRoutes, { prefix: 'site' })
   app.register(sendersRoutes, { prefix: 'site' })
   app.register(messagesRoutes, { prefix: 'v1' })
+  app.register(schedulesRoutes, { prefix: 'v1/schedules' })
 
   // Listen wppConnect
   app.post('/webhook', webHookController)
-
-  // Bull Board
-  const fastiFyAdapter = new FastifyAdapter()
-  createBullBoard({
-    queues: queue.queues.map((q) => new BullAdapter(q.bull)),
-    serverAdapter: fastiFyAdapter,
-  })
-
-  fastiFyAdapter.setBasePath('/queues/ui')
-  app.register(fastiFyAdapter.registerPlugin(), {
-    basePath: '',
-    prefix: '/queues/ui',
-  })
 }

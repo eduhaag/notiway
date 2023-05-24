@@ -5,8 +5,8 @@ import { TaxIdAlreadyExistsError } from '../errors/tax-id-already-exists-error'
 import { Consumer } from '@prisma/client'
 import path from 'path'
 import { UserTokensRepository } from '@/respositories/user-tokens-repository'
-import queue from '@/providers/queues/queue'
 import { UsersRepository } from '@/respositories/users-repository'
+import { QueuesProvider } from '@/providers/queues-provider'
 
 interface CreateConsumerUseCaseRequest {
   name: string
@@ -36,6 +36,7 @@ export class CreateConsumerUseCase {
     private consumersRepository: ConsumersRepository,
     private usersRepository: UsersRepository,
     private usertTokensRepository: UserTokensRepository,
+    private queues: QueuesProvider,
   ) {}
 
   async execute(
@@ -119,7 +120,7 @@ export class CreateConsumerUseCase {
       'mail-verify.hbs',
     )
 
-    await queue.add('sendMail', {
+    const mail = {
       to: email,
       from: 'atendimento@notiway.com.br',
       subject: 'Notiway | Verificação de E-mail',
@@ -127,7 +128,9 @@ export class CreateConsumerUseCase {
       variables: {
         token,
       },
-    })
+    }
+
+    await this.queues.add({ data: mail, date: new Date(), queue: 'send-mail' })
 
     return { consumer }
   }

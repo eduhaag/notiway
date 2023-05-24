@@ -2,6 +2,7 @@ import { PrismaUserTokensRepository } from '@/respositories/prisma/prisma-user-t
 import { CreateConsumerUseCase } from '../create'
 import { PrismaConsumersRepository } from '@/respositories/prisma/prisma-consumers-repository'
 import { PrismaUsersRepository } from '@/respositories/prisma/prisma-users-repository'
+import { queuesProvider } from '@/app'
 
 export function makeCreateConsumerUseCase() {
   const prismaConsumersRepository = new PrismaConsumersRepository()
@@ -11,6 +12,7 @@ export function makeCreateConsumerUseCase() {
     prismaConsumersRepository,
     prismaUsersRepository,
     prismaUserTokensRepository,
+    queuesProvider,
   )
 
   return createUsersUseCase

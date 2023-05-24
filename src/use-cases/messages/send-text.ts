@@ -1,21 +1,25 @@
 import { Message } from '@/DTOS/message-types'
-import queue from '@/providers/queues/queue'
 import { ClientTokensRepository } from '@/respositories/client-tokens-repository'
 import { ClientNotAuthorizedError } from '../errors/client-not-authorized-error'
 import { ClientNotReadyError } from '../errors/client-not-ready-error'
 import { ClientSenderNotReadyError } from '../errors/client-sender-not-ready-error'
+import { QueuesProvider } from '@/providers/queues-provider'
 
 interface SendTextUseCaseRequest {
   token: string
   to: string
   text: string
+  sendOn?: Date
 }
 
 export class SendTextUseCase {
-  constructor(private clientTokensRepository: ClientTokensRepository) {}
+  constructor(
+    private clientTokensRepository: ClientTokensRepository,
+    private queuesProvider: QueuesProvider,
+  ) {}
 
   async execute(request: SendTextUseCaseRequest): Promise<void> {
-    const { token, text, to } = request
+    const { token, text, to, sendOn } = request
 
     const clientToken = await this.clientTokensRepository.findByToken(token)
 
@@ -47,6 +51,12 @@ export class SendTextUseCase {
       },
     }
 
-    await queue.add('SendToWPP', message)
+    const date = sendOn ? new Date(sendOn) : new Date()
+
+    await this.queuesProvider.add({
+      date,
+      data: message,
+      queue: 'send-message',
+    })
   }
 }

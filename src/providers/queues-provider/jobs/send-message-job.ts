@@ -1,8 +1,7 @@
 import { Message } from '@/DTOS/message-types'
 import { env } from '@/env'
 import { api } from '@/lib/axios'
-import { Job } from 'bull'
-import { randomInt } from 'node:crypto'
+import { randomInt } from 'crypto'
 
 interface SendSeenReq {
   senderName: string
@@ -23,14 +22,7 @@ interface SendMessageReq {
   key: string
 }
 
-export default {
-  key: 'SendToWPP',
-  async handle({ data }: Job<Message>) {
-    await sendToWppConnect(data)
-  },
-}
-
-async function sendToWppConnect(data: Message) {
+export async function sendMessage(data: Message, jobId: string) {
   const { apiToken, content, to, senderName } = data
 
   let url: string
@@ -174,9 +166,7 @@ async function sendToWppConnect(data: Message) {
           senderName,
         })
 
-        const response = await sendMessage({ key: apiToken, requestBody, url })
-
-        return response
+        await sendToWpp({ key: apiToken, requestBody, url })
       }, PREPARING_DELAY)
     } else {
       await setTyping({
@@ -194,9 +184,7 @@ async function sendToWppConnect(data: Message) {
           senderName,
         })
 
-        const response = await sendMessage({ key: apiToken, requestBody, url })
-
-        return response
+        await sendToWpp({ key: apiToken, requestBody, url })
       }, PREPARING_DELAY)
     }
   } catch (error) {
@@ -272,9 +260,9 @@ async function setRecording({
   }
 }
 
-async function sendMessage({ url, key, requestBody }: SendMessageReq) {
+async function sendToWpp({ url, key, requestBody }: SendMessageReq) {
   try {
-    const response = await api.post(
+    await api.post(
       `${env.WPP_URL}${url}`,
       { ...requestBody },
       {
@@ -283,8 +271,6 @@ async function sendMessage({ url, key, requestBody }: SendMessageReq) {
         },
       },
     )
-
-    return response.data
   } catch (error) {
     throw error
   }

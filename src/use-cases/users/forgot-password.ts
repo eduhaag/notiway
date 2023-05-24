@@ -2,8 +2,8 @@ import { UsersRepository } from '@/respositories/users-repository'
 import { ResourceNotFoundError } from '../errors/resource-not-found'
 import { UserTokensRepository } from '@/respositories/user-tokens-repository'
 import dayjs from 'dayjs'
-import queue from '@/providers/queues/queue'
 import path from 'path'
+import { QueuesProvider } from '@/providers/queues-provider'
 
 interface ForgotPasswordUseCaseRequest {
   email: string
@@ -13,6 +13,7 @@ export class ForgotPasswordUseCase {
   constructor(
     private usersRepository: UsersRepository,
     private userTokesRepository: UserTokensRepository,
+    private queuesProvider: QueuesProvider,
   ) {}
 
   async execute({ email }: ForgotPasswordUseCaseRequest): Promise<void> {
@@ -39,7 +40,7 @@ export class ForgotPasswordUseCase {
       'forgot-password.hbs',
     )
 
-    await queue.add('sendMail', {
+    const mail = {
       to: email,
       subject: 'Notiway | Recuperação de senha',
       path: templatePath,
@@ -47,6 +48,12 @@ export class ForgotPasswordUseCase {
         mail: email,
         token,
       },
+    }
+
+    await this.queuesProvider.add({
+      data: mail,
+      date: new Date(),
+      queue: 'send-mail',
     })
   }
 }

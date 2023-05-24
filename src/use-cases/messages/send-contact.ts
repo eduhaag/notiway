@@ -1,22 +1,26 @@
 import { Message } from '@/DTOS/message-types'
-import queue from '@/providers/queues/queue'
 import { ClientTokensRepository } from '@/respositories/client-tokens-repository'
 import { ClientNotAuthorizedError } from '../errors/client-not-authorized-error'
 import { ClientNotReadyError } from '../errors/client-not-ready-error'
 import { ClientSenderNotReadyError } from '../errors/client-sender-not-ready-error'
+import { QueuesProvider } from '@/providers/queues-provider'
 
 interface SendContactUseCaseRequest {
   token: string
   to: string
   contact: string
   name: string
+  sendOn?: Date
 }
 
 export class SendContactUseCase {
-  constructor(private clientTokensRepository: ClientTokensRepository) {}
+  constructor(
+    private clientTokensRepository: ClientTokensRepository,
+    private queuesProvider: QueuesProvider,
+  ) {}
 
   async execute(request: SendContactUseCaseRequest): Promise<void> {
-    const { token, contact, name, to } = request
+    const { token, contact, name, to, sendOn } = request
 
     const clientToken = await this.clientTokensRepository.findByToken(token)
 
@@ -46,6 +50,13 @@ export class SendContactUseCase {
         name,
       },
     }
-    await queue.add('SendToWPP', message)
+
+    const date = sendOn ? new Date(sendOn) : new Date()
+
+    await this.queuesProvider.add({
+      date,
+      data: message,
+      queue: 'send-message',
+    })
   }
 }

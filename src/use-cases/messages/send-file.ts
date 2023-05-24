@@ -1,9 +1,9 @@
 import { AUDIO, FILE, IMAGE, Message } from '@/DTOS/message-types'
-import queue from '@/providers/queues/queue'
 import { ClientTokensRepository } from '@/respositories/client-tokens-repository'
 import { ClientNotAuthorizedError } from '../errors/client-not-authorized-error'
 import { ClientNotReadyError } from '../errors/client-not-ready-error'
 import { ClientSenderNotReadyError } from '../errors/client-sender-not-ready-error'
+import { QueuesProvider } from '@/providers/queues-provider'
 
 interface SendFileUseCaseRequest {
   token: string
@@ -12,13 +12,17 @@ interface SendFileUseCaseRequest {
   fileType: 'IMAGE' | 'AUDIO' | 'FILE'
   text?: string
   fileName?: string
+  sendOn?: Date
 }
 
 export class SendFileUseCase {
-  constructor(private clientTokensRepository: ClientTokensRepository) {}
+  constructor(
+    private clientTokensRepository: ClientTokensRepository,
+    private queuesProvider: QueuesProvider,
+  ) {}
 
   async execute(request: SendFileUseCaseRequest): Promise<void> {
-    const { token, to, base64, text, fileType, fileName } = request
+    const { token, to, base64, text, fileType, fileName, sendOn } = request
 
     const clientToken = await this.clientTokensRepository.findByToken(token)
 
@@ -73,6 +77,12 @@ export class SendFileUseCase {
       content,
     }
 
-    await queue.add('SendToWPP', message)
+    const date = sendOn ? new Date(sendOn) : new Date()
+
+    await this.queuesProvider.add({
+      date,
+      data: message,
+      queue: 'send-message',
+    })
   }
 }

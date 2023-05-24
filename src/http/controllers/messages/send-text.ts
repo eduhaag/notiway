@@ -9,14 +9,20 @@ export async function sendText(req: FastifyRequest, reply: FastifyReply) {
   const sendTextBodySchema = z.object({
     to: z.string(),
     message: z.string(),
+    send_on: z.coerce.date().optional(),
   })
 
-  const { message, to } = sendTextBodySchema.parse(req.body)
+  const { message, to, send_on } = sendTextBodySchema.parse(req.body)
 
   try {
     const sendTexUseCase = makeSendTextUseCase()
 
-    await sendTexUseCase.execute({ text: message, to, token: req.token })
+    await sendTexUseCase.execute({
+      text: message,
+      to,
+      token: req.token,
+      sendOn: send_on,
+    })
 
     return reply.status(200).send({ status: 'sended' })
   } catch (error) {

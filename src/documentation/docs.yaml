@@ -2,39 +2,39 @@ openapi: 3.0.3
 info: 
   title: NotiWay - Whatsapp Notifications Sender - API REST
   x-logo:
-    url: https://api.notiway.com.br/images/logo.png
+    url: https://sjc04pap001files.storage.live.com/y4mcZVLO7Ga8PhF8ehsEln-uAQsqSonNsG8wCG_lyRw-zsDMaRmqyfkoZLonvB7M1NoNtMcm3vZ5qPO5GYrT53fKS1iqNSlBhQGsO0-VxRhXiZLIct_513N9GNo4ddcdM4ajN9l1FWxDHnkty9bm0ZFklBwsiG5pHd5CckM3pp5olCZgDblxVBiYo12IuiMrJHr?width=563&height=356&cropmode=none
+    altText: 'Logo da Notiway'
   description: |-
     # Introdução
     NotiWay é uma **API Rest** eficiente e fácil de usar para envio de notificações via WhatsApp, voltada tanto para pequenas e médias empresas quanto para desenvolvedores de aplicações. Com a nossa API, você pode enviar mensagens personalizadas, promocionais ou informativas diretamente para os clientes, mantendo uma comunicação direta e eficaz.
 
     A API é baseada no modelo SaaS (Software as a Service) e pode ser integrada facilmente com outras aplicações e serviços, proporcionando mais eficiência e praticidade para a sua empresa.
 
-    A API atua utilizando o Web Whatsapp da Meta, simulando o envio de mensagens pelo próprio navegador, dessa forma permite a automação de envio de mensagens.
+    A API atua utilizando o Whatsapp Web da Meta, simulando o envio de mensagens pelo próprio navegador, dessa forma permite a automação de envio de mensagens.
 
     Nossa equipe está sempre à disposição para ajudar em qualquer dúvida ou problema que possa surgir, garantindo uma experiência de uso excepcional para nossos clientes. Se você está procurando uma solução moderna e eficiente para envio de notificações via WhatsApp, a API da NotiWay é a escolha perfeita!
 
     # Autenticação
     A autenticação na API é feita por meio de uma `api-key` enviada no `headers` da solicitação;
 
-    Para obter a `api-key` você deve acessar sua conta em <a href="https://notiway.com.br" target="_blank">notiway.com.br</a>, selecionar a opção "Clients" no menu, em seguida clicar sobre o _client_ desejado e então será exibida uma caixa de texto com a `api-key` oculta. Você tem as opções de exibir ou copiar a chave para área de transferência conforme imagem abaixo:
+    Para obter a `api-key` você deve acessar sua conta em <a href="https://notiway.com.br" target="_blank">notiway.com.br</a>, selecionar o _client_ desejado e então será exibida uma caixa de texto com a `api-key` oculta. Você tem as opções de exibir, copiar a chave para área de transferência ou gerar uma nova chave conforme imagem abaixo:
 
-    <img src="/images/client_key.png" alt=""/>
+    <img src="https://sjc04pap001files.storage.live.com/y4mU42gc48Bs8I2ygRWAjzKXkXYdX6HSFv72CEpPjiYbIdZDbxqRTvrAFmbQ7Z8-OIYbvY5CZTe6Q_zs9VfApM6cGIZ8wXIKwqBzoWAWa1wZ_1MZ7EFfK2xr2iYN-8T95ojHz4nZxppgAG4zAPcsMkR0wJ6KlURBnCEWJ4yd5rphG4i9ThkFEQFHSNlAdEVghjI?width=1003&height=271&cropmode=none" alt="Tela do client" style="border:1px solid #555; border-radius: 10px"/>
 
-    **Atenção!** Clicar em *Gerar nova chave*, invalida a `api-key` anterior, sendo necessário substituí-la nas suas aplicações em produção.
+    **Atenção!** Clicar no ícone de  *Gerar nova chave*, invalida a `api-key` anterior, sendo necessário substituí-la nas suas aplicações em produção.
 
     <SecurityDefinitions />
 
     # Sincronização do Whatsapp
-    Nossa API funciona através do Whastapp Web, dessa forma caso você não tenha feito a assinatura de um número virtual conosco ou não tenha contratado o plano com número compartilhado, é necessário que você realize a sincronização da sua conta do Whatsapp com a API. Para isso, siga os passos abaixo:
+    Nossa API funciona através do Whastapp Web, dessa forma caso você não tenha contratado o plano com número compartilhado, é necessário que você realize a sincronização da sua conta do Whatsapp com a API. Para isso, siga os passos abaixo:
 
     <ol style="display: flex; flex-direction:column; gap:1rem;">
-      <li> Acesse a opção <b>Senders</b> no menu em <a href="https://notiway.com.br/senders" target="_blank">notiway.com.br</a>;</li>
-      <li> Clique sobre o <i>sender</i> desejado;</li>
+      <li>Selecione o <i>client</i> desejado em <a href="https://notiway.com.br/" target="_blank">notiway.com.br</a>;</li>
       <li> Confirme se o número do telefone cadastrado está correto, caso contrário nos comunique o mais rápido possível clicando <a href="https://wa.me/5547996788597" target="_blank">aqui</a>;</li>
       <li> Acesse o Whatsapp em seu celular e siga de acordo com seu sistema:
         <ul style="display:flex; flex-direction:column; gap: 0.5rem;">    
-          <li><strong>Android:</strong> toque em <b>Mais opções</b><img src="/images/dot_menu.png" style="max-width: 25px; max-height: 25px;" alt="Atalho de menu de 3 pontos do whatsapp" /> >  <b>Aparelhos conetados</b> > <b>Conectar aparelho</b>.</li>
-          <li><strong>IPhone:</strong> toque em <b>Configurações</b>&nbsp<img src="/images/iphone_config.png" style="max-width: 25px; max-height: 25px" alt="Icone de engrenagem" /> > <b>Aparelhos conetados</b> > <b>Conectar aparelho</b>.</li>
+          <li><strong>Android:</strong> toque em <b>Mais opções</b><img src="https://sjc04pap001files.storage.live.com/y4m3NZmjtGEvmRDvqQO8c9lh5Um42lNKSr8PYobZChXJonCkAZsceneNP93FKNGoJW0KP3TdDOQ8zaNF_LPT4UFuvFtIIfCQW2WsqSa2viFfgj597W5i2FieduZX3uTW7cxSNARpYmpCYkfvU5CSDLRlHpov6_ZBXWIZw3e8Jlo5wSUebAIS6xWWfu5B-VOaEgL?width=72&height=72&cropmode=none" style="max-width: 25px; max-height: 25px;" alt="Atalho de menu de 3 pontos do whatsapp" /> >  <b>Aparelhos conetados</b> > <b>Conectar aparelho</b>.</li>
+          <li><strong>IPhone:</strong> toque em <b>Configurações</b>&nbsp<img src="https://sjc04pap001files.storage.live.com/y4m8WcrRimtupUlDM1_jkutkUOhtvHOZdLt-9APF-fB6tu88SWjmcQEC8EC_eHe7U8TPmizNf_1TzLT5x4Mp5-9xTYGM5Wbmn5EXL6uJXtjd559MEGMucpMslTAf781J_1ykXSC8mUJBNcSpmavnmp_VaFsvUctUT9Z1tYfSy3tmsnr3uDm3jFOb3cpWObQZyUu?width=87&height=87&cropmode=none" style="max-width: 25px; max-height: 25px" alt="Icone de engrenagem" /> > <b>Aparelhos conetados</b> > <b>Conectar aparelho</b>.</li>
           <span style="display:block; margin-bottom: 1rem;">Lembre-se que cada conta do Whatsapp pode estar conectada a no máximo 4 dispositivos diferentes. Caso você já tenha atingido este limite, será necessário desconectar algum dispositivo para sincronizar com a API.</span>
         </ul>
       </li>
@@ -44,14 +44,14 @@ info:
           <li> Se a autenticação biométrica não estiver ativada, será necessário informar o código usado para desbloquear o celular.</li>
         </ul>
       </li>
-      <li> Clique na opção <b>Conectar</b> no <i>sender</i> selecionado no site e aguarde gerar o <b>QR Code</b>;
-          <img src="/images/connect.png" alt="Tela de conexão no site Notiway.com.br" style="display:block; margin-bottom:1rem;" />
+      <li> Clique na opção <b>Conectar</b> no <i>client</i> selecionado no site e aguarde gerar o <b>QR Code</b>;
+          <img src="https://sjc04pap001files.storage.live.com/y4mV0B8GeJp8dyyBQdW_DG6PGcM3VrqRv2LzGkL80U7XKi6nsXwIrIGI-_SNZ643fBZpQgPfnrpd66N2qiF8RbnZhyhDvpWasSe_8J9DUoq5H99G6mEPbyl7i6_Ik8_9xcn1dewm-QNSGxgpDU9X-IPzqiyM_lbu9KeCSCyQ8yD9bRWeg2z41Fjt2ZwGp-4HSHU?width=1003&height=271&cropmode=none" alt="Tela de conexão no site Notiway.com.br" style="display:block; margin-bottom:1rem; border:1px solid #555; border-radius: 10px" />
       </li>
       <li> Quando o <b>QR Code</b> for exibido, basta fazer o escaneamento com a câmera do seu celular. Para esta operação você terá cerca de 50 segundos. Caso o tempo encerre sem que ocorra a leitura do QR Code, será exibido um alerta informando falha na leitura e você poderá iniciar novamente do passo 6.
-          <img src="/images/qr_code.png" alt="Tela de leitura do QR Code" style="display:block; margin-bottom:1rem;" />
+          <img src="https://sjc04pap001files.storage.live.com/y4mxgycyC7VUKpdH2rcnWJGAFYGwSrDlNHBSsmYSrOA6totDXXbi0fJ0tm8T3TmoGfhtU-Y8zEGLtxDneX253bCbW3cG1RdHtfWQcF85B1iAGF0ze6byOwpXuVa8tBQZJDdDKW2LycQZ0Wzz5P-UWWuJKLyqYRD_tbjPtq_I5fEfGYbfyZAVGKwTmDTjrra3Dq0?width=1006&height=342&cropmode=none" alt="Tela de leitura do QR Code" style="display:block; margin-bottom:1rem; border:1px solid #555; border-radius: 10px" />
       </li>
       <li>Após a leitura ser realizada com sucesso, aguarde até que o <b>status da conexão em seu celular</b> esteja como <b>Ativo</b>.
-          <img src="/images/connection_status.jpeg" alt="Tela de status da conexão no Whatsapp" style="display: block; max-width:300px"/>
+          <img src="https://sjc04pap001files.storage.live.com/y4mUmNMwnSQqQrLnrrhFPZNLNC1SEfcp8APeUDbCqjfgUngYQtK_PzsB9H54AVFyObpDrUlMko6aX2DFsfBzzlFkFqETlHw21DlO8ChiYDs8uBmibjUmcSU53jc9hBdliFnxm5WDGONDPwww506QzQAbumauNB2NEqIyvOdK4J8vLyZ-4_ZXM-6W_gEArEuL33H?width=864&height=1280&cropmode=none" alt="Tela de status da conexão no Whatsapp" style="display: block; max-width:300px"/>
       </li>
       <li><b>Pronto!</b> Agora você já pode utilizar a API com a sua conta do Whatsapp.</li>
     </ul>

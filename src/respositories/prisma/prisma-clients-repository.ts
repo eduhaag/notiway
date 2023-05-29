@@ -41,6 +41,10 @@ export class PrismaClientsRepository implements ClientsRepository {
         ClientToken: true,
         sender: {
           select: {
+            id: true,
+            type: true,
+            paread_at: true,
+            full_number: true,
             name: true,
           },
         },

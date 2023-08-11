@@ -5,7 +5,7 @@ O Notiway é uma API Rest cujo seu objetivo é o envio de notificações via Wha
 
 Aqui você encontra o API completa com todos recursos para gestão dos clientes na Notiway, além da própria estrutura de rotas para envio de Notificações para o Whasapp.
 
-Para o envio das notificações, esta necessida enviar requisições HTTP para um servidor rodando o WPPConnect.
+Para o envio das notificações, esta API necessida enviar requisições HTTP para um servidor rodando o WPPConnect.
 
 Este projeto foi criado como forma de estudo de ferramentas e conceitos e não possui careter comercial.
 

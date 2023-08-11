@@ -23,7 +23,7 @@ Este projeto foi criado como forma de estudo de ferramentas e conceitos e não p
 - Testes automatizados (unitários e e2e);
 - Monitoramento de erros em produção;
 
-## 💻 Técnolongias utilizadas
+## 💻 Tecnologias utilizadas
 - Node
 - Typescript
 - Prisma ORM

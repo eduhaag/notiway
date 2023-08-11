@@ -9,7 +9,7 @@ Para o envio das notificações, esta necessida enviar requisições HTTP para u
 
 Este projeto foi criado como forma de estudo de ferramentas e conceitos e não possui careter comercial.
 
-## :tw-1f4dd: Conceitos estudados
+## 📝 Conceitos estudados
 - Roteamento da API;
 - Manipulação em banco de dados;
 - Tarefas em segundo plano (filas);
@@ -23,7 +23,7 @@ Este projeto foi criado como forma de estudo de ferramentas e conceitos e não p
 - Testes automatizados (unitários e e2e);
 - Monitoramento de erros em produção;
 
-## :tw-1f4bb: Técnolongias utilizadas
+## 💻 Técnolongias utilizadas
 - Node
 - Typescript
 - Prisma ORM

@@ -89,7 +89,7 @@ $ npm run dev
 - **[Zod](https://zod.dev/)** - Biblioteca para validação esquema de dados recebidos nas requisições da API;
 - **[Vitest](https://vitest.dev/)** - Biblioteca para testes automatizados. (No projeto foi utilizado em testes unitários e e2e);
 - **[Supertest](https://github.com/ladjs/supertest)** - Permite enviar requisições a API nos testes e2e;
-> Veja o arquivo [package.json](https://github.com/eduhaag/Memoteca/package.json)
+> Veja o arquivo [package.json](package.json)
 
 **Utilitários**
 - Editor:  **[Visual Studio Code](https://code.visualstudio.com/)**;
